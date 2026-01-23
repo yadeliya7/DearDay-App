@@ -1047,7 +1047,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'DearDay is a personal development assistant designed to increase your emotional awareness and track your habits.';
 
   @override
-  String get aboutPrivacyTitle => 'Privacy';
+  String get aboutPrivacyTitle => 'Privacyy';
 
   @override
   String get aboutPrivacyDesc =>
