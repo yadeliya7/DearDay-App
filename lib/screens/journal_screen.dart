@@ -282,36 +282,33 @@ class _JournalCardState extends State<_JournalCard> {
         margin: const EdgeInsets.only(bottom: 24),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark ? null : Colors.white,
-          gradient: isDark
-              ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    widget.mood.color.withAlpha(12),
-                    const Color(0xFF1C1C1E),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isDark
+                ? [widget.mood.color.withAlpha(12), const Color(0xFF1C1C1E)]
+                : [
+                    widget.mood.color.withAlpha(
+                      25,
+                    ), // Soft mood color (10% opacity)
+                    Colors.white, // Fade to white
                   ],
-                )
-              : null,
+          ),
           borderRadius: BorderRadius.circular(16),
-          // Add shadow in Light Mode for depth
-          boxShadow: isDark
-              ? []
-              : [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                    spreadRadius: 2,
-                  ),
-                ],
-          // Mood-colored border in Light Mode instead of glow
-          border: isDark
-              ? null
-              : Border.all(
-                  color: widget.mood.color.withValues(alpha: 0.4),
-                  width: 2,
-                ),
+          boxShadow: [
+            BoxShadow(
+              color: isDark
+                  ? widget.mood.color.withAlpha(20)
+                  : widget.mood.color.withAlpha(30),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+              spreadRadius: 1,
+            ),
+          ],
+          border: Border.all(
+            color: widget.mood.color.withValues(alpha: 0.4),
+            width: isDark ? 1 : 2,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

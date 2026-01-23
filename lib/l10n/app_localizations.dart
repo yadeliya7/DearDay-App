@@ -2227,6 +2227,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mood of the Year: '**
   String get moodOfTheYear;
+
+  /// No description provided for @insightTeaserSuperPowerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Super Power? 🔒'**
+  String get insightTeaserSuperPowerTitle;
+
+  /// No description provided for @insightTeaserSuperPowerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover which activity makes you 40% happier.'**
+  String get insightTeaserSuperPowerDesc;
+
+  /// No description provided for @insightTeaserEnergyDrainersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy Drainers 🔒'**
+  String get insightTeaserEnergyDrainersTitle;
+
+  /// No description provided for @insightTeaserEnergyDrainersDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Find hidden reasons draining your mood.'**
+  String get insightTeaserEnergyDrainersDesc;
+
+  /// No description provided for @insightTeaserSleepAnalysisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Analysis 🔒'**
+  String get insightTeaserSleepAnalysisTitle;
+
+  /// No description provided for @insightTeaserSleepAnalysisDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'How does sleep affect your day?'**
+  String get insightTeaserSleepAnalysisDesc;
+
+  /// No description provided for @dataCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gathering Data... ⏳'**
+  String get dataCollectionTitle;
+
+  /// No description provided for @dataCollectionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to enter data for at least 3-5 days for analysis. Keep journaling!'**
+  String get dataCollectionDesc;
 }
 
 class _AppLocalizationsDelegate

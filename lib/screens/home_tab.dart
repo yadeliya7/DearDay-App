@@ -944,9 +944,25 @@ class _HomeTabState extends State<HomeTab> {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: mood.color.withValues(alpha: 0.08),
+        color: Theme.of(
+          context,
+        ).cardColor, // Theme-aware color (light cream or dark charcoal)
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: mood.color.withValues(alpha: 0.2), width: 1),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : const Color(0xFFE0C9A6).withValues(alpha: 0.3),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.3)
+                : const Color(0xFFD4A574).withValues(alpha: 0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1073,202 +1089,278 @@ class _HomeTabState extends State<HomeTab> {
   Widget _buildWrapIcons(DailyEntry entry) {
     // Configuration Map for all activities
     final Map<String, dynamic> activityConfig = {
-      // Sleep
-      'good': {'l': 'İyi Uyku', 'i': LineIcons.sun, 'c': Colors.orange},
+      // Sleep - Soft Purple/Lavender
+      'good': {
+        'l': 'İyi Uyku',
+        'i': LineIcons.sun,
+        'c': const Color(0xFFB39DDB),
+      },
       'medium': {
         'l': 'Orta Uyku',
         'i': LineIcons.cloudWithMoon,
-        'c': Colors.cyanAccent,
+        'c': const Color(0xFF9FA8DA),
       },
       'bad': {
         'l': 'Kötü Uyku',
         'i': LineIcons.moon,
-        'c': Colors.deepPurpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
 
-      // Weather
-      'sunny': {'l': 'Güneşli', 'i': LineIcons.sun, 'c': Colors.amber},
+      // Weather - Light Amber, Soft Blue, Grey
+      'sunny': {
+        'l': 'Güneşli',
+        'i': LineIcons.sun,
+        'c': const Color(0xFFFFD54F),
+      },
       'rainy': {
         'l': 'Yağmurlu',
         'i': LineIcons.cloudWithRain,
-        'c': Colors.blue,
+        'c': const Color(0xFF81D4FA),
       },
-      'cloudy': {'l': 'Bulutlu', 'i': LineIcons.cloud, 'c': Colors.grey},
+      'cloudy': {
+        'l': 'Bulutlu',
+        'i': LineIcons.cloud,
+        'c': const Color(0xFFB0BEC5),
+      },
       'snowy': {
         'l': 'Karlı',
         'i': LineIcons.snowflake,
-        'c': Colors.lightBlueAccent,
+        'c': const Color(0xFFB3E5FC),
       },
-      'windy': {'l': 'Rüzgarlı', 'i': LineIcons.wind, 'c': Colors.blueGrey},
-      'foggy': {'l': 'Sisli', 'i': Icons.foggy, 'c': Colors.blueGrey},
-      'hail': {'l': 'Dolu', 'i': Icons.ac_unit, 'c': Colors.lightBlueAccent},
+      'windy': {
+        'l': 'Rüzgarlı',
+        'i': LineIcons.wind,
+        'c': const Color(0xFF90CAF9),
+      },
+      'foggy': {'l': 'Sisli', 'i': Icons.foggy, 'c': const Color(0xFFCFD8DC)},
+      'hail': {'l': 'Dolu', 'i': Icons.ac_unit, 'c': const Color(0xFFE1F5FE)},
 
-      // Health
-      'sport': {'l': 'Spor', 'i': LineIcons.running, 'c': Colors.green},
+      // Health - Soft Greens, Light Coral
+      'sport': {
+        'l': 'Spor',
+        'i': LineIcons.running,
+        'c': const Color(0xFFA5D6A7),
+      },
       'healthy_food': {
         'l': 'Sağlıklı',
         'i': LineIcons.carrot,
-        'c': Colors.greenAccent,
+        'c': const Color(0xFFC5E1A5),
       },
       'fast_food': {
         'l': 'Fast Food',
         'i': LineIcons.hamburger,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFAB91),
       },
-      'water': {'l': 'Su', 'i': LineIcons.tint, 'c': Colors.blueAccent},
-      'walking': {'l': 'Yürüyüş', 'i': LineIcons.walking, 'c': Colors.green},
+      'water': {'l': 'Su', 'i': LineIcons.tint, 'c': const Color(0xFF80DEEA)},
+      'walking': {
+        'l': 'Yürüyüş',
+        'i': LineIcons.walking,
+        'c': const Color(0xFFB2DFDB),
+      },
       'vitamins': {
         'l': 'Vitamin',
         'i': LineIcons.pills,
-        'c': Colors.greenAccent,
+        'c': const Color(0xFFDCEDC8),
       },
       'sleep_health': {
         'l': 'Uyku',
         'i': LineIcons.bed,
-        'c': Colors.indigoAccent,
+        'c': const Color(0xFFD1C4E9),
       },
       'doctor': {
         'l': 'Doktor',
         'i': LineIcons.stethoscope,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFEF9A9A),
       },
 
-      // Social
+      // Social - Soft Pinks, Lavender, Mint
       'friends': {
         'l': 'Arkadaşlar',
         'i': LineIcons.userFriends,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFE1BEE7),
       },
-      'family': {'l': 'Aile', 'i': LineIcons.home, 'c': Colors.pinkAccent},
-      'party': {'l': 'Parti', 'i': LineIcons.cocktail, 'c': Colors.cyanAccent},
+      'family': {
+        'l': 'Aile',
+        'i': LineIcons.home,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'party': {
+        'l': 'Parti',
+        'i': LineIcons.cocktail,
+        'c': const Color(0xFF80CBC4),
+      },
       'partner': {
         'l': 'Partner',
         'i': LineIcons.heartAlt,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFF48FB1),
       },
       'guests': {
         'l': 'Misafir',
         'i': Icons.people_outline,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
       'colleagues': {
         'l': 'İş Ark.',
         'i': LineIcons.briefcase,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFF80CBC4),
       },
-      'travel': {'l': 'Seyahat', 'i': LineIcons.plane, 'c': Colors.blue},
+      'travel': {
+        'l': 'Seyahat',
+        'i': LineIcons.plane,
+        'c': const Color(0xFF90CAF9),
+      },
       'volunteer': {
         'l': 'Gönüllü',
         'i': LineIcons.heart,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFFFCDD2),
       },
 
-      // Hobbies
-      'gaming': {'l': 'Oyun', 'i': LineIcons.gamepad, 'c': Colors.indigoAccent},
+      // Hobbies - Mint, Coral, Soft Blue, Peach
+      'gaming': {
+        'l': 'Oyun',
+        'i': LineIcons.gamepad,
+        'c': const Color(0xFF9FA8DA),
+      },
       'reading': {
         'l': 'Okuma',
         'i': LineIcons.book,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       },
-      'movie': {'l': 'Film', 'i': LineIcons.video, 'c': Colors.redAccent},
-      'art': {'l': 'Sanat', 'i': LineIcons.palette, 'c': Colors.pinkAccent},
-      'music': {'l': 'Müzik', 'i': LineIcons.music, 'c': Colors.pinkAccent},
-      'coding': {'l': 'Kodlama', 'i': LineIcons.code, 'c': Colors.tealAccent},
+      'movie': {
+        'l': 'Film',
+        'i': LineIcons.video,
+        'c': const Color(0xFFEF9A9A),
+      },
+      'art': {
+        'l': 'Sanat',
+        'i': LineIcons.palette,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'music': {
+        'l': 'Müzik',
+        'i': LineIcons.music,
+        'c': const Color(0xFFE1BEE7),
+      },
+      'coding': {
+        'l': 'Kodlama',
+        'i': LineIcons.code,
+        'c': const Color(0xFF80CBC4),
+      },
       'photography': {
         'l': 'Fotoğraf',
         'i': LineIcons.camera,
-        'c': Colors.cyanAccent,
+        'c': const Color(0xFF81D4FA),
       },
-      'crafts': {'l': 'El İşi', 'i': LineIcons.brush, 'c': Colors.orange},
+      'crafts': {
+        'l': 'El İşi',
+        'i': LineIcons.brush,
+        'c': const Color(0xFFFFCC80),
+      },
 
-      // Chores
+      // Chores - Light Teal, Peach, Soft Coral
       'cleaning': {
         'l': 'Temizlik',
         'i': LineIcons.broom,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFFB2DFDB),
       },
       'shopping': {
         'l': 'Alışveriş',
         'i': LineIcons.shoppingCart,
-        'c': Colors.orange,
+        'c': const Color(0xFFFFAB91),
       },
       'laundry': {
         'l': 'Çamaşır',
         'i': LineIcons.tShirt,
-        'c': Colors.lightBlueAccent,
+        'c': const Color(0xFFB3E5FC),
       },
       'cooking': {
         'l': 'Yemek',
         'i': LineIcons.utensils,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       },
-      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': Colors.cyanAccent},
-      'dishes': {'l': 'Bulaşık', 'i': Icons.kitchen, 'c': Colors.tealAccent},
+      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': const Color(0xFF80DEEA)},
+      'dishes': {
+        'l': 'Bulaşık',
+        'i': Icons.kitchen,
+        'c': const Color(0xFFA5D6A7),
+      },
       'repair': {
         'l': 'Tamirat',
         'i': LineIcons.tools,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFAB91),
       },
-      'plants': {'l': 'Bitkiler', 'i': LineIcons.leaf, 'c': Colors.greenAccent},
+      'plants': {
+        'l': 'Bitkiler',
+        'i': LineIcons.leaf,
+        'c': const Color(0xFFC5E1A5),
+      },
 
-      // Selfcare
+      // Selfcare - Soft Pink, Mint
       'manicure': {
         'l': 'Manikür',
         'i': LineIcons.handHoldingHeart,
-        'c': Colors.pink,
+        'c': const Color(0xFFF8BBD0),
       },
       'skincare': {
         'l': 'Cilt Bakımı',
         'i': LineIcons.spa,
-        'c': Colors.lightGreen,
+        'c': const Color(0xFFC5E1A5),
       },
-      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': Colors.pinkAccent},
-      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': Colors.tealAccent},
-      'facemask': {'l': 'Maske', 'i': Icons.face, 'c': Colors.pinkAccent},
-      'bath': {'l': 'Banyo', 'i': LineIcons.bath, 'c': Colors.blue},
+      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': const Color(0xFFE1BEE7)},
+      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': const Color(0xFF80CBC4)},
+      'facemask': {'l': 'Maske', 'i': Icons.face, 'c': const Color(0xFFF48FB1)},
+      'bath': {'l': 'Banyo', 'i': LineIcons.bath, 'c': const Color(0xFF90CAF9)},
       'digital_detox': {
         'l': 'Detoks',
         'i': Icons.phonelink_off,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFFB2DFDB),
       },
 
       // Booleans (Goals)
       'no_smoking': {
         'l': 'Sigara Yok',
         'i': LineIcons.smokingBan,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFEF9A9A),
       },
       'social_media_detox': {
         'l': 'Sosyal Medya',
         'i': LineIcons.mobilePhone,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
       'meditation': {
         'l': 'Meditasyon',
         'i': LineIcons.spa,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFD1C4E9),
       },
       'read_book': {
         'l': 'Okuma',
         'i': LineIcons.book,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       }, // Reused key
       'drink_water': {
         'l': 'Su',
         'i': LineIcons.tint,
-        'c': Colors.blueAccent,
+        'c': const Color(0xFF80DEEA),
       }, // Reused key
       'early_rise': {
         'l': 'Erken Kalk',
         'i': LineIcons.bell,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFD54F),
       },
-      'no_sugar': {'l': 'Şekersiz', 'i': Icons.no_food, 'c': Colors.pinkAccent},
-      'journaling': {'l': 'Günlük', 'i': LineIcons.bookOpen, 'c': Colors.amber},
+      'no_sugar': {
+        'l': 'Şekersiz',
+        'i': Icons.no_food,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'journaling': {
+        'l': 'Günlük',
+        'i': LineIcons.bookOpen,
+        'c': const Color(0xFFFFCC80),
+      },
       '10k_steps': {
         'l': '10 Bin Adım',
         'i': LineIcons.shoePrints,
-        'c': Colors.green,
+        'c': const Color(0xFFA5D6A7),
       },
     };
 
@@ -1290,12 +1382,16 @@ class _HomeTabState extends State<HomeTab> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 14),
+            Icon(
+              icon,
+              color: isDark ? color : const Color(0xFF4E342E),
+              size: 14,
+            ),
             const SizedBox(width: 6),
             Text(
               label,
               style: GoogleFonts.nunito(
-                color: color,
+                color: isDark ? color : const Color(0xFF4E342E),
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),

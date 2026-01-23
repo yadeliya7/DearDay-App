@@ -13,10 +13,20 @@ class AppTheme {
   static const Color lightAccent = Color(0xFFB59D7F);
 
   static ThemeData darkTheme() {
+    const darkCard = Color(0xFF252525); // Dark charcoal for cards
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: darkBackground,
+      cardColor: darkCard, // Define card color for dark mode
+      // Card Theme
+      cardTheme: CardThemeData(
+        color: darkCard,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+      ),
 
       // TÜM FONT AİLESİ: NUNITO
       textTheme: GoogleFonts.nunitoTextTheme(ThemeData.dark().textTheme)
@@ -64,6 +74,8 @@ class AppTheme {
   static const Color peachAccent = Color(0xFFFF7043);
 
   static ThemeData lightTheme() {
+    const lightCard = Color(0xFFFFF8E1); // Light creamy peach for cards
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
@@ -71,7 +83,7 @@ class AppTheme {
       // 1. Base Colors
       scaffoldBackgroundColor: peachScaffold,
       primaryColor: peachAccent,
-
+      cardColor: lightCard, // Define card color for light mode
       // 2. Color Scheme
       colorScheme: ColorScheme.fromSeed(
         seedColor: peachScaffold,

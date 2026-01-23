@@ -1177,4 +1177,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moodOfTheYear => 'Mood of the Year: ';
+
+  @override
+  String get insightTeaserSuperPowerTitle => 'Super Power? 🔒';
+
+  @override
+  String get insightTeaserSuperPowerDesc =>
+      'Discover which activity makes you 40% happier.';
+
+  @override
+  String get insightTeaserEnergyDrainersTitle => 'Energy Drainers 🔒';
+
+  @override
+  String get insightTeaserEnergyDrainersDesc =>
+      'Find hidden reasons draining your mood.';
+
+  @override
+  String get insightTeaserSleepAnalysisTitle => 'Sleep Analysis 🔒';
+
+  @override
+  String get insightTeaserSleepAnalysisDesc =>
+      'How does sleep affect your day?';
+
+  @override
+  String get dataCollectionTitle => 'Gathering Data... ⏳';
+
+  @override
+  String get dataCollectionDesc =>
+      'You need to enter data for at least 3-5 days for analysis. Keep journaling!';
 }

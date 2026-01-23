@@ -36,12 +36,11 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   Widget _buildNavItem(IconData icon, int index) {
     bool isSelected = _selectedIndex == index;
+    const coralAccent = Color(0xFFFF7043); // Vibrant coral for selected
+    const brownMedium = Color(0xFF8D6E63); // Medium brown for unselected
+
     return IconButton(
-      icon: Icon(
-        icon,
-        color: isSelected ? Colors.white : Colors.white54,
-        size: 28,
-      ),
+      icon: Icon(icon, color: isSelected ? coralAccent : brownMedium, size: 28),
       onPressed: () => _onItemTapped(index),
     );
   }
@@ -60,13 +59,19 @@ class _MainScaffoldState extends State<MainScaffold> {
             child: Container(
               height: 65,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withValues(alpha: 0.85),
+                color: Theme.of(context).cardColor.withValues(
+                  alpha: Theme.of(context).brightness == Brightness.dark
+                      ? 0.75 // Dark mode: 75% opacity
+                      : 0.55, // Light mode: 55% opacity (more transparent)
+                ),
                 borderRadius: BorderRadius.circular(30),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black26,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withValues(alpha: 0.3)
+                        : const Color(0xFFD4A574).withValues(alpha: 0.2),
                     blurRadius: 10,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),

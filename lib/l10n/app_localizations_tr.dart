@@ -1167,4 +1167,31 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get moodOfTheYear => 'Yılın Modu: ';
+
+  @override
+  String get insightTeaserSuperPowerTitle => 'Süper Gücün Ne? 🔒';
+
+  @override
+  String get insightTeaserSuperPowerDesc =>
+      'Hangi aktivite seni %40 daha mutlu ediyor keşfet.';
+
+  @override
+  String get insightTeaserEnergyDrainersTitle => 'Enerji Emiciler 🔒';
+
+  @override
+  String get insightTeaserEnergyDrainersDesc =>
+      'Modunu düşüren gizli sebepleri bul.';
+
+  @override
+  String get insightTeaserSleepAnalysisTitle => 'Uyku Analizi 🔒';
+
+  @override
+  String get insightTeaserSleepAnalysisDesc => 'Uykun gününü nasıl etkiliyor?';
+
+  @override
+  String get dataCollectionTitle => 'Veri Toplanıyor... ⏳';
+
+  @override
+  String get dataCollectionDesc =>
+      'Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!';
 }

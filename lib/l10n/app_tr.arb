@@ -592,5 +592,13 @@
     "creatingPdf": "PDF oluşturuluyor...",
     "pdfError": "PDF oluşturulurken bir hata oluştu: {error}",
     "moodOfTheMonth": "Bu ayın modu: ",
-    "moodOfTheYear": "Yılın Modu: "
+    "moodOfTheYear": "Yılın Modu: ",
+    "insightTeaserSuperPowerTitle": "Süper Gücün Ne? 🔒",
+    "insightTeaserSuperPowerDesc": "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
+    "insightTeaserEnergyDrainersTitle": "Enerji Emiciler 🔒",
+    "insightTeaserEnergyDrainersDesc": "Modunu düşüren gizli sebepleri bul.",
+    "insightTeaserSleepAnalysisTitle": "Uyku Analizi 🔒",
+    "insightTeaserSleepAnalysisDesc": "Uykun gününü nasıl etkiliyor?",
+    "dataCollectionTitle": "Veri Toplanıyor... ⏳",
+    "dataCollectionDesc": "Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!"
 }

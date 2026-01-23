@@ -685,9 +685,12 @@ class AnalysisScreen extends StatelessWidget {
               // Card A: Superpower
               _buildInsightCard(
                 context,
-                title: "Süper Gücün Ne? 🔒",
-                description:
-                    "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
+                title: AppLocalizations.of(
+                  context,
+                )!.insightTeaserSuperPowerTitle,
+                description: AppLocalizations.of(
+                  context,
+                )!.insightTeaserSuperPowerDesc,
                 icon: Icons.flash_on,
                 gradientColors: [
                   Colors.green.shade400.withOpacity(0.8),
@@ -701,8 +704,12 @@ class AnalysisScreen extends StatelessWidget {
               // Card B: Energy Drainers
               _buildInsightCard(
                 context,
-                title: "Enerji Emiciler 🔒",
-                description: "Modunu düşüren gizli sebepleri bul.",
+                title: AppLocalizations.of(
+                  context,
+                )!.insightTeaserEnergyDrainersTitle,
+                description: AppLocalizations.of(
+                  context,
+                )!.insightTeaserEnergyDrainersDesc,
                 icon: LineIcons.batteryEmpty,
                 gradientColors: [
                   Colors.red.shade400.withOpacity(0.8),
@@ -716,8 +723,12 @@ class AnalysisScreen extends StatelessWidget {
               // Card C: Sleep Analysis
               _buildInsightCard(
                 context,
-                title: "Uyku Analizi 🔒",
-                description: "Uykun gününü nasıl etkiliyor?",
+                title: AppLocalizations.of(
+                  context,
+                )!.insightTeaserSleepAnalysisTitle,
+                description: AppLocalizations.of(
+                  context,
+                )!.insightTeaserSleepAnalysisDesc,
                 icon: LineIcons.moon,
                 gradientColors: [
                   Colors.purple.shade400.withOpacity(0.8),
@@ -774,7 +785,7 @@ class AnalysisScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Veri Toplanıyor... ⏳",
+                  AppLocalizations.of(context)!.dataCollectionTitle,
                   style: GoogleFonts.nunito(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -783,7 +794,7 @@ class AnalysisScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!",
+                  AppLocalizations.of(context)!.dataCollectionDesc,
                   style: GoogleFonts.nunito(
                     fontSize: 13,
                     color: Colors.white.withValues(alpha: 0.9),

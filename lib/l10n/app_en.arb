@@ -780,5 +780,21 @@
     "moodOfTheMonth": "Mood of the Month: ",
     "@moodOfTheMonth": {},
     "moodOfTheYear": "Mood of the Year: ",
-    "@moodOfTheYear": {}
+    "@moodOfTheYear": {},
+    "insightTeaserSuperPowerTitle": "Super Power? 🔒",
+    "@insightTeaserSuperPowerTitle": {},
+    "insightTeaserSuperPowerDesc": "Discover which activity makes you 40% happier.",
+    "@insightTeaserSuperPowerDesc": {},
+    "insightTeaserEnergyDrainersTitle": "Energy Drainers 🔒",
+    "@insightTeaserEnergyDrainersTitle": {},
+    "insightTeaserEnergyDrainersDesc": "Find hidden reasons draining your mood.",
+    "@insightTeaserEnergyDrainersDesc": {},
+    "insightTeaserSleepAnalysisTitle": "Sleep Analysis 🔒",
+    "@insightTeaserSleepAnalysisTitle": {},
+    "insightTeaserSleepAnalysisDesc": "How does sleep affect your day?",
+    "@insightTeaserSleepAnalysisDesc": {},
+    "dataCollectionTitle": "Gathering Data... ⏳",
+    "@dataCollectionTitle": {},
+    "dataCollectionDesc": "You need to enter data for at least 3-5 days for analysis. Keep journaling!",
+    "@dataCollectionDesc": {}
 }
