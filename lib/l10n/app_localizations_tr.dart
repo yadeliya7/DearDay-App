@@ -154,7 +154,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get btnCancel => 'İptal';
 
   @override
-  String get btnDelete => 'Sil';
+  String get btnDelete => 'Delete';
 
   @override
   String get msgSaved => 'Başarıyla kaydedildi';
@@ -549,7 +549,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get msgNoMoodPoems => 'Bu ruh halinde henüz şiir yok.';
 
   @override
-  String get appTitle => 'Habitual';
+  String get appTitle => 'DearDay';
 
   @override
   String get msgNoPoemSelected => 'Henüz bir şiir seçilmedi.';
@@ -561,7 +561,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get dailyGoals => 'Günlük Hedefler';
 
   @override
-  String get homeTitle => 'Habitual';
+  String get homeTitle => 'DearDay';
 
   @override
   String get today => 'Bugün';
@@ -627,7 +627,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shareMessage =>
-      'Selam! Duygu durumumu ve alışkanlıklarımı takip ettiğim bu harika uygulamayı keşfettim. Sen de denemelisin! 🚀 Habitual\n\n';
+      'Selam! Duygu durumumu ve alışkanlıklarımı takip ettiğim bu harika uygulamayı keşfettim. Sen de denemelisin! 🚀 DearDay\n\n';
 
   @override
   String shareError(String error) {
@@ -641,7 +641,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumDesc => 'Sınırsız erişim ve reklamsız deneyim.';
 
   @override
-  String get sectionAppearance => 'GÖRÜNÜM';
+  String get sectionAppearance => 'APPEARANCE';
 
   @override
   String get sectionOther => 'DİĞER';
@@ -1034,7 +1034,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get aboutWhatDesc =>
-      'Habitual, duygusal farkındalığınızı artırmak ve alışkanlıklarınızı takip etmek için tasarlanmış kişisel bir gelişim asistanıdır.';
+      'DearDay, duygusal farkındalığınızı artırmak ve alışkanlıklarınızı takip etmek için tasarlanmış kişisel bir gelişim asistanıdır.';
 
   @override
   String get aboutPrivacyTitle => 'Gizlilik';
@@ -1140,4 +1140,31 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get unlockYearView => 'Yıllık Görünümü Aç';
+
+  @override
+  String get exportToPdf => 'PDF Olarak İndir';
+
+  @override
+  String get exportToPdfDesc => 'Günlüğünüzü kitap formatında kaydedin';
+
+  @override
+  String get premiumFeatureLocked => 'Premium Özellik';
+
+  @override
+  String get noEntriesForPdf =>
+      'Henüz hiç günlük girişi yok. PDF oluşturmak için en az bir giriş yapmalısınız.';
+
+  @override
+  String get creatingPdf => 'PDF oluşturuluyor...';
+
+  @override
+  String pdfError(String error) {
+    return 'PDF oluşturulurken bir hata oluştu: $error';
+  }
+
+  @override
+  String get moodOfTheMonth => 'Bu ayın modu: ';
+
+  @override
+  String get moodOfTheYear => 'Yılın Modu: ';
 }

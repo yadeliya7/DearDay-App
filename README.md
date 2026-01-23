@@ -1,4 +1,4 @@
-# Habitual - Habitual
+# DearDay - DearDay
 
 Bir premium Flutter uygulaması - "Museum Aesthetic" tasarım felsefesi ile geliştirilmiş, şiirlerin duygusal derinliğini ve görsel zenginliğini bir araya getiren bir şiir günlüğü uygulaması.
 

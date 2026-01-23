@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets' as pw;
+import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
 import '../models/daily_entry_model.dart';
@@ -19,10 +19,19 @@ class PdfExportService {
     final sortedEntries = entries.toList()
       ..sort((a, b) => a.date.compareTo(b.date));
 
-    // Get year from entries
-    final year = sortedEntries.isNotEmpty
-        ? sortedEntries.first.date.year
-        : DateTime.now().year;
+    // Calculate Year Range
+    String yearDisplay;
+    if (sortedEntries.isNotEmpty) {
+      final minYear = sortedEntries.first.date.year;
+      final maxYear = sortedEntries.last.date.year;
+      if (minYear == maxYear) {
+        yearDisplay = '$minYear';
+      } else {
+        yearDisplay = '$minYear - $maxYear';
+      }
+    } else {
+      yearDisplay = '${DateTime.now().year}';
+    }
 
     // Load fonts for Turkish support
     final ttf = await PdfGoogleFonts.notoSerifRegular();
@@ -38,16 +47,25 @@ class PdfExportService {
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
               pw.Text(
-                userName,
+                'DearDay',
                 style: pw.TextStyle(
                   font: ttfBold,
                   fontSize: 48,
                   letterSpacing: 2,
                 ),
               ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                userName,
+                style: pw.TextStyle(
+                  font: ttf,
+                  fontSize: 18,
+                  color: PdfColors.grey700,
+                ),
+              ),
               pw.SizedBox(height: 20),
               pw.Text(
-                '$year Günlüğüm',
+                '$yearDisplay ${_t('journal_title', locale)}',
                 style: pw.TextStyle(
                   font: ttfItalic,
                   fontSize: 24,
@@ -59,7 +77,7 @@ class PdfExportService {
               pw.Container(width: 200, height: 2, color: PdfColors.grey400),
               pw.SizedBox(height: 40),
               pw.Text(
-                'Anılarım • Duygularım • Yolculuğum',
+                _t('journal_subtitle', locale),
                 style: pw.TextStyle(
                   font: ttfItalic,
                   fontSize: 14,
@@ -79,6 +97,15 @@ class PdfExportService {
         'dd MMMM yyyy, EEEE',
         locale,
       ).format(entry.date);
+
+      // Load image if exists
+      pw.ImageProvider? entryImage;
+      if (entry.mediaPaths.isNotEmpty) {
+        entryImage = await _loadImage(entry.mediaPaths.first);
+      }
+
+      // 1. Prep Story Text
+      final storyText = entry.customStory ?? entry.savedStory;
 
       // Build page content
       final pageContent = <pw.Widget>[
@@ -109,54 +136,69 @@ class PdfExportService {
         pw.Divider(color: PdfColors.grey300),
         pw.SizedBox(height: 16),
 
-        // Story text
-        if (entry.customStory != null && entry.customStory!.isNotEmpty)
-          pw.Text(
-            entry.customStory!,
-            style: pw.TextStyle(
-              font: ttf,
-              fontSize: 12,
-              height: 1.6,
-              color: PdfColors.grey900,
+        // 1. THE STORY (Only if it exists)
+        if (storyText != null && storyText.trim().isNotEmpty) ...[
+          pw.Container(
+            margin: const pw.EdgeInsets.only(bottom: 5),
+            child: pw.Text(
+              storyText,
+              style: pw.TextStyle(
+                font: ttfItalic,
+                fontSize: 10,
+                color: PdfColors.grey700,
+                fontStyle: pw.FontStyle.italic,
+              ),
+              textAlign: pw.TextAlign.justify,
             ),
-            textAlign: pw.TextAlign.justify,
           ),
+          pw.SizedBox(height: 5), // Small gap after story
+        ],
 
-        // Note if no story
-        if ((entry.customStory == null || entry.customStory!.isEmpty) &&
-            entry.note != null &&
-            entry.note!.isNotEmpty)
+        // 2. THE MANUAL NOTE (Only if it exists)
+        if (entry.note != null && entry.note!.trim().isNotEmpty) ...[
           pw.Text(
             entry.note!,
             style: pw.TextStyle(
-              font: ttfItalic,
-              fontSize: 12,
-              height: 1.6,
-              color: PdfColors.grey700,
+              font: ttf, // Regular font
+              fontSize: 11,
+              color: PdfColors.black,
             ),
             textAlign: pw.TextAlign.justify,
           ),
+          pw.SizedBox(height: 10),
+        ],
+
+        // Separator between text and media
+        if (entry.mediaPaths.isNotEmpty) ...[
+          pw.SizedBox(height: 20),
+          pw.Divider(color: PdfColors.grey300, thickness: 0.5),
+          pw.SizedBox(height: 20),
+        ],
 
         pw.SizedBox(height: 20),
 
         // Photo if exists
-        if (entry.mediaPaths.isNotEmpty)
-          pw.FutureBuilder<pw.ImageProvider?>(
-            future: _loadImage(entry.mediaPaths.first),
-            builder: (context, data) {
-              if (data.data != null) {
-                return pw.Container(
-                  alignment: pw.Alignment.center,
-                  child: pw.Image(
-                    data.data!,
-                    height: 200,
-                    fit: pw.BoxFit.contain,
-                  ),
-                );
-              }
-              return pw.SizedBox();
-            },
+        if (entryImage != null)
+          pw.Container(
+            alignment: pw.Alignment.center,
+            child: pw.Image(entryImage, height: 200, fit: pw.BoxFit.contain),
           ),
+
+        pw.Spacer(),
+
+        // Footer
+        pw.Container(
+          alignment: pw.Alignment.centerRight,
+          margin: const pw.EdgeInsets.only(top: 20),
+          child: pw.Text(
+            'Created with DearDay  •  ${_t('page', locale)} ${i + 2}',
+            style: pw.TextStyle(
+              font: ttfItalic,
+              fontSize: 10,
+              color: PdfColors.grey500,
+            ),
+          ),
+        ),
       ];
 
       pdf.addPage(
@@ -166,18 +208,6 @@ class PdfExportService {
           build: (context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: pageContent,
-          ),
-          footer: (context) => pw.Container(
-            alignment: pw.Alignment.centerRight,
-            margin: const pw.EdgeInsets.only(top: 20),
-            child: pw.Text(
-              'Sayfa ${i + 2}',
-              style: pw.TextStyle(
-                font: ttfItalic,
-                fontSize: 10,
-                color: PdfColors.grey600,
-              ),
-            ),
           ),
         ),
       );
@@ -201,7 +231,7 @@ class PdfExportService {
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text(
-              'Yılın Özeti',
+              _t('year_summary', locale),
               style: pw.TextStyle(
                 font: ttfBold,
                 fontSize: 32,
@@ -214,21 +244,21 @@ class PdfExportService {
 
             // Statistics
             _buildStat(
-              'Toplam Gün Sayısı',
+              _t('total_days', locale),
               '${sortedEntries.length}',
               ttf,
               ttfBold,
             ),
             pw.SizedBox(height: 20),
             _buildStat(
-              'En Çok Hissedilen Duygu',
-              _getMoodName(topMood),
+              _t('top_mood', locale),
+              _getMoodName(topMood, locale),
               ttf,
               ttfBold,
             ),
             pw.SizedBox(height: 20),
             _buildStat(
-              'İlk Giriş',
+              _t('first_entry', locale),
               sortedEntries.isNotEmpty
                   ? DateFormat(
                       'dd MMMM yyyy',
@@ -240,7 +270,7 @@ class PdfExportService {
             ),
             pw.SizedBox(height: 20),
             _buildStat(
-              'Son Giriş',
+              _t('last_entry', locale),
               sortedEntries.isNotEmpty
                   ? DateFormat(
                       'dd MMMM yyyy',
@@ -264,7 +294,7 @@ class PdfExportService {
                   ),
                 ),
                 child: pw.Text(
-                  '"Her gün bir sayfa, her sayfa bir anı..."',
+                  _t('quote', locale),
                   style: pw.TextStyle(
                     font: ttfItalic,
                     fontSize: 14,
@@ -334,29 +364,61 @@ class PdfExportService {
     }
   }
 
-  // Helper: Get mood name in Turkish
-  String _getMoodName(String code) {
+  // Helper: Translate strings for PDF
+  String _t(String key, String locale) {
+    final isTr = locale.startsWith('tr');
+    switch (key) {
+      case 'journal_title':
+        return isTr ? 'Günlüğüm' : 'My Journal';
+      case 'journal_subtitle':
+        return isTr
+            ? 'Anılarım • Duygularım • Yolculuğum'
+            : 'Memories • Feelings • Journey';
+      case 'page':
+        return isTr ? 'Sayfa' : 'Page';
+      case 'year_summary':
+        return isTr ? 'Yılın Özeti' : 'Year in Review';
+      case 'total_days':
+        return isTr ? 'Toplam Gün Sayısı' : 'Total Days';
+      case 'top_mood':
+        return isTr ? 'En Çok Hissedilen Duygu' : 'Dominant Mood';
+      case 'first_entry':
+        return isTr ? 'İlk Giriş' : 'First Entry';
+      case 'last_entry':
+        return isTr ? 'Son Giriş' : 'Last Entry';
+      case 'quote':
+        return isTr
+            ? '"Her gün bir sayfa, her sayfa bir anı..."'
+            : '"Every day is a page, every page is a memory..."';
+      default:
+        return key;
+    }
+  }
+
+  // Helper: Get mood name in Turkish/English
+  String _getMoodName(String code, String locale) {
+    final isTr = locale.startsWith('tr');
     switch (code) {
       case 'happy':
-        return 'Mutlu';
+        return isTr ? 'Mutlu' : 'Happy';
       case 'sad':
-        return 'Üzgün';
+        return isTr ? 'Üzgün' : 'Sad';
       case 'romantic':
-        return 'Romantik';
+        return isTr ? 'Romantik' : 'Romantic';
       case 'mystic':
-        return 'Mistik';
+        return isTr ? 'Mistik' : 'Mystic';
       case 'tired':
-        return 'Yorgun';
+        return isTr ? 'Yorgun' : 'Tired';
       case 'hopeful':
-        return 'Umutlu';
+        return isTr ? 'Umutlu' : 'Hopeful';
       case 'peaceful':
-        return 'Huzurlu';
+        return isTr ? 'Huzurlu' : 'Peaceful';
       case 'nostalgic':
-        return 'Nostaljik';
+        return isTr ? 'Nostaljik' : 'Nostalgic';
       case 'angry':
-        return 'Kızgın';
+        return isTr ? 'Kızgın' : 'Angry';
       default:
-        return 'Bilinmiyor';
+        return isTr ? 'Bilinmiyor' : 'Unknown';
     }
   }
 

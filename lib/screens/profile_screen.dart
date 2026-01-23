@@ -60,6 +60,11 @@ class ProfileScreen extends StatelessWidget {
                                   )
                                 : const AssetImage('assets/images/bg_1.jpg')
                                       as ImageProvider,
+                            onBackgroundImageError: (exception, stackTrace) {
+                              debugPrint(
+                                'Error loading profile image: $exception',
+                              );
+                            },
                             child: moodProvider.profileImagePath == null
                                 ? const Icon(
                                     LineIcons.user,
@@ -402,10 +407,10 @@ class ProfileScreen extends StatelessWidget {
               _buildSettingTile(
                 context,
                 icon: Icons.picture_as_pdf,
-                title: 'PDF Olarak İndir',
+                title: AppLocalizations.of(context)!.exportToPdf,
                 subtitle: Provider.of<PremiumProvider>(context).isPremium
-                    ? 'Günlüğünüzü kitap formatında kaydedin'
-                    : '🔒 Premium Özellik',
+                    ? AppLocalizations.of(context)!.exportToPdfDesc
+                    : '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}',
                 onTap: () => _exportToPdf(context),
                 isDark: isDark,
                 isPremiumFeature: true,
@@ -536,10 +541,7 @@ class ProfileScreen extends StatelessWidget {
         subtitle: subtitle != null
             ? Text(
                 subtitle,
-                style: GoogleFonts.nunito(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey),
               )
             : null,
         trailing: Icon(
@@ -553,28 +555,32 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _exportToPdf(BuildContext context) async {
-    final isPremium = Provider.of<PremiumProvider>(context, listen: false).isPremium;
-    
+    final isPremium = Provider.of<PremiumProvider>(
+      context,
+      listen: false,
+    ).isPremium;
+
     // Premium gate
     if (!isPremium) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const PaywallScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const PaywallScreen()),
       );
       return;
     }
 
     final moodProvider = Provider.of<MoodProvider>(context, listen: false);
-    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final languageProvider = Provider.of<LanguageProvider>(
+      context,
+      listen: false,
+    );
     final entries = moodProvider.journal.values.toList();
 
     if (entries.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Henüz hiç günlük girişi yok. PDF oluşturmak için en az bir giriş yapmalısınız.',
+            AppLocalizations.of(context)!.noEntriesForPdf,
             style: GoogleFonts.nunito(),
           ),
           backgroundColor: Colors.orange,
@@ -602,7 +608,7 @@ class ProfileScreen extends StatelessWidget {
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
               Text(
-                'PDF oluşturuluyor...',
+                AppLocalizations.of(context)!.creatingPdf,
                 style: GoogleFonts.nunito(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -621,17 +627,17 @@ class ProfileScreen extends StatelessWidget {
         userName: moodProvider.userName,
         locale: languageProvider.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
       );
-      
+
       // Close loading dialog
       Navigator.of(context).pop();
     } catch (e) {
       // Close loading dialog
       Navigator.of(context).pop();
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'PDF oluşturulurken bir hata oluştu: $e',
+            AppLocalizations.of(context)!.pdfError(e.toString()),
             style: GoogleFonts.nunito(),
           ),
           backgroundColor: Colors.red,

@@ -3,694 +3,901 @@
         "dayNote": [
             "Günün Notu: {note}",
             "Bugünden aklımda kalan: {note}",
-            "Kısaca özetlemek gerekirse: {note}"
+            "Kısaca özetlemek gerekirse: {note}",
+            "Günün özeti: {note}",
+            "Bugüne dair son sözüm: {note}"
         ],
         "journal_sport": [
-            "Bugün spor yaparak bedenimi canlandırdım ve ter attım.",
+            "Bugün spor yaparak bedenimi canlandırdım.",
             "Antrenmanın hakkını verdim, kaslarımın çalıştığını hissetmek harikaydı.",
-            "Harekete geçmek ruhuma ilaç gibi geldi, limitlerimi zorladım."
+            "Harekete geçmek ruhuma ilaç gibi geldi, limitlerimi zorladım.",
+            "Spor bitti, ben de bittim ama bu tatlı yorgunluğa bayılıyorum.",
+            "Bedenim 'dur' dedi, iradem 'devam et'. Kazanan iradem oldu.",
+            "Ter atmak, günün stresini atmanın en iyi yoluydu.",
+            "Bugün bahaneleri bir kenara bıraktım ve o antrenmanı yaptım!"
         ],
         "journal_healthy_food": [
             "Vücuduma iyi baktım ve sağlıklı besinler tükettim.",
             "Tabağım rengarenkti, vitamin deposu bir gün geçirdim.",
-            "Bedenime çöp değil yakıt koydum, temiz beslendim."
+            "Bedenime çöp değil yakıt koydum, temiz beslendim.",
+            "Bugün yeşillikler ve taze gıdalarla dolu bir menüm vardı.",
+            "Sağlıklı beslenince enerjimin nasıl yükseldiğini fark ettim.",
+            "Midemi yormayan, hücrelerimi besleyen harika tercihler yaptım."
         ],
         "journal_fast_food": [
             "Bugünlük kendime izin verdim ve fast food kaçamağı yaptım.",
             "Canım çok çekti, ödül öğünü yaparak lezzetin tadını çıkardım.",
-            "Sağlıklı beslenmeye kısa bir mola verip kendimi şımarttım."
+            "Sağlıklı beslenmeye kısa bir mola verip kendimi şımarttım.",
+            "Kalorileri saymadım, sadece o ilk ısırığın mutluluğuna odaklandım.",
+            "Bazen ruhun da doyması gerekir; bugün o günlerden biriydi.",
+            "Pişman değilim, yine olsa yine yerim! Lezzet şöleniydi."
         ],
         "journal_water": [
             "Bol bol su içerek vücudumu tazeledim.",
             "Hidrasyonu ihmal etmedim, suyun ferahlığını hissettim.",
-            "Hücrelerime can suyu verdim, su içme hedefimi tutturdum."
+            "Hücrelerime can suyu verdim, su içme hedefimi tutturdum.",
+            "Bugün su şişem en yakın arkadaşımdı, yanımdan ayırmadım.",
+            "Su hayattır dedik, kana kana içtik.",
+            "Vücudumun suya doyduğu, ferah bir gün oldu."
         ],
         "journal_walking": [
             "Güzel bir yürüyüşle zihnimi açtım.",
-            "Adımlarımı sayarken dertlerimi arkamda bıraktım, harika bir yürüyüştü.",
-            "Temiz havada yürümek bana terapi gibi geldi."
+            "Adımlarımı sayarken dertlerimi arkamda bıraktım.",
+            "Temiz havada yürümek bana terapi gibi geldi.",
+            "Ayaklarımın ritmine düşüncelerim eşlik etti, uzun uzun yürüdüm.",
+            "Şehrin sokaklarını arşınladım, her adımda biraz daha hafifledim.",
+            "Kulaklığımı taktım, dünyayı sessize alıp sadece yürüdüm."
         ],
         "journal_vitamins": [
             "Vitaminlerimi alarak bağışıklığımı destekledim.",
             "Takviyelerimi unutmadım, sağlığımı garantiye aldım.",
-            "Güne vitamin desteğiyle zinde devam ettim."
+            "Güne vitamin desteğiyle zinde devam ettim.",
+            "Küçük bir kapsül, büyük bir sağlık yatırımı. Vitaminler tamam.",
+            "Kendime bakıyorum, vitaminlerimi aksatmadan alıyorum."
         ],
         "journal_sleep_health": [
             "Gün içinde ekstra uyuyarak enerji depoladım.",
             "Şekerleme yaparak zihnimi dinlendirdim, yenilenmiş uyandım.",
-            "Vücudumun dinlenme isteğine kulak verdim ve uyudum."
+            "Vücudumun dinlenme isteğine kulak verdim ve uyudum.",
+            "Dünya dursun, ben biraz uyuyacağım dedim ve o molayı verdim.",
+            "Kısa bir uyku, günü kurtarmaya yetti."
         ],
         "journal_doctor": [
             "Doktor kontrolüne giderek sağlığımı ihmal etmedim.",
-            "Sağlık her şeyden önce gelir dedim ve doktor randevumu hallettim.",
-            "Kontrollerimi yaptırarak kendime en büyük iyiliği yaptım."
+            "Sağlık her şeyden önce gelir dedim ve randevumu hallettim.",
+            "Kontrollerimi yaptırarak kendime en büyük iyiliği yaptım.",
+            "Bugün hastane işleri vardı, sağlığım için gerekeni yaptım.",
+            "Ertelediğim o kontrolü nihayet aradan çıkardım, içim rahat."
         ],
         "journal_friends": [
             "Arkadaşlarımla buluşup harika vakit geçirdim.",
             "Dost meclisinde kahkahalar havada uçuştu, çok keyifliydi.",
-            "Sevdiğim insanlarla bir arada olmak tüm stresimi aldı götürdü."
+            "Sevdiğim insanlarla bir arada olmak tüm stresimi aldı götürdü.",
+            "Yıllanmış dostluklar, sıcak sohbetler... Ruhum doydu.",
+            "Gülmekten karnımızın ağrıdığı o günlerden biriydi.",
+            "Arkadaşlarım iyi ki varlar, onlarla zaman su gibi aktı."
         ],
         "journal_family": [
             "Ailemle zaman geçirmenin huzurunu yaşadım.",
             "Evdeki sıcak ortam ve aile saadeti paha biçilemezdi.",
-            "En güvenli limanımda, ailemle birlikteydim."
+            "En güvenli limanımda, ailemle birlikteydim.",
+            "Anne/Baba evinin huzuru başkadır, bugün onu hissettim.",
+            "Ailemle bir arada olmak bana güç verdi."
         ],
         "journal_party": [
             "Partiye katıldım ve eğlencenin tadını çıkardım!",
             "Müzik, dans ve eğlence... Gecenin ritmine kendimi kaptırdım.",
-            "Sosyal kelebek modundaydım, harika bir kutlamaydı."
+            "Sosyal kelebek modundaydım, harika bir kutlamaydı.",
+            "Kurtlarımızı döktük, pistin tozunu attırdık!",
+            "Unutulmaz bir geceydi, enerjimiz tavan yaptı."
         ],
         "journal_partner": [
             "Partnerimle romantik ve özel anlar paylaştım.",
             "Aşk dolu, baş başa ve keyifli zaman geçirdik.",
-            "Sevdiğim kişiyle anın tadını çıkardım, kalbim sıcacıktı."
+            "Sevdiğim kişiyle anın tadını çıkardım, kalbim sıcacıktı.",
+            "Onunla geçen her dakika kıymetli, bugün de harikaydı.",
+            "Göz göze, diz dize... Aşk tazeledik."
         ],
         "journal_guests": [
             "Evimde misafir ağırlamanın keyfini yaşadım.",
             "Kapım sevdiklerime açıktı, misafirperverliğin tadı başkaydı.",
-            "Evim şenlendi, dostlarla sofra başında keyifli sohbetler ettik."
+            "Evim şenlendi, dostlarla sofra başında keyifli sohbetler ettik.",
+            "Misafir berekettir, evimiz bugün çok kalabalıktı ve güzeldi.",
+            "Güzel ağırladık, güzel uğurladık. Yorgun ama mutluyum."
         ],
         "journal_colleagues": [
             "İş arkadaşlarımla verimli vakit geçirdim.",
             "Ofis ortamında hem çalıştık hem de keyifli molalar verdik.",
-            "Ekip ruhunu hissettiğim, iş arkadaşlarımla sosyalleştiğim bir gündü."
+            "Ekip ruhunu hissettiğim, iş arkadaşlarımla sosyalleştiğim bir gündü.",
+            "İş stresi, kahve molasındaki sohbetlerle uçup gitti.",
+            "Bugün ofiste işten çok kahkaha vardı."
         ],
         "journal_travel": [
             "Yollara düştüm, seyahat etmenin özgürlüğünü hissettim.",
             "Yeni yerler, yeni yollar... Seyahat ruhumu besledi.",
-            "Tekerlekler dönerken ben de zihnimi özgür bıraktım."
+            "Tekerlekler dönerken ben de zihnimi özgür bıraktım.",
+            "Çantamı sırtladım ve bilinmeze doğru yola çıktım.",
+            "Yol açık, yola çıkmak gerek. Bugün gezgin ruhum devredeydi.",
+            "Farklı şehirler, farklı yüzler... Keşfetmenin hazzı başkaydı."
         ],
         "journal_volunteer": [
             "Gönüllü çalışmalara katılarak ruhumu besledim.",
             "Başkalarına yardım etmenin verdiği o eşsiz huzuru hissettim.",
-            "Bir iyiliğin parçası olmak günümü anlamlı kıldı."
+            "Bir iyiliğin parçası olmak günümü anlamlı kıldı.",
+            "Karşılıksız vermenin, paylaşmanın güzelliğini yaşadım.",
+            "Bugün dünyayı biraz daha güzelleştirmek için adım attım."
         ],
         "journal_gaming": [
             "Oyun dünyasına dalarak günün stresini attım.",
             "Gerçek dünyadan kopup sanal dünyada maceralara atıldım.",
-            "Konsolun/Bilgisayarın başına geçip eğlenceli saatler geçirdim."
+            "Konsolun/Bilgisayarın başına geçip eğlenceli saatler geçirdim.",
+            "Bölümleri geçtim, rekorları kırdım, oyunun kralı bendim.",
+            "Sadece bir oyun değil, bambaşka bir evrende yolculuktu."
         ],
         "journal_reading": [
             "Kitabımın sayfaları arasında kayboldum.",
             "Okuduğum satırlar bana yepyeni dünyaların kapısını açtı.",
-            "Bir fincan kahve ve iyi bir kitapla ruhumu doyurdum."
+            "Bir fincan kahve ve iyi bir kitapla ruhumu doyurdum.",
+            "Kelimelerin nehrinde yıkandım, başka hayatlara dokundum.",
+            "Kitabın en heyecanlı yerindeydim, zamanın nasıl geçtiğini anlamadım.",
+            "Bugün en iyi arkadaşım kitabımdı."
         ],
         "journal_movie": [
             "Güzel bir film/dizi izleyerek keyif yaptım.",
             "Ekran karşısına geçip hikayenin içine daldım.",
-            "Seyir keyfi yüksek, harika bir yapım izledim."
+            "Seyir keyfi yüksek, harika bir yapım izledim.",
+            "Patlamış mısırımı aldım ve sinema keyfini eve taşıdım.",
+            "Bir film izledim ve dünyam değişti (şaka şaka, ama güzeldi).",
+            "Dizi maratonu yaptım, bir sonraki bölümü açmadan duramadım."
         ],
         "journal_art": [
             "Sanatla ilgilenerek içimdeki yaratıcılığı dışa vurdum.",
             "Renkler, şekiller ve ilham... Sanatla ruhumu ifade ettim.",
-            "Yaratıcı enerjimi serbest bıraktım, üretmek çok iyi geldi."
+            "Yaratıcı enerjimi serbest bıraktım, üretmek çok iyi geldi.",
+            "İlham perileri bugün yanımdaydı, ortaya güzel şeyler çıktı.",
+            "Sanat, ruhun yıkandığı yerdir. Bugün ruhumu yıkadım."
         ],
         "journal_music": [
             "Müziğin ritmine kapıldım ve ruhumu dinlendirdim.",
             "Kulaklığımı taktım ve dünya ile bağımı kopardım, sadece müzik vardı.",
-            "En sevdiğim şarkılar günün soundtrack'i oldu."
+            "En sevdiğim şarkılar günün soundtrack'i oldu.",
+            "Notaların arasında gezindim, müzik ruhumun gıdasıydı.",
+            "Şarkılara eşlik ettim, sesim kötü olsa da keyfim yerindeydi."
         ],
         "journal_coding": [
             "Kod yazarak yeni şeyler inşa etmenin hazzını yaşadım.",
             "Ekran başında üretken bir gün geçirdim, algoritmalarla dans ettim.",
-            "Projeme odaklandım ve satır satır ilerlemenin keyfine vardım."
+            "Projeme odaklandım ve satır satır ilerlemenin keyfine vardım.",
+            "Buglar çözüldü, kodlar derlendi, benden mutlusu yok.",
+            "Siyah ekran, renkli kodlar ve kahve... Benim dünyam."
         ],
         "journal_photography": [
             "Kadrajımdan hayatı yakaladım ve fotoğraf çektim.",
             "Anı dondurmak ve güzel kareler yakalamak harikaydı.",
-            "Dünyaya vizörden bakıp estetik detayları keşfettim."
+            "Dünyaya vizörden bakıp estetik detayları keşfettim.",
+            "Işık mükemmeldi, deklanşöre basmaktan kendimi alamadım.",
+            "Gözümün gördüğü güzellikleri ölümsüzleştirdim."
         ],
         "journal_crafts": [
             "El işleriyle uğraşarak üretken bir gün geçirdim.",
             "Ellerim çalıştı, zihnim dinlendi. Üretmek harika bir his.",
-            "Kendi emeğimle bir şeyler ortaya çıkarmanın keyfini yaşadım."
+            "Kendi emeğimle bir şeyler ortaya çıkarmanın keyfini yaşadım.",
+            "İlmek ilmek, parça parça bir şeyler yaratmak terapi gibiydi."
         ],
         "journal_cleaning": [
             "Evi temizleyip ferah bir yaşam alanı yarattım.",
             "Evi derleyip toplamak zihnimi de düzenledi sanki.",
-            "Mis gibi kokan, tertemiz bir evde olmanın huzurunu yaşıyorum."
+            "Mis gibi kokan, tertemiz bir evde olmanın huzurunu yaşıyorum.",
+            "Dip köşe temizlik yaptım, yoruldum ama ev parladı.",
+            "Dağınıklığı toparlamak ruhumu da ferahlattı."
         ],
         "journal_shopping": [
             "Alışverişe çıktım ve eksiklerimi tamamladım.",
             "Kendim ve evim için güzel şeyler aldım, alışveriş terapisi iyi geldi.",
-            "Mağazaları dolaştım ve ihtiyaçlarımı giderdim."
+            "Mağazaları dolaştım ve ihtiyaçlarımı giderdim.",
+            "Para harcamak bazen en iyi terapidir, bugün hakkını verdim!",
+            "Poşetler dolusu mutlulukla eve döndüm."
         ],
         "journal_laundry": [
             "Çamaşırları yıkayıp düzeni sağladım.",
             "Temiz kıyafetlerin kokusu eve yayıldı, işleri yoluna koydum.",
-            "Çamaşır sepetini boşalttım, düzenli olmanın hafifliğini hissediyorum."
+            "Çamaşır sepetini boşalttım, düzenli olmanın hafifliğini hissediyorum.",
+            "Yıka, kurut, katla... Döngüyü tamamladım, görev başarılı."
         ],
         "journal_cooking": [
             "Mutfağa girdim ve lezzetli yemekler hazırladım.",
             "Tencerede pişen yemeğin kokusu evi sardı, mutfakta şef bendim.",
-            "Kendi ellerimle hazırladığım yemeğin tadı bir başkaydı."
+            "Kendi ellerimle hazırladığım yemeğin tadı bir başkaydı.",
+            "Soğan doğra, karıştır, pişir... Mutfakta terapi yaptım.",
+            "Bugün menüde sevgi ve lezzet vardı."
         ],
         "journal_ironing": [
             "Ütü yaparak kıyafetlerimi jilet gibi yaptım.",
             "Kırışıklıkları giderirken zihnimdeki karmaşayı da ütüledim sanki.",
-            "Düzenli ve özenli görünmek için ütüleri hallettim."
+            "Düzenli ve özenli görünmek için ütüleri hallettim.",
+            "Sıcak buhar ve düzen... Ütü yapmak garip bir huzur verdi."
         ],
         "journal_dishes": [
             "Bulaşıkları halledip mutfağı tertemiz bıraktım.",
             "Tezgahın üzerini boşaltmak bana ferahlık verdi.",
-            "Mutfak işlerini bitirip günü kapattım."
+            "Mutfak işlerini bitirip günü kapattım.",
+            "Köpüklü sular, temiz tabaklar... Mutfak mesaisi bitti."
         ],
         "journal_repair": [
             "Evdeki ufak tamirat işlerini hallettim.",
             "Elimden iş gelir dedim ve arızaları giderdim.",
-            "Evin eksiklerini tamamlamak, tamir etmek beni tatmin etti."
+            "Evin eksiklerini tamamlamak, tamir etmek beni tatmin etti.",
+            "Usta çağırmaya gerek kalmadı, kendi işimi kendim gördüm."
         ],
         "journal_plants": [
             "Bitkilerimle ilgilendim, onlara can suyu verdim.",
             "Toprakla uğraşmak ve yeşile dokunmak enerjimi tazeledi.",
-            "Bitkilerimin bakımını yaptım, büyüdüklerini görmek harika."
+            "Bitkilerimin bakımını yaptım, büyüdüklerini görmek harika.",
+            "Evimin yeşil üyeleriyle konuştum, yapraklarını sevdim.",
+            "Doğanın küçük bir parçasını evimde yaşatmak huzur veriyor."
         ],
         "journal_manicure": [
             "Manikür yaptırarak ellerime bakım uyguladım.",
             "Tırnaklarıma özen gösterdim, bakımlı olmak iyi hissettirdi.",
-            "Küçük bir güzellik molası verip ellerimi şımarttım."
+            "Küçük bir güzellik molası verip ellerimi şımarttım.",
+            "Renkli ojeler, bakımlı eller... Modum yükseldi."
         ],
         "journal_skincare": [
             "Cilt bakımı rutinimi uygulayıp kendimi şımarttım.",
             "Cildim neme doydu, aynaya bakınca ışıldadığımı hissettim.",
-            "Kendime ayırdığım bu bakım saati bana çok iyi geldi."
+            "Kendime ayırdığım bu bakım saati bana çok iyi geldi.",
+            "Cildim nefes aldı, ben yenilendim. Işıl ışıl bir gün.",
+            "Bakım şart dedik, kremleri sürdük, keyfimize baktık."
         ],
         "journal_hair": [
             "Saçlarıma bakım yaptım ve kendimi yenilenmiş hissettim.",
             "Saçlarımla ilgilendim, bakımlı olmanın özgüvenini yaşadım.",
-            "Kuaför/Bakım günümdü, değişim enerjimi yükseltti."
+            "Kuaför/Bakım günümdü, değişim enerjimi yükseltti.",
+            "Saçlarım ahenkle dans ediyor, bugün kendimi iyi hissediyorum."
         ],
         "journal_massage": [
             "Masajla tüm kaslarımı gevşettim.",
             "Vücudumdaki tüm gerginlik uçup gitti, pamuk gibi oldum.",
-            "Kendime harika bir hediye verdim ve masajın keyfini çıkardım."
+            "Kendime harika bir hediye verdim ve masajın keyfini çıkardım.",
+            "Dünya üzerindeki en rahatlatıcı saatti, yeniden doğdum."
         ],
         "journal_facemask": [
             "Yüz maskesi yaparak cildimi canlandırdım.",
             "Evde spa keyfi yaptım, cildim nefes aldı.",
-            "Maskemi sürdüm, arkama yaslandım ve dinlendim."
+            "Maskemi sürdüm, arkama yaslandım ve dinlendim.",
+            "Güzellik uykusuna değil, güzellik maskesine yattım."
         ],
         "journal_bath": [
             "Sıcak bir banyo ile tüm yorgunluğumu attım.",
             "Suyun iyileştirici gücüne bıraktım kendimi.",
-            "Köpükler ve sıcak su... Günün en huzurlu anıydı."
+            "Köpükler ve sıcak su... Günün en huzurlu anıydı.",
+            "Duş almak sadece bedeni değil, ruhu da temizler. Bugün öyle oldu.",
+            "Su aktı, dertler bitti. Tertemiz bir kapanış."
         ],
         "journal_digital_detox": [
             "Teknolojiden uzaklaşıp kendimle baş başa kaldım.",
             "Ekranları kapattım, hayata döndüm. Bildirimsiz bir huzur vardı.",
-            "Çevrimdışı olmanın özgürlüğünü yaşadım."
+            "Çevrimdışı olmanın özgürlüğünü yaşadım.",
+            "Wi-Fi yok, huzur var. Bugün dijital dünyadan izinliydim.",
+            "Gerçek hayatın pikselleri, ekranınkinden daha güzelmiş."
         ],
         "journal_no_smoking": [
             "Bugün sigara içmeyerek ciğerlerime bir iyilik yaptım.",
             "İrademi korudum ve duman yerine temiz hava çektim içime.",
-            "Sağlıklı bir yaşam için dumansız bir günü daha devirdim."
+            "Sağlıklı bir yaşam için dumansız bir günü daha devirdim.",
+            "Kendimi zehirlemedim, bugün nefesim daha derin.",
+            "Zor oldu ama başardım, dumansız hava sahası."
         ],
         "journal_social_media_detox": [
             "Sosyal medyadan uzak durarak anın tadını çıkardım.",
             "Başkalarının hayatını izlemek yerine kendi hayatımı yaşadım.",
-            "Kaydırmayı bıraktım, etrafıma bakıp güzellikleri gördüm."
+            "Kaydırmayı bıraktım, etrafıma bakıp güzellikleri gördüm.",
+            "Beğeni butonuna değil, hayata dokundum bugün.",
+            "Sanal kalabalıktan uzak, kendimle baş başa."
         ],
         "journal_read_book": [
             "Günlük kitap okuma hedefimi başarıyla tamamladım.",
             "Sayfalar arasında gezinirken zihnim aydınlandı.",
-            "Kitabıma sadık kaldım, bugünkü okuma kotamı doldurdum."
+            "Kitabıma sadık kaldım, bugünkü okuma kotamı doldurdum.",
+            "Birkaç sayfa okumak bile zihnimi açmaya yetti.",
+            "Bugün zihnimi kelimelerle besledim."
         ],
         "journal_drink_water": [
             "Su içme hedefimi tutturdum, hidrasyon tamam!",
             "Şişem yanımdan ayrılmadı, günü bol suyla tamamladım.",
-            "Bedenimin suya doyduğu sağlıklı bir gün oldu."
+            "Bedenimin suya doyduğu sağlıklı bir gün oldu.",
+            "Su içmeyi unutmadım, görev tamamlandı."
         ],
         "journal_meditation": [
             "Meditasyon yaparak iç huzuruma odaklandım.",
             "Zihnimi susturup nefesime odaklandım, dinginleştim.",
-            "Farkındalık dolu bir seansla ruhumu dengeledim."
+            "Farkındalık dolu bir seansla ruhumu dengeledim.",
+            "Dışarıdaki gürültüyü kapatıp içimdeki sese kulak verdim.",
+            "Nefes al, nefes ver... Bugün merkezimde kaldım."
         ],
         "journal_early_rise": [
             "Güneşten önce uyanarak günü yakaladım.",
             "Erken kalkıp günün en verimli saatlerini değerlendirdim.",
-            "Sabahın sessizliğinde güne başlamak harikaydı."
+            "Sabahın sessizliğinde güne başlamak harikaydı.",
+            "Alarm çalmadan (veya çalar çalmaz) kalktım, gün bana kaldı.",
+            "Erken kalkan yol alır dedik, günü verimli geçirdik."
         ],
         "journal_no_sugar": [
             "Şekersiz beslenerek irademi korudum.",
             "Tatlı krizlerine yenilmedim, sağlıklı tercihler yaptım.",
-            "Şekeri hayatımdan çıkarınca enerjimin dengelendiğini hissettim."
+            "Şekeri hayatımdan çıkarınca enerjimin dengelendiğini hissettim.",
+            "Acı kahve, gerçek tatlar. Bugün şeker yoktu, sağlık vardı.",
+            "Bedenim tatlı istemedi, ben de vermedim. İrade kazandı."
         ],
         "journal_journaling": [
             "Günlüğümü yazarak duygularımı kağıda döktüm.",
             "Kalemimden dökülenler zihnimi rahatlattı.",
-            "Günü kayda geçirdim, kendimle dertleştim."
+            "Günü kayda geçirdim, kendimle dertleştim.",
+            "Yazmak, içimdekileri boşaltmanın en güzel yoluydu.",
+            "Söz uçar yazı kalır dedim, bugünü ölümsüzleştirdim."
         ],
         "journal_10k_steps": [
             "10 bin adımı devirdim, hedefe ulaştım!",
             "Adım sayarım rekor kırdı, bugün hiç durmadım!",
-            "Hareketli bir gündü, 10.000 adım hedefini başarıyla tamamladım."
+            "Hareketli bir gündü, 10.000 adım hedefini başarıyla tamamladım.",
+            "Yürüdüm, yürüdüm, yürüdüm... Hedef tamam!",
+            "Ayaklarım ağrıdı ama gururum okşandı. 10K kulübündeyim."
         ],
         "mood_sentence_huzun": [
             "İçimde tarif etmesi zor bir hüzün vardı.",
             "Bugün gökyüzü içim kadar griydi, biraz buruk hissettim.",
-            "Kalbimde hafif bir ağırlık, gözlerimde bir nem vardı."
+            "Kalbimde hafif bir ağırlık, gözlerimde bir nem vardı.",
+            "Nedensiz bir efkar çöktü üstüme, sessizliği dinledim.",
+            "Bazen hüzün de güzeldir, ruhu dinlendirir. Bugün öyleydi."
         ],
         "mood_sentence_nese": [
             "İçim kıpır kıpırdı, neşe doluydum!",
             "Gülümsemem yüzümden eksik olmadı, enerji saçıyordum.",
-            "Hayatın renkli tarafındaydım, her şey gözüme güzel göründü."
+            "Hayatın renkli tarafındaydım, her şey gözüme güzel göründü.",
+            "Kahkahaların eksik olmadığı, pırıl pırıl bir gündü.",
+            "Bugün mutluluktan ayaklarım yere basmadı!"
         ],
         "mood_sentence_nostaljik": [
             "Eski günler aklıma geldi, biraz nostaljik hissettim.",
             "Anıların tozlu raflarında gezindim, geçmişe özlem duydum.",
-            "Eski bir şarkı veya koku beni alıp maziye götürdü."
+            "Eski bir şarkı veya koku beni alıp maziye götürdü.",
+            "Geçmişin güzel günlerini yad ettim, içim bir hoş oldu.",
+            "Zaman tünelinde kısa bir yolculuğa çıktım bugün."
         ],
         "mood_sentence_sinirli": [
             "Biraz gergindim, sinirlerim yay gibiydi.",
             "Sabrımın sınandığı anlar oldu, öfkemi kontrol etmeye çalıştım.",
-            "Tahammül seviyem düşüktü, biraz barut gibiydim."
+            "Tahammül seviyem düşüktü, biraz barut gibiydim.",
+            "Derin nefesler alarak sakinleşmeye çalıştığım, gergin bir gündü.",
+            "Bugün kimse damarıma basmasın modundaydım."
         ],
         "mood_sentence_umut": [
             "Geleceğe dair içimde güzel bir umut yeşerdi.",
             "Her şeyin güzel olacağına dair inancım tamdı bugün.",
-            "Tünelin ucundaki ışığı gördüğüm, motive olduğum bir gündü."
+            "Tünelin ucundaki ışığı gördüğüm, motive olduğum bir gündü.",
+            "Umut, en güzel kahvaltıdır. Güne umutla başladım.",
+            "Bugün kalbimde 'her şey çok güzel olacak' hissi vardı."
         ],
         "mood_sentence_huzur": [
             "Sakin, dingin ve huzurlu bir ruh halindeydim.",
             "Ruhum deniz gibi durgundu, kargaşadan uzak kaldım.",
-            "Kendimle barışık, anın tadını çıkardığım huzurlu bir gündü."
+            "Kendimle barışık, anın tadını çıkardığım huzurlu bir gündü.",
+            "Sessizliğin müziğini dinledim, huzur doluydu.",
+            "Kaos yok, acele yok. Sadece ben ve huzur var."
         ],
         "mood_sentence_romantik": [
             "Kalbimde romantik rüzgarlar esiyordu.",
             "Duygusal ve sevgi dolu hissettiğim, aşk kokan bir gündü.",
-            "Dünyaya pembe gözlüklerle baktım, kalbim pır pırdı."
+            "Dünyaya pembe gözlüklerle baktım, kalbim pır pırdı.",
+            "Şiir gibi bir gündü, duygularım şelale oldu.",
+            "Aşkı hissettiğim, romantizmin doruklarında bir gün."
         ],
         "mood_sentence_yorgun": [
             "Üzerimde tatlı bir yorgunluk ve ağırlık vardı.",
             "Enerjim biraz düşüktü, dinlenmeye ihtiyaç duydum.",
-            "Pilim bitmek üzereydi, günü zor tamamladım."
+            "Pilim bitmek üzereydi, günü zor tamamladım.",
+            "Göz kapaklarımın ağırlaştığı, yastığımı özlediğim bir gün.",
+            "Bugün dünya çok hızlı döndü, ben yetişemedim. Yorgunum."
         ],
         "sleep_good": [
             "Ayrıca uykumu harika almıştım.",
             "Gece deliksiz uyuduğum için sabah dinç kalktım.",
-            "Uykumu tam almanın verdiği enerji gün boyu sürdü."
+            "Uykumu tam almanın verdiği enerji gün boyu sürdü.",
+            "Mışıl mışıl uyumanın ödülünü gün boyu enerjik olarak aldım.",
+            "Yataktan zımba gibi kalktım, uyku kalitem süperdi."
         ],
         "sleep_bad": [
             "Ancak uykumu pek alamamıştım.",
             "Gece sık sık uyandığım için biraz uykusuzdum.",
-            "Yatakta dönüp durduğum zor bir gecenin ardından güne başladım."
+            "Yatakta dönüp durduğum zor bir gecenin ardından güne başladım.",
+            "Uykusuzluk biraz sersemletti ama yine de günü kurtardım.",
+            "Gözlerimden uyku akıyordu, zor bir geceydi."
         ],
         "weather_context": [
             "Hava da {weather}.",
             "Dışarıda ise {weather} bir hava hakimdi.",
-            "Gökyüzüne baktığımda hava {weather} görünüyordu."
+            "Gökyüzüne baktığımda hava {weather} görünüyordu.",
+            "Günün atmosferine {weather} hava eşlik etti.",
+            "Hava durumu {weather} olsa da modum kendi elimdeydi."
         ],
         "weather_sentence_sunny": [
             "Güneşin sıcak enerjisi günüme eşlik etti.",
             "Pırıl pırıl bir güneş içimi ısıttı.",
-            "Gökyüzü masmaviydi, güneşin tadını çıkardım."
+            "Gökyüzü masmaviydi, güneşin tadını çıkardım.",
+            "Güneş bana gülümsedi, ben de ona. Harika bir aydınlık vardı.",
+            "D vitamini depoladığım, ışıl ışıl bir gündü."
         ],
         "weather_sentence_cloudy": [
             "Gökyüzü bulutluydu, sakin ve dingin bir atmosfer hakimdi.",
             "Gri bulutlar şehre mistik bir hava kattı.",
-            "Güneş bulutların ardına saklanmıştı, serin bir gündü."
+            "Güneş bulutların ardına saklanmıştı, serin bir gündü.",
+            "Bulutların dansını izledim, hava tam düşüncelere dalmalıktı.",
+            "Kapalı havanın o kendine has huzuru vardı."
         ],
         "weather_sentence_rainy": [
             "Yağmurun sesi ruhumu dinlendirdi, damlalar şehri yıkadı.",
             "Toprak kokusu eşliğinde yağmurlu bir gün geçirdim.",
-            "Gök gürültüsü ve yağmurun ritmi güne eşlik etti."
+            "Gök gürültüsü ve yağmurun ritmi güne eşlik etti.",
+            "Pencereye vuran damlalarla huzur buldum.",
+            "Şemsiyemi aldım ve yağmurun tadını çıkardım."
         ],
         "weather_sentence_snowy": [
             "Lapa lapa yağan kar, etrafı bembeyaz bir masal gibi kapladı.",
             "Her yer bembeyazdı, karın sessizliği huzur verdi.",
-            "Soğuk ama büyüleyici bir kar yağışı vardı."
+            "Soğuk ama büyüleyici bir kar yağışı vardı.",
+            "Kar tanelerini izlemek büyüleyiciydi, dünya beyaz bir yorgan örttü.",
+            "Kış masalı gibi bir gündü, karın keyfini çıkardım."
         ]
     },
     "en": {
-        "introHighEnergy": [
-            "My energy levels were high today! {weather}",
-            "I woke up feeling supercharged and ready to conquer the day! {weather}",
-            "I felt absolutely electric today, nothing could stop me. {weather}"
-        ],
-        "introLowEnergy": [
-            "It was a day where I felt a bit tired. {weather}",
-            "My battery was running low today, so I took it easy. {weather}",
-            "I felt a gentle heaviness today, moving at a slower pace. {weather}"
-        ],
-        "introNeutral": [
-            "I had a calm and steady day. {weather}",
-            "Not too manic, not too slow; just a perfectly balanced day. {weather}",
-            "I went with the flow today, finding balance in the routine. {weather}"
-        ],
-        "healthAction": [
-            "I took good care of my body: {activities}.",
-            "Prioritized my health today: {activities}.",
-            "Listened to my body's needs: {activities}."
-        ],
-        "socialAction": [
-            "Spent time with loved ones: {activities}.",
-            "Socializing was good for my soul: {activities}.",
-            "Shared beautiful moments with great people: {activities}."
-        ],
-        "hobbyAction": [
-            "Improved myself and had fun: {activities}.",
-            "Devoted time to things that feed my soul: {activities}.",
-            "Focused on activities that bring me joy: {activities}."
-        ],
-        "choreAction": [
-            "Handled my responsibilities: {activities}.",
-            "Sorted out tasks I've been putting off: {activities}.",
-            "Productivity was my middle name today: {activities}."
-        ],
-        "selfCareAction": [
-            "I pampered myself: {activities}.",
-            "Showed myself the care I deserve: {activities}.",
-            "Created some 'me time': {activities}."
-        ],
-        "streakBonus": [
-            "I'm on fire, reached my goals! 🚀",
-            "Didn't break the chain, proud of my consistency! 🔥",
-            "Goals crushed for today, full speed ahead! 💪"
-        ],
-        "streakSpecific": [
-            "Successfully continued my {activity} goal on day {count}! 🔥",
-            "Doing great with {activity} for {count} days straight!",
-            "A monument of consistency: day {count} of {activity} is done."
-        ],
         "dayNote": [
-            "Note of the day: {note}",
-            "What stuck with me today: {note}",
-            "To summarize briefly: {note}"
+            "Day's Note: {note}",
+            "Stuck in my mind today: {note}",
+            "To sum it up briefly: {note}",
+            "Snapshot of the day: {note}",
+            "Final thoughts: {note}"
         ],
         "journal_sport": [
-            "I revitalized my body and broke a sweat with some sports today.",
-            "I gave it my all during the workout; feeling the burn was amazing.",
-            "Moving my body was exactly what I needed—pure therapy."
+            "Energized my body and broke a sweat with some sports today.",
+            "Gave it my all during the workout; feeling the burn was amazing.",
+            "Moving my body was exactly what I needed—pure therapy.",
+            "Pushed my limits and conquered the workout!",
+            "Sweat is just fat crying—and today, it cried a lot. Great session.",
+            "My muscles are tired, but my spirit is soaring.",
+            "No excuses today, just pure action and results."
         ],
         "journal_healthy_food": [
-            "I took care of my body and ate healthy foods.",
+            "Took good care of my body and ate healthy foods.",
             "My plate was colorful today, a vitamin-packed day.",
-            "Fueled my body with clean food instead of junk."
+            "Fueled my body with clean food instead of junk.",
+            "Eat good, feel good. Today was all about nutritious choices.",
+            "Nourished my cells with greens and wholesome meals.",
+            "Proud of my healthy choices today; my body thanked me."
         ],
         "journal_fast_food": [
-            "I allowed myself a treat and had some fast food today.",
-            "I was craving it, so I enjoyed a cheat meal guilt-free.",
-            "Took a short break from healthy eating to indulge myself."
+            "Allowed myself a treat and had some fast food today.",
+            "Was craving it, so I enjoyed a cheat meal guilt-free.",
+            "Took a short break from healthy eating to indulge myself.",
+            "Life is short, ate the burger. No regrets!",
+            "Enjoyed every bite of that delicious cheat meal.",
+            "Sometimes the soul needs comfort food, and today was that day."
         ],
         "journal_water": [
-            "I refreshed my body by drinking plenty of water.",
+            "Refreshed my body by drinking plenty of water.",
             "Didn't neglect hydration; felt the freshness of water.",
-            "Gave my cells the hydration they needed, hit my water goal."
+            "Gave my cells the hydration they needed, hit my water goal.",
+            "Water was my best friend today, stayed fully hydrated.",
+            "Clear mind, clear skin, lots of water.",
+            "Quenched my thirst and kept my energy up with H2O."
         ],
         "journal_walking": [
             "Cleared my mind with a nice walk.",
             "Left my worries behind with every step; it was a great walk.",
-            "Walking in the fresh air felt like therapy to me."
+            "Walking in the fresh air felt like therapy to me.",
+            "One step at a time, I walked my way to a calmer mind.",
+            "Explored the streets and enjoyed the rhythm of walking.",
+            "Put on my headphones and walked the world away."
         ],
         "journal_vitamins": [
             "Supported my immunity by taking my vitamins.",
             "Didn't forget my supplements, secured my health.",
-            "Kept going strong with a vitamin boost."
+            "Kept going strong with a vitamin boost.",
+            "Small pill, big impact. Health comes first.",
+            "Stayed consistent with my supplements today."
         ],
         "journal_sleep_health": [
             "Recharged by getting some extra sleep during the day.",
             "Rested my mind with a nap, woke up feeling renewed.",
-            "Listened to my body's need for rest and slept."
+            "Listened to my body's need for rest and slept.",
+            "Paused the world for a bit and took a power nap.",
+            "Sleep is the best medicine, and I took a dose today."
         ],
         "journal_doctor": [
             "Didn't neglect my health and went for a doctor's check-up.",
             "Put health first and sorted out my doctor's appointment.",
-            "Did myself the biggest favor by getting my check-ups done."
+            "Did myself the biggest favor by getting my check-ups done.",
+            "Health is wealth, so I invested time in my check-up today.",
+            "Finally ticked that doctor's appointment off my list."
         ],
         "journal_friends": [
             "Met up with friends and had a wonderful time.",
             "Laughter filled the air in good company; it was delightful.",
-            "Being with people I love took all my stress away."
+            "Being with people I love took all my stress away.",
+            "Good friends, good vibes, and great memories made.",
+            "Time flies when you're having fun with your besties.",
+            "Grateful for the friends who make life brighter."
         ],
         "journal_family": [
             "Experienced the peace of spending time with my family.",
             "The warmth of home and family happiness was priceless.",
-            "I was in my safest harbor, together with my family."
+            "I was in my safest harbor, together with my family.",
+            "Nothing beats the comfort of family time.",
+            "Recharged my soul with the love of my family."
         ],
         "journal_party": [
             "Joined a party and enjoyed the fun!",
             "Music, dance, and fun... I got lost in the rhythm of the night.",
-            "I was in social butterfly mode, it was a great celebration."
+            "I was in social butterfly mode, it was a great celebration.",
+            "Danced like nobody was watching, had a blast!",
+            "Great vibes, loud music, and unforgettable moments."
         ],
         "journal_partner": [
             "Shared romantic and special moments with my partner.",
             "We spent loving, private, and enjoyable time together.",
-            "Enjoyed the moment with my loved one, my heart was warm."
+            "Enjoyed the moment with my loved one, my heart was warm.",
+            "Love was in the air today.",
+            "Cherished every second spent with my better half."
         ],
         "journal_guests": [
             "Enjoyed the pleasure of hosting guests at my home.",
             "My door was open to loved ones; hospitality tasted different.",
-            "My home was lively, had pleasant chats at the table with friends."
+            "My home was lively, had pleasant chats at the table with friends.",
+            "Full house, full hearts. Loved hosting today.",
+            "The joy of sharing my home with others is unmatched."
         ],
         "journal_colleagues": [
             "Spent productive time with my colleagues.",
             "We worked hard and had enjoyable breaks at the office.",
-            "A day where I felt the team spirit and socialized with coworkers."
+            "A day where I felt the team spirit and socialized with coworkers.",
+            "Office banter made the workday fly by.",
+            "Productive meetings and good laughs with the team."
         ],
         "journal_travel": [
             "Hit the road, felt the freedom of traveling.",
             "New places, new roads... Travel fed my soul.",
-            "As the wheels turned, I set my mind free too."
+            "As the wheels turned, I set my mind free too.",
+            "Wanderlust kicked in; exploring new horizons.",
+            "Adventure awaits, and I answered the call today.",
+            "Collecting moments and miles, feeling free."
         ],
         "journal_volunteer": [
             "Fed my soul by participating in volunteer work.",
             "Felt the unique peace of helping others.",
-            "Being part of a good cause made my day meaningful."
+            "Being part of a good cause made my day meaningful.",
+            "Giving back feels better than receiving. A fulfilling day.",
+            "Made a small difference in the world today."
         ],
         "journal_gaming": [
             "Relieved the day's stress by diving into the gaming world.",
             "Disconnected from reality and embarked on virtual adventures.",
-            "Spent fun hours in front of the console/PC."
+            "Spent fun hours in front of the console/PC.",
+            "Leveled up in the game and cooled down in real life.",
+            "Just one more game... and it was totally worth it."
         ],
         "journal_reading": [
             "Got lost between the pages of my book.",
             "The lines I read opened up whole new worlds to me.",
-            "Fed my soul with a cup of coffee and a good book."
+            "Fed my soul with a cup of coffee and a good book.",
+            "Traveled to different worlds without leaving my chair.",
+            "Just me and a good story, the perfect escape.",
+            "Devoured chapters and fueled my imagination."
         ],
         "journal_movie": [
             "Enjoyed myself by watching a good movie/series.",
             "Sat in front of the screen and dove into the story.",
-            "Watched a great production with high viewing pleasure."
+            "Watched a great production with high viewing pleasure.",
+            "Popcorn in hand, reality on pause. Movie night!",
+            "Binge-watched my favorite show, no regrets.",
+            "Cinema therapy was exactly what I needed."
         ],
         "journal_art": [
             "Expressed my inner creativity by engaging with art.",
             "Colors, shapes, and inspiration... I expressed my soul through art.",
-            "Unleashed my creative energy; creating felt so good."
+            "Unleashed my creative energy; creating felt so good.",
+            "Let my imagination run wild on the canvas.",
+            "Art washes away from the soul the dust of everyday life."
         ],
         "journal_music": [
             "Got carried away by the rhythm of the music and rested my soul.",
             "Put on my headphones and cut ties with the world; just music.",
-            "My favorite songs became the soundtrack of the day."
+            "My favorite songs became the soundtrack of the day.",
+            "Lost in the melody, found in the lyrics.",
+            "Music on, world off. My kind of meditation."
         ],
         "journal_coding": [
             "Experienced the joy of building new things by coding.",
             "Had a productive day at the screen, dancing with algorithms.",
-            "Focused on my project and enjoyed progressing line by line."
+            "Focused on my project and enjoyed progressing line by line.",
+            "Squashed bugs and built features. A coder's paradise.",
+            "Turning coffee into code, one line at a time."
         ],
         "journal_photography": [
             "Captured life through my lens and took photos.",
             "Freezing the moment and capturing beautiful shots was great.",
-            "Looked at the world through the viewfinder and discovered aesthetic details."
+            "Looked at the world through the viewfinder and discovered aesthetic details.",
+            "Chasing light and capturing memories.",
+            "Every picture tells a story, and today I told many."
         ],
         "journal_crafts": [
             "Had a productive day working on handicrafts.",
             "My hands worked, my mind rested. Creating is a great feeling.",
-            "Enjoyed the pleasure of creating something with my own effort."
+            "Enjoyed the pleasure of creating something with my own effort.",
+            "Handmade with love, felt productive and creative."
         ],
         "journal_cleaning": [
             "Cleaned the house and created a fresh living space.",
             "Tidying up the house seemed to organize my mind too.",
-            "Enjoying the peace of being in a smelling-fresh, spotless home."
+            "Enjoying the peace of being in a smelling-fresh, spotless home.",
+            "Scrubbed the stress away, now my home sparkles.",
+            "A clean home is a happy home. Mission accomplished."
         ],
         "journal_shopping": [
             "Went shopping and completed my missing items.",
             "Bought nice things for myself and my home; retail therapy worked.",
-            "Browsed the stores and sorted out my needs."
+            "Browsed the stores and sorted out my needs.",
+            "Shopping is cheaper than a psychiatrist! Had fun today.",
+            "Came home with bags full of joy."
         ],
         "journal_laundry": [
             "Washed the laundry and restored order.",
             "The scent of clean clothes filled the house; got things back on track.",
-            "Emptied the laundry basket, feeling the lightness of being organized."
+            "Emptied the laundry basket, feeling the lightness of being organized.",
+            "Wash, dry, fold, repeat. conquered the laundry mountain."
         ],
         "journal_cooking": [
             "Entered the kitchen and prepared delicious meals.",
             "The smell of cooking filled the house; I was the chef today.",
-            "The taste of the meal I prepared with my own hands was unique."
+            "The taste of the meal I prepared with my own hands was unique.",
+            "Cooked with love and served with pride.",
+            "My kitchen, my rules, my delicious creation."
         ],
         "journal_ironing": [
             "Ironed my clothes to make them look sharp.",
             "Felt like I ironed out the chaos in my mind while smoothing wrinkles.",
-            "Handled the ironing to look neat and polished."
+            "Handled the ironing to look neat and polished.",
+            "Smooth clothes, smooth day. Ironing done."
         ],
         "journal_dishes": [
             "Handled the dishes and left the kitchen spotless.",
             "Clearing the counter gave me a sense of relief.",
-            "Finished the kitchen chores and closed the day."
+            "Finished the kitchen chores and closed the day.",
+            "Clean sink, clear mind. Dishes are done."
         ],
         "journal_repair": [
             "Took care of small repair jobs around the house.",
             "Proved I'm handy and fixed the malfunctions.",
-            "Completing the house's missing parts and fixing things satisfied me."
+            "Completing the house's missing parts and fixing things satisfied me.",
+            "Mr./Ms. Fix-it strikes again! Repairs handled."
         ],
         "journal_plants": [
             "Took care of my plants, gave them life water.",
             "Dealing with soil and touching the green refreshed my energy.",
-            "Did the maintenance for my plants; seeing them grow is wonderful."
+            "Did the maintenance for my plants; seeing them grow is wonderful.",
+            "Talking to my plants and watching them thrive.",
+            "Green therapy at home; my urban jungle is happy."
         ],
         "journal_manicure": [
             "Pampered my hands by getting a manicure.",
             "Took care of my nails; feeling well-groomed felt good.",
-            "Took a little beauty break and spoiled my hands."
+            "Took a little beauty break and spoiled my hands.",
+            "Fresh nails, fresh vibes. Feeling polished."
         ],
         "journal_skincare": [
             "Applied my skincare routine and pampered myself.",
             "My skin felt hydrated; I felt glowing when I looked in the mirror.",
-            "This care hour I set aside for myself did me so much good."
+            "This care hour I set aside for myself did me so much good.",
+            "Glowing skin is always in. Self-care mode: ON.",
+            "Invested in my skin today, feeling radiant."
         ],
         "journal_hair": [
             "Did my hair care and felt renewed.",
             "Took care of my hair, experienced the confidence of looking good.",
-            "It was my hairdresser/care day; the change boosted my energy."
+            "It was my hairdresser/care day; the change boosted my energy.",
+            "Good hair day, good mood. Feeling confident."
         ],
         "journal_massage": [
-            " relaxed all my muscles with a massage.",
+            "Relaxed all my muscles with a massage.",
             "All the tension in my body flew away; felt as light as a feather.",
-            "Gave myself a great gift and enjoyed the massage."
+            "Gave myself a great gift and enjoyed the massage.",
+            "Pure bliss. My muscles finally thanked me.",
+            "Melted the stress away with a perfect massage."
         ],
         "journal_facemask": [
             "Revitalized my skin by doing a face mask.",
             "Had a home spa moment, my skin breathed.",
-            "Applied my mask, leaned back, and rested."
+            "Applied my mask, leaned back, and rested.",
+            "Face mask on, world off. Relaxing time."
         ],
         "journal_bath": [
             "Washed away all fatigue with a hot bath.",
             "Surrendered myself to the healing power of water.",
-            "Bubbles and hot water... It was the most peaceful moment of the day."
+            "Bubbles and hot water... It was the most peaceful moment of the day.",
+            "Soaking the stress away. A warm bath was just what I needed.",
+            "Clean body, calm mind. The perfect end to the day."
         ],
         "journal_digital_detox": [
             "Stepped away from technology and stayed alone with myself.",
             "Turned off screens, returned to life. There was a notification-free peace.",
-            "Experienced the freedom of being offline."
+            "Experienced the freedom of being offline.",
+            "Disconnected to reconnect with myself.",
+            "Real life looks better than a screen. Enjoyed the detox."
         ],
         "journal_no_smoking": [
             "Did my lungs a favor by not smoking today.",
             "Kept my willpower and inhaled fresh air instead of smoke.",
-            "Passed another smoke-free day for a healthy life."
+            "Passed another smoke-free day for a healthy life.",
+            "Chose health over habit. Breathing easier today.",
+            "Proud of myself for staying smoke-free."
         ],
         "journal_social_media_detox": [
             "Enjoyed the moment by staying away from social media.",
             "Lived my own life instead of watching others'.",
-            "Stopped scrolling, looked around, and saw the beauty."
+            "Stopped scrolling, looked around, and saw the beauty.",
+            "Less scrolling, more living. Felt present today.",
+            "Unplugged from the noise, plugged into the moment."
         ],
         "journal_read_book": [
             "Successfully completed my daily reading goal.",
             "My mind enlightened while wandering through the pages.",
-            "Stayed faithful to my book, filled my reading quota today."
+            "Stayed faithful to my book, filled my reading quota today.",
+            "A few pages a day keeps the stress away.",
+            "Fed my mind with words today."
         ],
         "journal_drink_water": [
             "Hit my water drinking goal, hydration complete!",
             "My bottle didn't leave my side; finished the day with plenty of water.",
-            "It was a healthy day where my body was saturated with water."
+            "It was a healthy day where my body was saturated with water.",
+            "Hydration check: passed! Feeling refreshed."
         ],
         "journal_meditation": [
             "Focused on my inner peace by meditating.",
             "Silenced my mind and focused on my breath; calmed down.",
-            "Balanced my soul with a session full of mindfulness."
+            "Balanced my soul with a session full of mindfulness.",
+            "Inhale peace, exhale stress. Found my center today.",
+            "A moment of silence for a loud mind. Meditation done."
         ],
         "journal_early_rise": [
             "Caught the day by waking up before the sun.",
             "Woke up early and utilized the most productive hours of the day.",
-            "Starting the day in the silence of the morning was wonderful."
+            "Starting the day in the silence of the morning was wonderful.",
+            "The early bird catches the worm, and I caught a great start.",
+            "Morning peace is the best peace. Glad I woke up early."
         ],
         "journal_no_sugar": [
             "Protected my willpower by eating sugar-free.",
             "Didn't give in to sweet cravings, made healthy choices.",
-            "Felt my energy balance out when I cut sugar from my life."
+            "Felt my energy balance out when I cut sugar from my life.",
+            "Sweet enough without the sugar. Healthy choices today.",
+            "Beat the sugar craving and chose health."
         ],
         "journal_journaling": [
             "Poured my emotions onto paper by writing in my journal.",
             "What spilled from my pen relaxed my mind.",
-            "Recorded the day, had a heart-to-heart with myself."
+            "Recorded the day, had a heart-to-heart with myself.",
+            "Writing is the painting of the voice. I painted my day.",
+            "Cleared my head by putting pen to paper."
         ],
         "journal_10k_steps": [
             "Crushed 10k steps, reached the goal!",
             "My pedometer broke a record, I didn't stop today!",
-            "An active day, successfully completed the 10,000 steps goal."
+            "An active day, successfully completed the 10,000 steps goal.",
+            "Walked my way to 10K. Feeling accomplished!",
+            "Steps taken, goal crushed. Legs are tired but happy."
         ],
         "mood_sentence_huzun": [
             "There was a sadness inside me that's hard to describe.",
             "The sky was as grey as I felt today; felt a bit bitter.",
-            "A slight heaviness in my heart, a mist in my eyes."
+            "A slight heaviness in my heart, a mist in my eyes.",
+            "Carrying a heavy heart today, but it's okay not to be okay.",
+            "A quiet melancholy settled over me."
         ],
         "mood_sentence_nese": [
             "I was bubbling inside, full of joy!",
             "The smile never left my face, I was radiating energy.",
-            "I was on the colorful side of life; everything looked beautiful to me."
+            "I was on the colorful side of life; everything looked beautiful to me.",
+            "Walking on sunshine today! Happiness overload.",
+            "My heart is full and my smile is wide."
         ],
         "mood_sentence_nostaljik": [
             "Old days came to mind, felt a bit nostalgic.",
             "Wandered through the dusty shelves of memories, missed the past.",
-            "An old song or scent took me back to yesterday."
+            "An old song or scent took me back to yesterday.",
+            "Took a trip down memory lane. Bittersweet feelings.",
+            "Nostalgia hit me like a wave today."
         ],
         "mood_sentence_sinirli": [
             "I was a bit tense, my nerves were like a bowstring.",
             "There were moments my patience was tested; tried to control my anger.",
-            "My tolerance level was low; felt a bit explosive."
+            "My tolerance level was low; felt a bit explosive.",
+            "Trying to breathe through the frustration. A testing day.",
+            "Patience ran thin today, felt quite edgy."
         ],
         "mood_sentence_umut": [
             "A beautiful hope for the future sprouted inside me.",
             "My belief that everything will be fine was full today.",
-            "A day where I saw the light at the end of the tunnel and felt motivated."
+            "A day where I saw the light at the end of the tunnel and felt motivated.",
+            "Hope is the thing with feathers, and it perched in my soul today.",
+            "Optimism is in the air. Better days are coming."
         ],
         "mood_sentence_huzur": [
             "I was in a calm, serene, and peaceful mood.",
             "My soul was still like the sea; stayed away from chaos.",
-            "A peaceful day where I was at peace with myself, enjoying the moment."
+            "A peaceful day where I was at peace with myself, enjoying the moment.",
+            "Serenity now. A calm mind is a powerful weapon.",
+            "No rush, no stress. Just pure peace."
         ],
         "mood_sentence_romantik": [
             "Romantic winds were blowing in my heart.",
             "A day where I felt emotional and loving, smelling of love.",
-            "Looked at the world through rose-colored glasses, my heart fluttered."
+            "Looked at the world through rose-colored glasses, my heart fluttered.",
+            "Love is all around. Felt deeply romantic today.",
+            "Heart full of love and eyes full of stars."
         ],
         "mood_sentence_yorgun": [
             "I had a sweet tiredness and heaviness on me.",
             "My energy was a bit low, needed some rest.",
-            "My battery was about to run out; barely finished the day."
+            "My battery was about to run out; barely finished the day.",
+            "Running on empty. Need a serious recharge.",
+            "The world moved fast, but I moved slow. So tired."
         ],
         "sleep_good": [
             "Also, I had a great sleep.",
             "Woke up fresh because I slept like a log last night.",
-            "The energy of getting a full night's sleep lasted all day."
+            "The energy of getting a full night's sleep lasted all day.",
+            "Slept like a baby and woke up ready to conquer.",
+            "A good night's rest makes everything better."
         ],
         "sleep_bad": [
             "However, I didn't get much sleep.",
             "I was a bit sleepless because I woke up often last night.",
-            "Started the day after a tough night tossing and turning in bed."
+            "Started the day after a tough night tossing and turning in bed.",
+            "Running on caffeine because sleep eluded me.",
+            "Tossed and turned all night. Feeling the lack of sleep."
         ],
         "weather_context": [
             "The weather was also {weather}.",
             "Outside, a {weather} weather prevailed.",
-            "Looking at the sky, the weather seemed {weather}."
+            "Looking at the sky, the weather seemed {weather}.",
+            "The atmosphere was defined by {weather} weather.",
+            "Despite the {weather} weather, I made the most of it."
         ],
         "weather_sentence_sunny": [
             "The sun's warm energy accompanied my day.",
             "A bright sun warmed me up inside.",
-            "The sky was deep blue; enjoyed the sun."
+            "The sky was deep blue; enjoyed the sun.",
+            "Sun-kissed vibes all day long.",
+            "Soaking up the vitamin D and the good mood."
         ],
         "weather_sentence_cloudy": [
             "The sky was cloudy; a calm and serene atmosphere prevailed.",
             "Grey clouds added a mystical vibe to the city.",
-            "The sun hid behind the clouds; it was a cool day."
+            "The sun hid behind the clouds; it was a cool day.",
+            "Cloudy skies, cozy vibes.",
+            "A blanket of clouds covered the sky, creating a calm mood."
         ],
         "weather_sentence_rainy": [
             "The sound of rain rested my soul; drops washed the city.",
             "Spent a rainy day accompanied by the smell of soil.",
-            "Thunder and the rhythm of the rain accompanied the day."
+            "Thunder and the rhythm of the rain accompanied the day.",
+            "Raindrops keep falling, washing the stress away.",
+            "A perfect day for tea and listening to the rain."
         ],
         "weather_sentence_snowy": [
             "Fluffy snow covered everything like a white fairytale.",
             "Everywhere was white; the silence of snow gave peace.",
-            "There was a cold but mesmerizing snowfall."
+            "There was a cold but mesmerizing snowfall.",
+            "Walking in a winter wonderland.",
+            "The world turned white and quiet. Snow day!"
         ]
     }
 }

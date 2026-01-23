@@ -11,14 +11,14 @@ class MonthlyMoodShareCard extends StatelessWidget {
   final Map<String, MoodCategory> moodDefinitions; // For colors/icons
   final Map<String, String> localizedLabels; // For translated names
   final String locale; // e.g. 'tr' or 'en'
-  final String footerText; // "Created with Habitual"
+  final String footerText; // "Created with DearDay"
 
   const MonthlyMoodShareCard({
     super.key,
     required this.month,
     required this.dailyMoods,
     // this.dailyActivities = const {},
-    this.userName = 'Habitual',
+    this.userName = 'DearDay',
     required this.moodDefinitions,
     required this.localizedLabels,
     required this.locale,
@@ -120,8 +120,8 @@ class MonthlyMoodShareCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 locale == 'tr'
-                    ? 'Habitual ile oluşturuldu'
-                    : 'Created with Habitual',
+                    ? 'DearDay ile oluşturuldu'
+                    : 'Created with DearDay',
                 style: GoogleFonts.nunito(
                   fontSize: 12,
                   color: Colors.grey,

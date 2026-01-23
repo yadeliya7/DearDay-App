@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
 import '../models/poem_model.dart';
+import '../models/daily_entry_model.dart';
+import '../helpers/story_generator.dart';
 import '../core/providers.dart';
 import '../core/language_provider.dart';
 
@@ -19,6 +21,7 @@ Future<void> showMoodEntryDialog(
   String? currentNote,
   List<String> currentMedia = const [],
   Map<String, dynamic> currentActivities = const {},
+  String? currentSavedStory,
 }) async {
   await showModalBottomSheet(
     context: context,
@@ -32,6 +35,7 @@ Future<void> showMoodEntryDialog(
         initialNote: currentNote,
         initialMedia: currentMedia,
         initialActivities: currentActivities,
+        initialSavedStory: currentSavedStory,
       );
     },
   );
@@ -44,6 +48,7 @@ class MoodEntrySheet extends StatefulWidget {
   final String? initialNote;
   final List<String> initialMedia;
   final Map<String, dynamic> initialActivities;
+  final String? initialSavedStory;
 
   const MoodEntrySheet({
     super.key,
@@ -53,6 +58,7 @@ class MoodEntrySheet extends StatefulWidget {
     this.initialNote,
     required this.initialMedia,
     required this.initialActivities,
+    this.initialSavedStory,
   });
 
   @override
@@ -64,6 +70,8 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
   late TextEditingController noteController;
   late List<String> selectedMedia;
   late Map<String, dynamic> activities;
+  String _generatedStoryText = '';
+  bool _isGeneratingStory = false;
 
   @override
   void initState() {
@@ -82,6 +90,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
     noteController = TextEditingController(text: widget.initialNote);
     selectedMedia = List.from(widget.initialMedia);
     activities = Map.from(widget.initialActivities);
+    _generatedStoryText = widget.initialSavedStory ?? '';
   }
 
   @override
@@ -120,7 +129,57 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
     });
   }
 
-  // MISSING METHODS ADDED HERE
+  // --- MAGIC WAND LOGIC ---
+  void _toggleStoryGeneration() async {
+    if (_generatedStoryText.isNotEmpty) {
+      // Remove story
+      setState(() {
+        _generatedStoryText = '';
+      });
+      return;
+    }
+
+    // Generate Story
+    setState(() {
+      _isGeneratingStory = true;
+    });
+
+    // Simulate magic delay
+    await Future.delayed(const Duration(milliseconds: 600));
+
+    if (!mounted) return;
+
+    if (moodNotifier.value == null) {
+      setState(() => _isGeneratingStory = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.selectMoodWarning),
+        ),
+      );
+      return;
+    }
+
+    final tempEntry = DailyEntry(
+      moodCode: moodNotifier.value!.code,
+      note: noteController.text,
+      date: widget.date,
+      mediaPaths: selectedMedia,
+      activities: activities,
+    );
+
+    final story = StoryGenerator.generateDailyStory(
+      context,
+      tempEntry,
+      isPremium: Provider.of<PremiumProvider>(context, listen: false).isPremium,
+      includeNote: false,
+    );
+
+    setState(() {
+      _generatedStoryText = story;
+      _isGeneratingStory = false;
+    });
+  }
+
   Future<void> _pickMedia() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
@@ -698,6 +757,155 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                       ),
                     ),
                     const SizedBox(height: 12),
+
+                    // --- MAGIC WAND STORY MAKER ---
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '',
+                            style: GoogleFonts.nunito(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white70 : Colors.grey,
+                            ),
+                          ),
+                          // Dynamic Magic Wand Button
+                          Builder(
+                            builder: (context) {
+                              final lang = Localizations.localeOf(
+                                context,
+                              ).languageCode;
+                              final hasStory = _generatedStoryText.isNotEmpty;
+
+                              // Dynamic Colors
+                              final Color bgColor = isDark
+                                  ? Colors.white.withValues(alpha: 0.1)
+                                  : Colors.deepPurple.withValues(alpha: 0.05);
+
+                              final Color contentColor = isDark
+                                  ? Colors.amberAccent
+                                  : Theme.of(context).primaryColor;
+
+                              final Color borderColor = isDark
+                                  ? Colors.amberAccent.withValues(alpha: 0.3)
+                                  : Theme.of(
+                                      context,
+                                    ).primaryColor.withValues(alpha: 0.2);
+
+                              // Dynamic Label
+                              String label;
+                              if (hasStory) {
+                                label = (lang == 'en')
+                                    ? "Remove Story"
+                                    : "Hikayeyi Kaldır";
+                              } else {
+                                label = (lang == 'en')
+                                    ? "Magic Story"
+                                    : "Hikaye Oluştur";
+                              }
+
+                              return InkWell(
+                                onTap: _toggleStoryGeneration,
+                                borderRadius: BorderRadius.circular(30),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: bgColor,
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(color: borderColor),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        hasStory
+                                            ? Icons.close
+                                            : Icons.auto_awesome,
+                                        color: contentColor,
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        label,
+                                        style: GoogleFonts.nunito(
+                                          color: contentColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    if (_isGeneratingStory)
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+
+                    if (_generatedStoryText.isNotEmpty && !_isGeneratingStory)
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF2C2C2E)
+                              : const Color(0xFFFFF8E1), // Creamy for story
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark
+                                ? Colors.transparent
+                                : Colors.amber.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.auto_awesome,
+                                  size: 16,
+                                  color: Colors.amber[700],
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'AI Story',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.amber[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _generatedStoryText,
+                              style: GoogleFonts.merriweather(
+                                fontSize: 14,
+                                height: 1.6,
+                                color: isDark ? Colors.white70 : Colors.black87,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    // --- END MAGIC WAND ---
+                    const SizedBox(height: 12),
                     _buildMediaSection(context, isDark),
 
                     const SizedBox(height: 80), // Space for fab/bottom area
@@ -744,12 +952,37 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 ).showSnackBar(SnackBar(content: Text(loc.selectMoodWarning)));
                 return;
               }
+              // Generate Story for Persistence (without note, to avoid duplication in PDF)
+              // Create a temp entry for generation
+              final tempEntry = DailyEntry(
+                moodCode: moodNotifier.value!.code,
+                note: noteController.text,
+                date: widget.date,
+                mediaPaths: selectedMedia,
+                activities: activities,
+              );
+
+              // NO AUTO GENERATION HERE. We use _generatedStoryText.
+              /* 
+              final generatedStory = StoryGenerator.generateDailyStory(
+                context,
+                tempEntry,
+                isPremium: Provider.of<PremiumProvider>(
+                  context,
+                  listen: false,
+                ).isPremium,
+                includeNote: false,
+              );
+              */
+
               widget.provider.saveDailyEntry(
                 widget.date,
                 moodNotifier.value!.code,
                 noteController.text,
                 selectedMedia,
                 activities,
+                null, // customStory
+                _generatedStoryText, // savedStory (Explicitly passed from magic wand)
               );
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(

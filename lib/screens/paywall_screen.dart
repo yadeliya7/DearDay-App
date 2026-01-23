@@ -138,7 +138,7 @@ class _PaywallScreenState extends State<PaywallScreen>
 
                               // Title & Subtitle
                               Text(
-                                "Habitual Premium",
+                                "DearDay Premium",
                                 style: GoogleFonts.outfit(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,

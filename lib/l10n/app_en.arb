@@ -315,7 +315,7 @@
     "@btnSeePoems": {},
     "msgNoMoodPoems": "No poems for this mood yet.",
     "@msgNoMoodPoems": {},
-    "appTitle": "Habitual",
+    "appTitle": "DearDay",
     "@appTitle": {},
     "msgNoPoemSelected": "No poem selected yet.",
     "@msgNoPoemSelected": {},
@@ -323,7 +323,7 @@
     "@createdWith": {},
     "dailyGoals": "Daily Goals",
     "@dailyGoals": {},
-    "homeTitle": "Habitual",
+    "homeTitle": "DearDay",
     "@homeTitle": {},
     "today": "Today",
     "@today": {},
@@ -371,7 +371,7 @@
     "@activityDetox": {},
     "shareApp": "Share with Friends",
     "@shareApp": {},
-    "shareMessage": "Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 Habitual\n\n",
+    "shareMessage": "Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 DearDay\n\n",
     "@shareMessage": {},
     "shareError": "Error: {error}. Please restart the app.",
     "@shareError": {
@@ -672,7 +672,7 @@
     "@aboutTitle": {},
     "aboutWhatTitle": "What is it?",
     "@aboutWhatTitle": {},
-    "aboutWhatDesc": "Habitual is a personal development assistant designed to increase your emotional awareness and track your habits.",
+    "aboutWhatDesc": "DearDay is a personal development assistant designed to increase your emotional awareness and track your habits.",
     "@aboutWhatDesc": {},
     "aboutPrivacyTitle": "Privacy",
     "@aboutPrivacyTitle": {},
@@ -758,5 +758,27 @@
     "yearPixelsTitle": "Year in Pixels",
     "@yearPixelsTitle": {},
     "unlockYearView": "Unlock Yearly View",
-    "@unlockYearView": {}
+    "@unlockYearView": {},
+    "exportToPdf": "Download as PDF",
+    "@exportToPdf": {},
+    "exportToPdfDesc": "Save your journal as a book format",
+    "@exportToPdfDesc": {},
+    "premiumFeatureLocked": "Premium Feature",
+    "@premiumFeatureLocked": {},
+    "noEntriesForPdf": "No journal entries found. Please add at least one entry to create a PDF.",
+    "@noEntriesForPdf": {},
+    "creatingPdf": "Creating PDF...",
+    "@creatingPdf": {},
+    "pdfError": "Error creating PDF: {error}",
+    "@pdfError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "moodOfTheMonth": "Mood of the Month: ",
+    "@moodOfTheMonth": {},
+    "moodOfTheYear": "Mood of the Year: ",
+    "@moodOfTheYear": {}
 }

@@ -168,8 +168,8 @@ class ShareablePoemCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       locale == 'tr'
-                          ? 'Habitual ile oluşturuldu'
-                          : 'Created with Habitual',
+                          ? 'DearDay ile oluşturuldu'
+                          : 'Created with DearDay',
                       style: GoogleFonts.montserrat(
                         color: Colors.white54,
                         fontSize: 11,

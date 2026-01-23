@@ -15,6 +15,7 @@ import 'package:line_icons/line_icons.dart';
 import '../widgets/mood_entry_dialog.dart';
 import '../widgets/home_mood_selector.dart';
 import '../helpers/localization_helper.dart';
+import '../helpers/story_generator.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -85,12 +86,7 @@ class _HomeTabState extends State<HomeTab> {
               // HABITS / GOALS
               return Padding(
                 padding: const EdgeInsets.only(bottom: 24.0),
-                child: _buildGoalsSection(
-                  context,
-                  todayEntry,
-                  moodProvider,
-                  isDark,
-                ),
+                child: _buildGoalsSection(context),
               );
             } else if (index == 2) {
               // TODAY'S CARD (Timeline Card)
@@ -178,14 +174,45 @@ class _HomeTabState extends State<HomeTab> {
       newActivities[key] = true;
     }
 
-    // 3. Save Immediate
+    // 3. Save Immediate & Regenerate/Persist Story
     // We keep existing mood, note, media.
+
+    // Regenerate story because activities changed (activities affect the story text)
+    // Need to create a temp entry with NEW activities
+    final tempEntry = DailyEntry(
+      moodCode: entry.moodCode,
+      note: entry.note,
+      date: entry.date,
+      mediaPaths: entry.mediaPaths,
+      activities: newActivities,
+    );
+
+    final generatedStory = StoryGenerator.generateDailyStory(
+      context,
+      tempEntry,
+      isPremium: Provider.of<PremiumProvider>(context, listen: false).isPremium,
+      includeNote: false,
+    );
+
     await provider.saveDailyEntry(
       entry.date,
       entry.moodCode,
       entry.note,
       entry.mediaPaths,
       newActivities,
+      entry.customStory, // Keep custom edit if exists?
+      // User Logic: "Capture the *current* story... If user hasn't edited it, save auto-generated."
+      // IF entry.customStory is NOT null, does it override?
+      // If user edited the story manually, changing activities might invalidate the text or not.
+      // Usually manual edits take precedence.
+      // BUT if the user just toggled an activity, they might expect the story to update?
+      // "If user hasn't edited (customStory null), save auto-generated."
+      // If customStory IS present, we should probably keep it (user's manual text).
+      // So passing generatedStory as savedStory is fine, because PDF prefers customStory > savedStory.
+      // Wait, if customStory is set, PDF uses it.
+      // If customStory is null, PDF uses savedStory.
+      // So updating savedStory here is safe and correct (keeps the "backing" story up to date).
+      generatedStory,
     );
 
     // 4. Check for Celebration (Goal Reached)
@@ -412,12 +439,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _buildGoalsSection(
-    BuildContext context,
-    DailyEntry? entry,
-    MoodProvider provider,
-    bool isDark,
-  ) {
+  Widget _buildGoalsSection(BuildContext context) {
     // Defined Habit List
     // Defined Habit List with Localized Labels
     final habits = [
@@ -430,36 +452,43 @@ class _HomeTabState extends State<HomeTab> {
         'key': 'journaling',
         'label': LocalizationHelper.getActivityName(context, 'journaling'),
         'icon': LineIcons.bookOpen,
+        'color': const Color(0xFF5C6BC0), // Indigo
       },
       {
         'key': 'early_rise',
         'label': LocalizationHelper.getActivityName(context, 'early_rise'),
         'icon': LineIcons.bell,
+        'color': const Color(0xFFFFA726), // Orange
       },
       {
         'key': 'no_sugar',
         'label': LocalizationHelper.getActivityName(context, 'no_sugar'),
         'icon': Icons.no_food,
+        'color': const Color(0xFFEF5350), // Red
       },
       {
         'key': '10k_steps',
         'label': LocalizationHelper.getActivityName(context, '10k_steps'),
         'icon': LineIcons.shoePrints,
+        'color': const Color(0xFF66BB6A), // Green
       },
       {
         'key': 'read_book',
         'label': LocalizationHelper.getActivityName(context, 'read_book'),
         'icon': LineIcons.book,
+        'color': const Color(0xFF9E9D24), // Olive
       },
       {
         'key': 'meditation',
         'label': LocalizationHelper.getActivityName(context, 'meditation'),
         'icon': LineIcons.spa,
+        'color': const Color(0xFF26A69A), // Teal
       },
       {
         'key': 'no_smoking',
         'label': LocalizationHelper.getActivityName(context, 'no_smoking'),
         'icon': LineIcons.smokingBan,
+        'color': const Color(0xFF78909C), // BlueGrey
       },
       {
         'key': 'social_media_detox',
@@ -468,6 +497,7 @@ class _HomeTabState extends State<HomeTab> {
           'social_media_detox',
         ),
         'icon': LineIcons.mobilePhone,
+        'color': const Color(0xFFAB47BC), // Purple
       },
     ];
 
@@ -540,152 +570,171 @@ class _HomeTabState extends State<HomeTab> {
       }
     }
 
-    return SizedBox(
-      height: 70,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        scrollDirection: Axis.horizontal,
-        itemCount: habits.length,
-        itemBuilder: (context, index) {
-          final item = habits[index];
-          final key = item['key'] as String;
-          final label = item['label'] as String;
-          final icon = item['icon'] as IconData;
+    return Consumer<MoodProvider>(
+      builder: (context, provider, child) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final entry = provider.getEntryForDate(DateTime.now());
 
-          // Status Check
-          final isDone = entry?.activities[key] == true;
+        return SizedBox(
+          height: 70,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            scrollDirection: Axis.horizontal,
+            itemCount: habits.length,
+            itemBuilder: (context, index) {
+              final item = habits[index];
+              final key = item['key'] as String;
+              final label = item['label'] as String;
+              final icon = item['icon'] as IconData;
 
-          // Streak Calculation
-          final baseStreak = provider.getStreakFor(key, DateTime.now());
-          // If done today, add 1
-          int displayStreak = baseStreak + (isDone ? 1 : 0);
-          final goalMax = provider.goalDuration;
+              // Status Check
+              final isDone = entry?.activities[key] == true;
 
-          // Clamp only if NOT in infinite mode (goal < 30)
-          // If goal is 30, we allow streaks to go beyond (31, 32...) to show mastery.
-          if (goalMax < 30 && displayStreak > goalMax) {
-            displayStreak = goalMax;
-          }
-          // Note: If goalMax == 30, displayStreak can be 45, etc.
+              // Streak Calculation
+              final baseStreak = provider.getStreakFor(key, DateTime.now());
+              // If done today, add 1
+              int displayStreak = baseStreak + (isDone ? 1 : 0);
+              final goalMax = provider.goalDuration;
 
-          final bool isGoalReached = displayStreak >= goalMax;
+              // Clamp only if NOT in infinite mode (goal < 30)
+              // If goal is 30, we allow streaks to go beyond (31, 32...) to show mastery.
+              if (goalMax < 30 && displayStreak > goalMax) {
+                displayStreak = goalMax;
+              }
+              // Note: If goalMax == 30, displayStreak can be 45, etc.
 
-          // Active Decoration
-          final gradient = getGradient(key);
+              final bool isGoalReached = displayStreak >= goalMax;
 
-          // Inactive Color logic (Dark Matte)
-          final inactiveColor = isDark
-              ? const Color(0xFF1E2228) // Deep Matte Grey
-              : const Color(0xFFEFF3F6); // Soft Light Grey
+              // Active Decoration
+              final gradient = getGradient(key);
 
-          final inactiveBorder = isDark
-              ? Border.all(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  width: 1,
-                )
-              : null; // No border in light mode or faint
+              // Inactive Color logic (Dark Matte)
+              final inactiveColor = isDark
+                  ? const Color(0xFF1E2228) // Deep Matte Grey
+                  : Colors.white.withValues(
+                      alpha: 0.4,
+                    ); // Glassy White on Cream
 
-          return Padding(
-            padding: const EdgeInsets.only(right: 12), // Spacing between items
-            child: InkWell(
-              onTap: () => _toggleActivity(context, provider, entry, key),
-              borderRadius: BorderRadius.circular(30),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
+              final inactiveBorder = isDark
+                  ? Border.all(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      width: 1,
+                    )
+                  : null; // No border in light mode or faint
+
+              return Padding(
+                padding: const EdgeInsets.only(
+                  right: 12,
+                ), // Spacing between items
+                child: InkWell(
+                  onTap: () => _toggleActivity(context, provider, entry, key),
                   borderRadius: BorderRadius.circular(30),
-                  // Active: Gradient, Inactive: Soft solid / glass
-                  gradient: isDone
-                      ? (isGoalReached
-                            ? const LinearGradient(
-                                colors: [
-                                  Color(0xFFFFD700),
-                                  Color(0xFFFFA000),
-                                ], // Gold
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )
-                            : gradient)
-                      : null,
-                  color: isDone ? null : inactiveColor,
-                  border: isDone ? null : inactiveBorder,
-                  boxShadow: isDone
-                      ? [
-                          BoxShadow(
-                            color: isGoalReached
-                                ? Colors.amber.withValues(alpha: 0.4)
-                                : Colors.black.withValues(
-                                    alpha: 0.3,
-                                  ), // Dark shadow
-                            blurRadius: isGoalReached ? 10 : 6,
-                            offset: const Offset(0, 4),
-                          ),
-                        ]
-                      : [],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      isGoalReached ? LineIcons.trophy : icon,
-                      size: 20,
-                      color: isDone
-                          ? Colors.white
-                          : (isDark ? Colors.white38 : Colors.grey),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
                     ),
-                    const SizedBox(width: 8),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      // Active: Gradient, Inactive: Soft solid / glass
+                      gradient: isDone
+                          ? (isGoalReached
+                                ? const LinearGradient(
+                                    colors: [
+                                      Color(0xFFFFD700),
+                                      Color(0xFFFFA000),
+                                    ], // Gold
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  )
+                                : gradient)
+                          : null,
+                      color: isDone ? null : inactiveColor,
+                      border: isDone ? null : inactiveBorder,
+                      boxShadow: isDone
+                          ? [
+                              BoxShadow(
+                                color: isGoalReached
+                                    ? Colors.amber.withValues(alpha: 0.4)
+                                    : Colors.black.withValues(
+                                        alpha: 0.3,
+                                      ), // Dark shadow
+                                blurRadius: isGoalReached ? 10 : 6,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : [],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          label,
-                          style: GoogleFonts.nunito(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: isDone
-                                ? Colors.white
-                                : (isDark ? Colors.white70 : Colors.black87),
-                          ),
+                        Icon(
+                          isGoalReached ? LineIcons.trophy : icon,
+                          size: 20,
+                          color: isDone
+                              ? Colors.white
+                              : (isDark
+                                    ? Colors.white38
+                                    : const Color(
+                                        0xFF4E342E,
+                                      )), // Dark Brown for Cream
                         ),
-                        if (displayStreak > 0)
-                          Row(
-                            children: [
-                              Icon(
-                                isGoalReached
-                                    ? Icons.star
-                                    : Icons.local_fire_department,
-                                size: 10,
+                        const SizedBox(width: 8),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              label,
+                              style: GoogleFonts.nunito(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                                 color: isDone
-                                    ? Colors.white.withValues(alpha: 0.8)
-                                    : Colors.orangeAccent,
+                                    ? Colors.white
+                                    : (isDark
+                                          ? Colors.white70
+                                          : const Color(
+                                              0xFF4E342E,
+                                            )), // Dark Brown
                               ),
-                              const SizedBox(width: 2),
-                              Text(
-                                "$displayStreak/$goalMax",
-                                style: GoogleFonts.nunito(
-                                  fontSize: 10,
-                                  color: isDone
-                                      ? Colors.white.withValues(alpha: 0.8)
-                                      : Colors.grey,
-                                ),
+                            ),
+                            if (displayStreak > 0)
+                              Row(
+                                children: [
+                                  Icon(
+                                    isGoalReached
+                                        ? Icons.star
+                                        : Icons.local_fire_department,
+                                    size: 10,
+                                    color: isDone
+                                        ? Colors.white.withValues(alpha: 0.8)
+                                        : Colors.orangeAccent,
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    "$displayStreak/$goalMax",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 10,
+                                      color: isDone
+                                          ? Colors.white.withValues(alpha: 0.8)
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -850,6 +899,11 @@ class _HomeTabState extends State<HomeTab> {
             backgroundImage: provider.profileImagePath != null
                 ? FileImage(File(provider.profileImagePath!))
                 : null,
+            onBackgroundImageError: provider.profileImagePath != null
+                ? (exception, stackTrace) {
+                    debugPrint('Error loading profile image: $exception');
+                  }
+                : null,
             child: provider.profileImagePath == null
                 ? Text(
                     _getInitials(firstName),
@@ -960,6 +1014,7 @@ class _HomeTabState extends State<HomeTab> {
                         currentNote: entry.note,
                         currentMedia: entry.mediaPaths,
                         currentActivities: entry.activities,
+                        currentSavedStory: entry.savedStory,
                       );
                     },
                   ),
@@ -1023,9 +1078,13 @@ class _HomeTabState extends State<HomeTab> {
       'medium': {
         'l': 'Orta Uyku',
         'i': LineIcons.cloudWithMoon,
-        'c': Colors.blueGrey,
+        'c': Colors.cyanAccent,
       },
-      'bad': {'l': 'Kötü Uyku', 'i': LineIcons.moon, 'c': Colors.indigo},
+      'bad': {
+        'l': 'Kötü Uyku',
+        'i': LineIcons.moon,
+        'c': Colors.deepPurpleAccent,
+      },
 
       // Weather
       'sunny': {'l': 'Güneşli', 'i': LineIcons.sun, 'c': Colors.amber},
@@ -1063,18 +1122,30 @@ class _HomeTabState extends State<HomeTab> {
         'i': LineIcons.pills,
         'c': Colors.greenAccent,
       },
-      'sleep_health': {'l': 'Uyku', 'i': LineIcons.bed, 'c': Colors.indigo},
-      'doctor': {'l': 'Doktor', 'i': LineIcons.stethoscope, 'c': Colors.red},
+      'sleep_health': {
+        'l': 'Uyku',
+        'i': LineIcons.bed,
+        'c': Colors.indigoAccent,
+      },
+      'doctor': {
+        'l': 'Doktor',
+        'i': LineIcons.stethoscope,
+        'c': Colors.redAccent,
+      },
 
       // Social
       'friends': {
         'l': 'Arkadaşlar',
         'i': LineIcons.userFriends,
-        'c': Colors.purple,
+        'c': Colors.purpleAccent,
       },
-      'family': {'l': 'Aile', 'i': LineIcons.home, 'c': Colors.brown},
-      'party': {'l': 'Parti', 'i': LineIcons.cocktail, 'c': Colors.deepPurple},
-      'partner': {'l': 'Partner', 'i': LineIcons.heartAlt, 'c': Colors.red},
+      'family': {'l': 'Aile', 'i': LineIcons.home, 'c': Colors.pinkAccent},
+      'party': {'l': 'Parti', 'i': LineIcons.cocktail, 'c': Colors.cyanAccent},
+      'partner': {
+        'l': 'Partner',
+        'i': LineIcons.heartAlt,
+        'c': Colors.redAccent,
+      },
       'guests': {
         'l': 'Misafir',
         'i': Icons.people_outline,
@@ -1083,7 +1154,7 @@ class _HomeTabState extends State<HomeTab> {
       'colleagues': {
         'l': 'İş Ark.',
         'i': LineIcons.briefcase,
-        'c': Colors.brown,
+        'c': Colors.tealAccent,
       },
       'travel': {'l': 'Seyahat', 'i': LineIcons.plane, 'c': Colors.blue},
       'volunteer': {
@@ -1094,39 +1165,51 @@ class _HomeTabState extends State<HomeTab> {
 
       // Hobbies
       'gaming': {'l': 'Oyun', 'i': LineIcons.gamepad, 'c': Colors.indigoAccent},
-      'reading': {'l': 'Okuma', 'i': LineIcons.book, 'c': Colors.brown},
+      'reading': {
+        'l': 'Okuma',
+        'i': LineIcons.book,
+        'c': Colors.deepOrangeAccent,
+      },
       'movie': {'l': 'Film', 'i': LineIcons.video, 'c': Colors.redAccent},
       'art': {'l': 'Sanat', 'i': LineIcons.palette, 'c': Colors.pinkAccent},
-      'music': {
-        'l': 'Müzik',
-        'i': LineIcons.music,
-        'c': Colors.deepPurpleAccent,
-      },
-      'coding': {'l': 'Kodlama', 'i': LineIcons.code, 'c': Colors.teal},
+      'music': {'l': 'Müzik', 'i': LineIcons.music, 'c': Colors.pinkAccent},
+      'coding': {'l': 'Kodlama', 'i': LineIcons.code, 'c': Colors.tealAccent},
       'photography': {
         'l': 'Fotoğraf',
         'i': LineIcons.camera,
-        'c': Colors.blueGrey,
+        'c': Colors.cyanAccent,
       },
       'crafts': {'l': 'El İşi', 'i': LineIcons.brush, 'c': Colors.orange},
 
       // Chores
-      'cleaning': {'l': 'Temizlik', 'i': LineIcons.broom, 'c': Colors.teal},
+      'cleaning': {
+        'l': 'Temizlik',
+        'i': LineIcons.broom,
+        'c': Colors.tealAccent,
+      },
       'shopping': {
         'l': 'Alışveriş',
         'i': LineIcons.shoppingCart,
         'c': Colors.orange,
       },
-      'laundry': {'l': 'Çamaşır', 'i': LineIcons.tShirt, 'c': Colors.blueGrey},
+      'laundry': {
+        'l': 'Çamaşır',
+        'i': LineIcons.tShirt,
+        'c': Colors.lightBlueAccent,
+      },
       'cooking': {
         'l': 'Yemek',
         'i': LineIcons.utensils,
-        'c': Colors.deepOrange,
+        'c': Colors.deepOrangeAccent,
       },
-      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': Colors.grey},
-      'dishes': {'l': 'Bulaşık', 'i': Icons.kitchen, 'c': Colors.teal},
-      'repair': {'l': 'Tamirat', 'i': LineIcons.tools, 'c': Colors.brown},
-      'plants': {'l': 'Bitkiler', 'i': LineIcons.leaf, 'c': Colors.green},
+      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': Colors.cyanAccent},
+      'dishes': {'l': 'Bulaşık', 'i': Icons.kitchen, 'c': Colors.tealAccent},
+      'repair': {
+        'l': 'Tamirat',
+        'i': LineIcons.tools,
+        'c': Colors.orangeAccent,
+      },
+      'plants': {'l': 'Bitkiler', 'i': LineIcons.leaf, 'c': Colors.greenAccent},
 
       // Selfcare
       'manicure': {
@@ -1139,14 +1222,14 @@ class _HomeTabState extends State<HomeTab> {
         'i': LineIcons.spa,
         'c': Colors.lightGreen,
       },
-      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': Colors.brown},
-      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': Colors.purple},
+      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': Colors.pinkAccent},
+      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': Colors.tealAccent},
       'facemask': {'l': 'Maske', 'i': Icons.face, 'c': Colors.pinkAccent},
       'bath': {'l': 'Banyo', 'i': LineIcons.bath, 'c': Colors.blue},
       'digital_detox': {
         'l': 'Detoks',
         'i': Icons.phonelink_off,
-        'c': Colors.blueGrey,
+        'c': Colors.tealAccent,
       },
 
       // Booleans (Goals)
@@ -1158,7 +1241,7 @@ class _HomeTabState extends State<HomeTab> {
       'social_media_detox': {
         'l': 'Sosyal Medya',
         'i': LineIcons.mobilePhone,
-        'c': Colors.blueGrey,
+        'c': Colors.purpleAccent,
       },
       'meditation': {
         'l': 'Meditasyon',
@@ -1168,16 +1251,20 @@ class _HomeTabState extends State<HomeTab> {
       'read_book': {
         'l': 'Okuma',
         'i': LineIcons.book,
-        'c': Colors.brown,
+        'c': Colors.deepOrangeAccent,
       }, // Reused key
       'drink_water': {
         'l': 'Su',
         'i': LineIcons.tint,
         'c': Colors.blueAccent,
       }, // Reused key
-      'early_rise': {'l': 'Erken Kalk', 'i': LineIcons.bell, 'c': Colors.amber},
-      'no_sugar': {'l': 'Şekersiz', 'i': Icons.no_food, 'c': Colors.pink},
-      'journaling': {'l': 'Günlük', 'i': LineIcons.bookOpen, 'c': Colors.brown},
+      'early_rise': {
+        'l': 'Erken Kalk',
+        'i': LineIcons.bell,
+        'c': Colors.orangeAccent,
+      },
+      'no_sugar': {'l': 'Şekersiz', 'i': Icons.no_food, 'c': Colors.pinkAccent},
+      'journaling': {'l': 'Günlük', 'i': LineIcons.bookOpen, 'c': Colors.amber},
       '10k_steps': {
         'l': '10 Bin Adım',
         'i': LineIcons.shoePrints,
@@ -1189,21 +1276,26 @@ class _HomeTabState extends State<HomeTab> {
 
     Widget makeChip(IconData icon, Color color, String label) {
       final isDark = Theme.of(context).brightness == Brightness.dark;
+      // Adjust color for readability if needed, or use as is.
+      // For text, we might want a slightly stronger shade if the main color is too pastel.
+      // But let's stick to the requested "matching" for now.
+
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(20),
+          color: color.withValues(alpha: isDark ? 0.15 : 0.1),
+          borderRadius: BorderRadius.circular(20), // Stadium-like
+          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 16),
+            Icon(icon, color: color, size: 14),
             const SizedBox(width: 6),
             Text(
               label,
               style: GoogleFonts.nunito(
-                color: isDark ? Colors.white70 : Colors.black87,
+                color: color,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),

@@ -1067,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Habitual'**
+  /// **'DearDay'**
   String get appTitle;
 
   /// No description provided for @msgNoPoemSelected.
@@ -1091,7 +1091,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Habitual'**
+  /// **'DearDay'**
   String get homeTitle;
 
   /// No description provided for @today.
@@ -1217,7 +1217,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareMessage.
   ///
   /// In en, this message translates to:
-  /// **'Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 Habitual\n\n'**
+  /// **'Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 DearDay\n\n'**
   String get shareMessage;
 
   /// No description provided for @shareError.
@@ -1985,7 +1985,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutWhatDesc.
   ///
   /// In en, this message translates to:
-  /// **'Habitual is a personal development assistant designed to increase your emotional awareness and track your habits.'**
+  /// **'DearDay is a personal development assistant designed to increase your emotional awareness and track your habits.'**
   String get aboutWhatDesc;
 
   /// No description provided for @aboutPrivacyTitle.
@@ -2179,6 +2179,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlock Yearly View'**
   String get unlockYearView;
+
+  /// No description provided for @exportToPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Download as PDF'**
+  String get exportToPdf;
+
+  /// No description provided for @exportToPdfDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your journal as a book format'**
+  String get exportToPdfDesc;
+
+  /// No description provided for @premiumFeatureLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Feature'**
+  String get premiumFeatureLocked;
+
+  /// No description provided for @noEntriesForPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'No journal entries found. Please add at least one entry to create a PDF.'**
+  String get noEntriesForPdf;
+
+  /// No description provided for @creatingPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating PDF...'**
+  String get creatingPdf;
+
+  /// No description provided for @pdfError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error creating PDF: {error}'**
+  String pdfError(String error);
+
+  /// No description provided for @moodOfTheMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood of the Month: '**
+  String get moodOfTheMonth;
+
+  /// No description provided for @moodOfTheYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood of the Year: '**
+  String get moodOfTheYear;
 }
 
 class _AppLocalizationsDelegate

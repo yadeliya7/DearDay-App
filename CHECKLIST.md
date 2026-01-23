@@ -255,7 +255,7 @@ C:\Users\Yadeliya\Desktop\Projelerim\poem_diary\poem_diary\
 ---
 
 **Teslim Tarihi**: 7 Ocak 2026
-**Proje Adı**: Habitual
+**Proje Adı**: DearDay
 **Platform**: Flutter
 **Durumu**: ✅ TAMAMLANDI
 

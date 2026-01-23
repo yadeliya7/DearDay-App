@@ -6,6 +6,7 @@ import 'core/providers.dart';
 import 'core/language_provider.dart';
 import 'screens/main_scaffold.dart';
 import 'screens/setup_profile_screen.dart';
+import 'screens/intro_screen.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -43,7 +44,7 @@ class PoemDiaryApp extends StatelessWidget {
       child: Consumer2<ThemeProvider, LanguageProvider>(
         builder: (context, themeProvider, languageProvider, _) {
           return MaterialApp(
-            title: 'Habitual',
+            title: 'DearDay',
             theme: AppTheme.lightTheme(),
             darkTheme: AppTheme.darkTheme(),
             themeMode: themeProvider.isDarkMode
@@ -61,13 +62,15 @@ class PoemDiaryApp extends StatelessWidget {
             supportedLocales: [Locale('en'), Locale('tr')],
             locale: languageProvider.currentLocale,
 
-            home: isSetupDone
-                ? const MainScaffold()
-                : const SetupProfileScreen(),
+            home: IntroScreen(isSetupDone: isSetupDone),
             debugShowCheckedModeBanner: false,
           );
         },
       ),
     );
+  }
+
+  static Widget getMainScreen(bool isSetupDone) {
+    return isSetupDone ? const MainScaffold() : const SetupProfileScreen();
   }
 }

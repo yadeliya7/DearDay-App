@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/daily_entry_model.dart';
@@ -32,62 +32,9 @@ class PoemProvider extends ChangeNotifier {
   }
 
   Future<void> _loadPoems() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final List<String> savedFavs =
-          prefs.getStringList('favorite_poems') ?? [];
-
-      final String response = await rootBundle.loadString('assets/poems.json');
-      final List<dynamic> data = json.decode(response);
-
-      _poems = [];
-      for (int i = 0; i < data.length; i++) {
-        final item = data[i];
-        // Calculate background image sequentially (1-9) using index
-        // Using "bg_X.jpg" format
-        final bgIndex = (i % 9) + 1;
-        final String assignedBg = 'assets/images/bg_$bgIndex.jpg';
-
-        // Derive tags from mood for filtering
-        String derivedTag = 'genel';
-        String jsonMood = item['mood']?.toString() ?? '';
-        if (jsonMood == 'sad') {
-          derivedTag = 'huzun';
-        } else if (jsonMood == 'romantic')
-          derivedTag = 'ask';
-        else if (jsonMood == 'hopeful')
-          derivedTag = 'umut';
-        else if (jsonMood == 'tired')
-          derivedTag = 'sakinlik';
-        else if (jsonMood == 'peaceful')
-          derivedTag = 'huzur';
-        else if (jsonMood == 'nostalgic')
-          derivedTag = 'ozlem';
-        else if (jsonMood == 'mystic')
-          derivedTag = 'mistik';
-        else if (jsonMood == 'happy')
-          derivedTag = 'neşe'; // Optional mapping
-
-        _poems.add(
-          Poem(
-            id: item['id'],
-            title: item['title'],
-            content: item['content'],
-            author: item['author'],
-            mood: item['mood'],
-            createdAt: DateTime.now(), // Date is dynamic
-            backgroundImage: assignedBg,
-            isFavorite: savedFavs.contains(item['id']),
-            tags: [derivedTag], // Auto-tagging
-          ),
-        );
-      }
-
-      notifyListeners();
-      debugPrint('Loaded ${_poems.length} poems with assigned backgrounds.');
-    } catch (e) {
-      debugPrint('Error loading poems: $e');
-    }
+    // User requested to remove usage of assets/poems.json
+    _poems = [];
+    notifyListeners();
   }
 
   String _contentFontFamily = 'Nunito';
@@ -468,6 +415,7 @@ class MoodProvider extends ChangeNotifier {
     List<String> mediaPaths = const [],
     Map<String, dynamic> activities = const {},
     String? customStory,
+    String? savedStory,
   ]) async {
     final String dateKey =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
@@ -476,6 +424,7 @@ class MoodProvider extends ChangeNotifier {
       moodCode: moodCode,
       note: note,
       customStory: customStory,
+      savedStory: savedStory,
       date: date,
       mediaPaths: mediaPaths,
       activities: activities,
@@ -498,6 +447,7 @@ class MoodProvider extends ChangeNotifier {
         entry.mediaPaths,
         entry.activities,
         customStory,
+        entry.savedStory,
       );
     }
   }

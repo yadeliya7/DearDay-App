@@ -541,6 +541,7 @@ class AnalysisScreen extends StatelessWidget {
                     ],
                     isLocked: true,
                     isTeaser: true, // Special flag for the CTA
+                    onTap: () => _openPaywall(context),
                   ),
                 );
               }
@@ -666,10 +667,7 @@ class AnalysisScreen extends StatelessWidget {
 
     // Wrap with GestureDetector if onTap is provided
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: cardContent,
-      );
+      return GestureDetector(onTap: onTap, child: cardContent);
     }
     return cardContent;
   }
@@ -688,7 +686,8 @@ class AnalysisScreen extends StatelessWidget {
               _buildInsightCard(
                 context,
                 title: "Süper Gücün Ne? 🔒",
-                description: "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
+                description:
+                    "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
                 icon: Icons.flash_on,
                 gradientColors: [
                   Colors.green.shade400.withOpacity(0.8),
@@ -742,10 +741,7 @@ class AnalysisScreen extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.orange.shade400,
-            Colors.orange.shade600,
-          ],
+          colors: [Colors.orange.shade400, Colors.orange.shade600],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -806,9 +802,7 @@ class AnalysisScreen extends StatelessWidget {
   void _openPaywall(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const PaywallScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const PaywallScreen()),
     );
   }
 

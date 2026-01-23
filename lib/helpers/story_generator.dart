@@ -20,12 +20,50 @@ class StoryGenerator {
     BuildContext context,
     DailyEntry entry, {
     bool isPremium = false,
+    bool includeNote = true,
   }) {
-    // 1. Get Locale
-    final locale = Localizations.localeOf(context).languageCode;
+    // Adapter to use the context-free generator with context-based localization
+    final loc = AppLocalizations.of(context)!;
+
+    return generateStory(
+      entry,
+      Localizations.localeOf(context).languageCode,
+      isPremium: isPremium,
+      includeNote: includeNote,
+      weatherTranslator: (weatherKey) {
+        switch (weatherKey) {
+          case 'sunny':
+            return loc.weatherSunny;
+          case 'cloudy':
+            return loc.weatherCloudy;
+          case 'rainy':
+            return loc.weatherRainy;
+          case 'snowy':
+            return loc.weatherSnowy;
+          case 'windy':
+            return loc.weatherWindy;
+          case 'foggy':
+            return loc.weatherFoggy;
+          case 'hail':
+            return loc.weatherHail;
+          default:
+            return weatherKey;
+        }
+      },
+    );
+  }
+
+  /// Context-free generator for use in PDF/Background services
+  static String generateStory(
+    DailyEntry entry,
+    String locale, {
+    bool isPremium = false,
+    bool includeNote = true,
+    String Function(String)? weatherTranslator,
+  }) {
     final sb = StringBuffer();
 
-    // 2. Prepare Data
+    // 1. Prepare Data
     final mood = entry.moodCode;
     final sleep = entry.activities['sleep'] as String? ?? '';
 
@@ -51,7 +89,7 @@ class StoryGenerator {
       }
     }
 
-    // 3. INTRO (Mood + Sleep + Weather)
+    // 2. INTRO (Mood + Sleep + Weather)
     String moodKey = _getMoodKey(mood);
     String moodSentence = selectTemplate(
       StoryContentService.getVariations(locale, moodKey),
@@ -85,7 +123,7 @@ class StoryGenerator {
     if (weatherSentence.isNotEmpty) sb.write(' $weatherSentence');
     sb.write(' ');
 
-    // 4. BODY (Activities)
+    // 3. BODY (Activities)
     final activities = _flattenActivities(entry.activities);
     final activitySentences = <String>[];
 
@@ -105,8 +143,8 @@ class StoryGenerator {
       sb.write(' ');
     }
 
-    // 5. OUTRO / NOTE
-    if (entry.note != null && entry.note!.isNotEmpty) {
+    // 4. OUTRO / NOTE
+    if (includeNote && entry.note != null && entry.note!.isNotEmpty) {
       String noteTemplate = selectTemplate(
         StoryContentService.getVariations(locale, 'dayNote'),
       );
@@ -118,38 +156,13 @@ class StoryGenerator {
     String finalStory = sb.toString().trim();
 
     if (finalStory.contains('{weather}') && weather != null) {
-      try {
-        final loc = AppLocalizations.of(context)!;
-        String weatherWord = "";
-        switch (weather) {
-          case 'sunny':
-            weatherWord = loc.weatherSunny;
-            break;
-          case 'cloudy':
-            weatherWord = loc.weatherCloudy;
-            break;
-          case 'rainy':
-            weatherWord = loc.weatherRainy;
-            break;
-          case 'snowy':
-            weatherWord = loc.weatherSnowy;
-            break;
-          case 'windy':
-            weatherWord = loc.weatherWindy;
-            break;
-          case 'foggy':
-            weatherWord = loc.weatherFoggy;
-            break;
-          case 'hail':
-            weatherWord = loc.weatherHail;
-            break;
-          default:
-            weatherWord = weather;
-        }
-        finalStory = finalStory.replaceAll('{weather}', weatherWord);
-      } catch (e) {
-        finalStory = finalStory.replaceAll('{weather}', weather);
+      String weatherWord = weather;
+      if (weatherTranslator != null) {
+        try {
+          weatherWord = weatherTranslator(weather);
+        } catch (_) {}
       }
+      finalStory = finalStory.replaceAll('{weather}', weatherWord);
     }
 
     return finalStory;

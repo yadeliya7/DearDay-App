@@ -7,7 +7,7 @@ import 'dart:io';
 import '../core/providers.dart';
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
-import '../helpers/story_generator.dart';
+
 import '../helpers/localization_helper.dart';
 import '../core/language_provider.dart';
 import 'full_screen_gallery.dart';
@@ -263,16 +263,10 @@ class _JournalCardState extends State<_JournalCard> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Use custom story if available, otherwise generate
+    // Use custom story if available, otherwise use SAVED story.
+    // We do NOT auto-generate here anymore to respect the user's "No Story" choice.
     final displayStory =
-        widget.entry.customStory ??
-        StoryGenerator.generateDailyStory(
-          context,
-          widget.entry,
-          isPremium: Provider.of<PremiumProvider>(
-            context,
-            listen: false,
-          ).isPremium,
-        );
+        widget.entry.customStory ?? widget.entry.savedStory ?? '';
 
     final dayFormat = lang.currentLanguage == 'tr'
         ? DateFormat('d', 'tr_TR')
@@ -387,16 +381,32 @@ class _JournalCardState extends State<_JournalCard> {
             const SizedBox(height: 16),
 
             // BODY: Story text (expandable)
-            Text(
-              displayStory,
-              maxLines: _isExpanded ? null : 3,
-              overflow: _isExpanded ? null : TextOverflow.ellipsis,
-              style: GoogleFonts.merriweather(
-                fontSize: 14,
-                height: 1.6,
-                color: isDark ? Colors.white70 : Colors.black87,
+            // BODY: Story text (expandable) - Only if exists
+            if (displayStory.isNotEmpty) ...[
+              Text(
+                displayStory,
+                maxLines: _isExpanded ? null : 3,
+                overflow: _isExpanded ? null : TextOverflow.ellipsis,
+                style: GoogleFonts.merriweather(
+                  fontSize: 14,
+                  height: 1.6,
+                  color: isDark ? Colors.white70 : Colors.black87,
+                ),
               ),
-            ),
+            ],
+
+            // NOTE: User's manual note (Always show if exists)
+            if (widget.entry.note != null && widget.entry.note!.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                widget.entry.note!,
+                style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  color: isDark ? Colors.white60 : Colors.black54,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
 
             // Read More indicator
             if (!_isExpanded && displayStory.length > 150)
@@ -434,8 +444,8 @@ class _JournalCardState extends State<_JournalCard> {
             if (widget.entry.activities.isNotEmpty) ...[
               const SizedBox(height: 16),
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: 4,
+                runSpacing: 4,
                 children: _buildActivityChips(isDark),
               ),
             ],
@@ -552,7 +562,7 @@ class _JournalCardState extends State<_JournalCard> {
       }
     });
 
-    return chips.take(6).toList();
+    return chips;
   }
 
   void _showEditDialog(BuildContext context, String currentText) {

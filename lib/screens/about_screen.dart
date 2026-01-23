@@ -93,7 +93,7 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              "Habitual",
+              "DearDay",
               style: GoogleFonts.nunito(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

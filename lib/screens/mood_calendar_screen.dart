@@ -63,7 +63,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         actions: [
           IconButton(
             icon: Icon(_isSharing ? Icons.hourglass_empty : Icons.ios_share),
-            onPressed: () => _isSharing ? null : _shareMonth(context),
+            onPressed: () => _isSharing ? null : _shareMonth(),
             tooltip: 'Ayı Paylaş',
           ),
         ],
@@ -110,7 +110,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: _currentView == CalendarViewMode.month
                                     ? (isDarkMode ? Colors.white : Colors.black)
-                                    : (isDarkMode ? Colors.grey : Colors.black54),
+                                    : (isDarkMode
+                                          ? Colors.grey
+                                          : Colors.black54),
                               ),
                             ),
                           ),
@@ -125,7 +127,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: _currentView == CalendarViewMode.year
                                     ? (isDarkMode ? Colors.white : Colors.black)
-                                    : (isDarkMode ? Colors.grey : Colors.black54),
+                                    : (isDarkMode
+                                          ? Colors.grey
+                                          : Colors.black54),
                               ),
                             ),
                           ),
@@ -144,245 +148,252 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                       child: _buildYearView(context, moodProvider),
                     )
                   else
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? const Color(0xFF1C1C1E)
-                        : Colors.grey[100],
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: isDarkMode
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: 0.2,
-                              ), // Fixed alpha type
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ]
-                        : [
-                            BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: 0.08,
-                              ), // Fixed alpha type
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                  ),
-                  child: TableCalendar(
-                    locale:
-                        Provider.of<LanguageProvider>(
-                              context,
-                            ).currentLanguage ==
-                            'tr'
-                        ? 'tr_TR'
-                        : 'en_US',
-                    firstDay: DateTime.utc(2024, 1, 1),
-                    lastDay: DateTime.utc(2030, 12, 31),
-                    focusedDay: _focusedDay,
-                    selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                    onDaySelected: (selectedDay, focusedDay) {
-                      // Future Check
-                      if (selectedDay.isAfter(DateTime.now())) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              AppLocalizations.of(context)!.futureWarning,
-                              style: GoogleFonts.nunito(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.redAccent,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                        return;
-                      }
-
-                      setState(() {
-                        _selectedDay = selectedDay;
-                        _focusedDay = focusedDay;
-                      });
-
-                      // Open Entry Dialog directly if no entry exists, or Details if exists
-                      final hasEntry =
-                          moodProvider.getEntryForDate(selectedDay) != null;
-
-                      if (hasEntry) {
-                        _showDayDetails(context, selectedDay, moodProvider);
-                      } else {
-                        showMoodEntryDialog(
-                          context,
-                          date: selectedDay,
-                          provider: moodProvider,
-                        );
-                      }
-                    },
-                    onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
-                    },
-
-                    // STYLING UPDATES
-                    daysOfWeekStyle: DaysOfWeekStyle(
-                      weekdayStyle: GoogleFonts.nunito(color: offColor),
-                      weekendStyle: GoogleFonts.nunito(color: Colors.redAccent),
-                    ),
-
-                    calendarStyle: CalendarStyle(
-                      defaultTextStyle: GoogleFonts.nunito(color: textColor),
-                      weekendTextStyle: GoogleFonts.nunito(
-                        color: Colors.redAccent,
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
                       ),
-                      outsideTextStyle: GoogleFonts.nunito(color: offColor),
-                      todayTextStyle: GoogleFonts.nunito(
-                        color: isDarkMode ? Colors.black : Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      todayDecoration: BoxDecoration(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
                         color: isDarkMode
-                            ? Colors.white
-                            : Colors.black, // White Moon
-                        shape: BoxShape.circle,
+                            ? const Color(0xFF1C1C1E)
+                            : Colors.grey[100],
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: isDarkMode
+                            ? [
+                                BoxShadow(
+                                  color: Colors.black.withValues(
+                                    alpha: 0.2,
+                                  ), // Fixed alpha type
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ]
+                            : [
+                                BoxShadow(
+                                  color: Colors.black.withValues(
+                                    alpha: 0.08,
+                                  ), // Fixed alpha type
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
                       ),
-                      selectedDecoration: const BoxDecoration(
-                        color: Colors.pinkAccent,
-                        shape: BoxShape.circle,
+                      child: TableCalendar(
+                        locale:
+                            Provider.of<LanguageProvider>(
+                                  context,
+                                ).currentLanguage ==
+                                'tr'
+                            ? 'tr_TR'
+                            : 'en_US',
+                        firstDay: DateTime.utc(2024, 1, 1),
+                        lastDay: DateTime.utc(2030, 12, 31),
+                        focusedDay: _focusedDay,
+                        selectedDayPredicate: (day) =>
+                            isSameDay(_selectedDay, day),
+                        onDaySelected: (selectedDay, focusedDay) {
+                          // Future Check
+                          if (selectedDay.isAfter(DateTime.now())) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppLocalizations.of(context)!.futureWarning,
+                                  style: GoogleFonts.nunito(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.redAccent,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                            return;
+                          }
+
+                          setState(() {
+                            _selectedDay = selectedDay;
+                            _focusedDay = focusedDay;
+                          });
+
+                          // Open Entry Dialog directly if no entry exists, or Details if exists
+                          final hasEntry =
+                              moodProvider.getEntryForDate(selectedDay) != null;
+
+                          if (hasEntry) {
+                            _showDayDetails(context, selectedDay, moodProvider);
+                          } else {
+                            showMoodEntryDialog(
+                              context,
+                              date: selectedDay,
+                              provider: moodProvider,
+                            );
+                          }
+                        },
+                        onPageChanged: (focusedDay) {
+                          _focusedDay = focusedDay;
+                        },
+
+                        // STYLING UPDATES
+                        daysOfWeekStyle: DaysOfWeekStyle(
+                          weekdayStyle: GoogleFonts.nunito(color: offColor),
+                          weekendStyle: GoogleFonts.nunito(
+                            color: Colors.redAccent,
+                          ),
+                        ),
+
+                        calendarStyle: CalendarStyle(
+                          defaultTextStyle: GoogleFonts.nunito(
+                            color: textColor,
+                          ),
+                          weekendTextStyle: GoogleFonts.nunito(
+                            color: Colors.redAccent,
+                          ),
+                          outsideTextStyle: GoogleFonts.nunito(color: offColor),
+                          todayTextStyle: GoogleFonts.nunito(
+                            color: isDarkMode ? Colors.black : Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          todayDecoration: BoxDecoration(
+                            color: isDarkMode
+                                ? Colors.white
+                                : Colors.black, // White Moon
+                            shape: BoxShape.circle,
+                          ),
+                          selectedDecoration: const BoxDecoration(
+                            color: Colors.pinkAccent,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+
+                        headerStyle: HeaderStyle(
+                          formatButtonVisible: false,
+                          titleCentered: true,
+                          titleTextStyle: GoogleFonts.nunito(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: isDarkMode ? Colors.white : Colors.black87,
+                          ),
+                          leftChevronIcon: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: isDarkMode
+                                  ? Colors.white.withAlpha(25)
+                                  : Colors.black.withAlpha(25),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.chevron_left,
+                              color: isDarkMode ? Colors.white : Colors.black87,
+                              size: 20,
+                            ),
+                          ),
+                          rightChevronIcon: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: isDarkMode
+                                  ? Colors.white.withAlpha(25)
+                                  : Colors.black.withAlpha(25),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.chevron_right,
+                              color: isDarkMode ? Colors.white : Colors.black87,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+
+                        calendarBuilders: CalendarBuilders(
+                          defaultBuilder: (context, day, focusedDay) {
+                            return _buildMoodCell(context, day, moodProvider);
+                          },
+                          selectedBuilder: (context, day, focusedDay) {
+                            return _buildMoodCell(
+                              context,
+                              day,
+                              moodProvider,
+                              isSelected: true,
+                            );
+                          },
+                          todayBuilder: (context, day, focusedDay) {
+                            return _buildMoodCell(
+                              context,
+                              day,
+                              moodProvider,
+                              isToday: true,
+                            );
+                          },
+                        ),
                       ),
                     ),
 
-                    headerStyle: HeaderStyle(
-                      formatButtonVisible: false,
-                      titleCentered: true,
-                      titleTextStyle: GoogleFonts.nunito(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        color: isDarkMode ? Colors.white : Colors.black87,
-                      ),
-                      leftChevronIcon: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: isDarkMode
-                              ? Colors.white.withAlpha(25)
-                              : Colors.black.withAlpha(25),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.chevron_left,
-                          color: isDarkMode ? Colors.white : Colors.black87,
-                          size: 20,
-                        ),
-                      ),
-                      rightChevronIcon: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: isDarkMode
-                              ? Colors.white.withAlpha(25)
-                              : Colors.black.withAlpha(25),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: isDarkMode ? Colors.white : Colors.black87,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-
-                    calendarBuilders: CalendarBuilders(
-                      defaultBuilder: (context, day, focusedDay) {
-                        return _buildMoodCell(context, day, moodProvider);
-                      },
-                      selectedBuilder: (context, day, focusedDay) {
-                        return _buildMoodCell(
-                          context,
-                          day,
-                          moodProvider,
-                          isSelected: true,
-                        );
-                      },
-                      todayBuilder: (context, day, focusedDay) {
-                        return _buildMoodCell(
-                          context,
-                          day,
-                          moodProvider,
-                          isToday: true,
-                        );
-                      },
+                  const SizedBox(height: 20),
+                  // Legend - Wrapped Mood Chips (All visible)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: moodProvider.moods
+                          .where((m) => m.code.isNotEmpty)
+                          .map((mood) {
+                            final color = _getMoodColor(mood.code);
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: color.withValues(
+                                  alpha: isDarkMode ? 0.2 : 0.3,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: color.withValues(
+                                    alpha: isDarkMode ? 0.5 : 0.6,
+                                  ),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: color,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    _getMoodName(context, mood.code),
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          })
+                          .toList(),
                     ),
                   ),
-                ),
 
-              const SizedBox(height: 20),
-              // Legend - Wrapped Mood Chips (All visible)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: moodProvider.moods
-                      .where((m) => m.code.isNotEmpty)
-                      .map((mood) {
-                        final color = _getMoodColor(mood.code);
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: color.withValues(
-                              alpha: isDarkMode ? 0.2 : 0.3,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: color.withValues(
-                                alpha: isDarkMode ? 0.5 : 0.6,
-                              ),
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: color,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                _getMoodName(context, mood.code),
-                                style: GoogleFonts.nunito(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: isDarkMode
-                                      ? Colors.white70
-                                      : Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      })
-                      .toList(),
-                ),
-              ),
+                  const SizedBox(height: 30),
+                  // Mood Summary (Month or Year)
+                  _buildMoodSummary(context, moodProvider, isDarkMode),
+                  const SizedBox(height: 30),
 
-              const SizedBox(height: 30),
-              // Monthly Summary
-              _buildMonthlySummary(context, moodProvider, isDarkMode),
-              const SizedBox(height: 30),
-
-              // Daily Check-in Button (if not focused on past)
-              // Actually, HomeScreen handles the check-in mostly, but nice to have here too maybe?
-              // Leaving it clean for now as requested.
+                  // Daily Check-in Button (if not focused on past)
+                  // Actually, HomeScreen handles the check-in mostly, but nice to have here too maybe?
+                  // Leaving it clean for now as requested.
                 ],
               ),
             );
@@ -458,48 +469,69 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
     }
   }
 
-  Widget _buildMonthlySummary(
+  Widget _buildMoodSummary(
     BuildContext context,
     MoodProvider provider,
     bool isDark,
   ) {
-    // Calculate dominant mood for current focused month
-    final monthEntries = provider.journal.values.where((entry) {
-      return entry.date.year == _focusedDay.year &&
-          entry.date.month == _focusedDay.month;
-    }).toList();
+    List<DailyEntry> entries;
+    String label;
 
-    if (monthEntries.isEmpty) {
+    if (_currentView == CalendarViewMode.year) {
+      // Year Logic
+      entries = provider.journal.values.where((entry) {
+        return entry.date.year == _focusedDay.year;
+      }).toList();
+      label = AppLocalizations.of(context)!.moodOfTheYear;
+    } else {
+      // Month Logic
+      entries = provider.journal.values.where((entry) {
+        return entry.date.year == _focusedDay.year &&
+            entry.date.month == _focusedDay.month;
+      }).toList();
+      label = AppLocalizations.of(context)!.moodOfTheMonth;
+    }
+
+    if (entries.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    // Count mood occurrences
+    // Count mood occurrences and track latest date for tie-breaking
     final moodCounts = <String, int>{};
-    for (var entry in monthEntries) {
+    final moodLatestDate = <String, DateTime>{};
+
+    for (var entry in entries) {
       moodCounts[entry.moodCode] = (moodCounts[entry.moodCode] ?? 0) + 1;
+
+      if (!moodLatestDate.containsKey(entry.moodCode) ||
+          entry.date.isAfter(moodLatestDate[entry.moodCode]!)) {
+        moodLatestDate[entry.moodCode] = entry.date;
+      }
     }
 
     // Find dominant mood
-    String? dominantMoodCode;
-    int maxCount = 0;
-    moodCounts.forEach((code, count) {
-      if (count > maxCount) {
-        maxCount = count;
-        dominantMoodCode = code;
-      }
-    });
+    final sortedCodes = moodCounts.keys.toList()
+      ..sort((a, b) {
+        final countA = moodCounts[a]!;
+        final countB = moodCounts[b]!;
+        if (countA != countB) {
+          return countB.compareTo(countA); // Higher count first
+        }
+        // Tie-breaker: Most recent date first
+        final dateA = moodLatestDate[a]!;
+        final dateB = moodLatestDate[b]!;
+        return dateB.compareTo(dateA);
+      });
 
-    if (dominantMoodCode == null) {
-      return const SizedBox.shrink();
-    }
+    if (sortedCodes.isEmpty) return const SizedBox.shrink();
+
+    final dominantMoodCode = sortedCodes.first;
 
     final dominantMood = provider.moods.firstWhere(
       (m) => m.code == dominantMoodCode,
       orElse: () => provider.moods.first,
     );
 
-    // final loc = AppLocalizations.of(context)!;
-    final lang = Provider.of<LanguageProvider>(context, listen: false);
     final moodName = _getMoodName(context, dominantMood.code);
 
     return Padding(
@@ -508,9 +540,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            lang.currentLanguage == 'tr'
-                ? 'Bu ayın modu: '
-                : 'This month\'s mood: ',
+            label,
             style: GoogleFonts.nunito(
               fontSize: 14,
               color: isDark ? Colors.grey : Colors.black54,
@@ -531,7 +561,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
     );
   }
 
-  Future<void> _shareMonth(BuildContext context) async {
+  Future<void> _shareMonth() async {
     setState(() => _isSharing = true);
     final provider = Provider.of<MoodProvider>(context, listen: false);
     final lang = Provider.of<LanguageProvider>(context, listen: false);
@@ -588,7 +618,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
           moodDefinitions: definitions,
           localizedLabels: localizedLabels,
           locale: lang.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
-          footerText: "${AppLocalizations.of(context)!.createdWith} Habitual",
+          footerText: "${AppLocalizations.of(context)!.createdWith} DearDay",
         ),
         delay: const Duration(milliseconds: 100),
         context: context,
@@ -1370,12 +1400,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
           childAspectRatio: 0.85,
         ),
         itemBuilder: (context, index) {
-          return _buildMiniMonth(
-            context,
-            moodProvider,
-            index + 1,
-            isDarkMode,
-          );
+          return _buildMiniMonth(context, moodProvider, index + 1, isDarkMode);
         },
       ),
     );
@@ -1388,7 +1413,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
     bool isDarkMode,
   ) {
     // Month Name
-    final date = DateTime(DateTime.now().year, month, 1);
+    final date = DateTime(_focusedDay.year, month, 1);
     final monthName = DateFormat.MMM(
       AppLocalizations.of(context)!.localeName,
     ).format(date);
@@ -1447,7 +1472,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
     bool isDarkMode,
     double size,
   ) {
-    final year = DateTime.now().year;
+    final year = _focusedDay.year;
     bool isValidDate = true;
     try {
       final d = DateTime(year, month, day);
@@ -1468,7 +1493,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
 
     // Empty cell colors: visible in BOTH light and dark modes
     Color color = isDarkMode
-        ? Colors.grey.shade800 // Solid grey visible on black
+        ? Colors
+              .grey
+              .shade800 // Solid grey visible on black
         : Colors.black.withValues(alpha: 0.05);
 
     if (entry != null) {
@@ -1495,10 +1522,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
       ),
     );
   }

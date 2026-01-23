@@ -559,7 +559,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msgNoMoodPoems => 'No poems for this mood yet.';
 
   @override
-  String get appTitle => 'Habitual';
+  String get appTitle => 'DearDay';
 
   @override
   String get msgNoPoemSelected => 'No poem selected yet.';
@@ -571,7 +571,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dailyGoals => 'Daily Goals';
 
   @override
-  String get homeTitle => 'Habitual';
+  String get homeTitle => 'DearDay';
 
   @override
   String get today => 'Today';
@@ -637,7 +637,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareMessage =>
-      'Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 Habitual\n\n';
+      'Hi! I discovered this great app to track my mood and habits. You should try it too! 🚀 DearDay\n\n';
 
   @override
   String shareError(String error) {
@@ -1044,7 +1044,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutWhatDesc =>
-      'Habitual is a personal development assistant designed to increase your emotional awareness and track your habits.';
+      'DearDay is a personal development assistant designed to increase your emotional awareness and track your habits.';
 
   @override
   String get aboutPrivacyTitle => 'Privacy';
@@ -1150,4 +1150,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unlockYearView => 'Unlock Yearly View';
+
+  @override
+  String get exportToPdf => 'Download as PDF';
+
+  @override
+  String get exportToPdfDesc => 'Save your journal as a book format';
+
+  @override
+  String get premiumFeatureLocked => 'Premium Feature';
+
+  @override
+  String get noEntriesForPdf =>
+      'No journal entries found. Please add at least one entry to create a PDF.';
+
+  @override
+  String get creatingPdf => 'Creating PDF...';
+
+  @override
+  String pdfError(String error) {
+    return 'Error creating PDF: $error';
+  }
+
+  @override
+  String get moodOfTheMonth => 'Mood of the Month: ';
+
+  @override
+  String get moodOfTheYear => 'Mood of the Year: ';
 }

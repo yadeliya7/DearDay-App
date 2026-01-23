@@ -2,6 +2,7 @@ class DailyEntry {
   final String moodCode;
   final String? note;
   final String? customStory;
+  final String? savedStory; // Persisted story text (auto-generated or edited)
   final DateTime date;
   final List<String> mediaPaths;
   final Map<String, dynamic> activities;
@@ -10,6 +11,7 @@ class DailyEntry {
     required this.moodCode,
     this.note,
     this.customStory,
+    this.savedStory,
     required this.date,
     this.mediaPaths = const [],
     this.activities = const {},
@@ -20,6 +22,7 @@ class DailyEntry {
       'moodCode': moodCode,
       'note': note,
       'customStory': customStory,
+      'savedStory': savedStory,
       'date': date.toIso8601String(),
       'mediaPaths': mediaPaths,
       'activities': activities,
@@ -31,6 +34,7 @@ class DailyEntry {
       moodCode: json['moodCode'] as String,
       note: json['note'] as String?,
       customStory: json['customStory'] as String?,
+      savedStory: json['savedStory'] as String?,
       date: DateTime.parse(json['date'] as String),
       mediaPaths:
           (json['mediaPaths'] as List<dynamic>?)

@@ -151,6 +151,13 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                       backgroundImage: _selectedImagePath != null
                           ? FileImage(File(_selectedImagePath!))
                           : null,
+                      onBackgroundImageError: _selectedImagePath != null
+                          ? (exception, stackTrace) {
+                              debugPrint(
+                                'Error loading profile image: $exception',
+                              );
+                            }
+                          : null,
                       child: _selectedImagePath == null
                           ? const Icon(
                               Icons.person,
