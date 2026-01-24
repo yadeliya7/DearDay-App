@@ -53,7 +53,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                 padding: const EdgeInsets.only(right: 16),
                 child: Text(
                   '${_currentIndex + 1} / ${widget.imagePaths.length}',
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                         const SizedBox(height: 16),
                         Text(
                           'Unable to load image',
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             color: Colors.white54,
                             fontSize: 14,
                           ),

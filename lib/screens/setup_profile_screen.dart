@@ -97,7 +97,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
           ? AppBar(
               title: Text(
                 AppLocalizations.of(context)!.editProfileTitle,
-                style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -121,7 +121,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 Text(
                   AppLocalizations.of(context)!.welcomeTitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : Colors.black87,
@@ -131,7 +131,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 Text(
                   AppLocalizations.of(context)!.welcomeSubtitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.nunito(fontSize: 16, color: Colors.grey),
+                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(height: 48),
               ] else ...[
@@ -192,7 +192,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               TextField(
                 controller: _nameController,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -230,7 +230,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                     widget.isEditMode
                         ? AppLocalizations.of(context)!.saveBtn
                         : AppLocalizations.of(context)!.startBtn,
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

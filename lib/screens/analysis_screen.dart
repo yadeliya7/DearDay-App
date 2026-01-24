@@ -35,7 +35,7 @@ class AnalysisScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.analysisTitle,
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -72,12 +72,19 @@ class AnalysisScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // 3. Top Activities (List/Bar)
+            // 3. Daily Goals
             _buildSection(
               context,
-              AppLocalizations.of(
-                context,
-              )!.mostFrequentActivities(DateTime.now().year),
+              AppLocalizations.of(context)!.dailyGoals,
+              _buildGoalStats(context, entries, isDark),
+              isDark,
+            ),
+            const SizedBox(height: 20),
+
+            // 4. Top Activities (List/Bar)
+            _buildSection(
+              context,
+              AppLocalizations.of(context)!.mostFrequentActivities,
               _buildActivityList(context, entries, isDark),
               isDark,
               onSeeAll: () => _showAllActivitiesModal(context, entries, isDark),
@@ -100,7 +107,7 @@ class AnalysisScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: Theme.of(context).cardColor, // Use theme card color
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -118,9 +125,9 @@ class AnalysisScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white : Colors.black87,
                 ),
               ),
@@ -134,9 +141,9 @@ class AnalysisScreen extends StatelessWidget {
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.btnSeeAll,
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.blue,
                     ),
                   ),
@@ -221,9 +228,9 @@ class AnalysisScreen extends StatelessWidget {
                             context,
                           ).currentLanguage,
                         ).format(data[index].date), // Pzt, Sal
-                        style: GoogleFonts.nunito(
+                        style: GoogleFonts.poppins(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: Colors.grey,
                         ),
                       ),
@@ -390,7 +397,7 @@ class AnalysisScreen extends StatelessWidget {
                       if (bad > 0)
                         PieChartSectionData(
                           value: bad.toDouble(),
-                          color: Colors.indigoAccent,
+                          color: const Color(0xFFEF5350),
                           title: '',
                           radius: 60,
                         ),
@@ -403,15 +410,15 @@ class AnalysisScreen extends StatelessWidget {
                   children: [
                     Text(
                       '$dominantPercentage%',
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 32,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
                     Text(
                       dominantLabel,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.grey,
                       ),
@@ -437,7 +444,7 @@ class AnalysisScreen extends StatelessWidget {
               ),
               const SizedBox(width: 20),
               _buildLegend(
-                Colors.indigoAccent,
+                const Color(0xFFEF5350),
                 AppLocalizations.of(context)!.legendSleepBad,
               ),
             ],
@@ -476,11 +483,11 @@ class AnalysisScreen extends StatelessWidget {
 
     // 2. Handle empty state with teaser carousel
     if (insights.isEmpty) {
-      // Premium user with no data - show informational card
-      if (isPremium && data.length < 3) {
+      // Premium User: Should NEVER see teaser. If empty, show "No Data / Finding Patterns"
+      if (isPremium) {
         return _buildNoDataCard(context, isDark);
       }
-      // Free user or not enough data - show teaser carousel
+      // Free User: Show Teaser
       return _buildTeaserCarousel(context, isDark);
     }
 
@@ -606,9 +613,9 @@ class AnalysisScreen extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
@@ -625,7 +632,7 @@ class AnalysisScreen extends StatelessWidget {
                           )
                         : Text(
                             description,
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               color: Colors.white.withValues(alpha: 0.9),
                             ),
@@ -786,16 +793,16 @@ class AnalysisScreen extends StatelessWidget {
               children: [
                 Text(
                   AppLocalizations.of(context)!.dataCollectionTitle,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   AppLocalizations.of(context)!.dataCollectionDesc,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 13,
                     color: Colors.white.withValues(alpha: 0.9),
                   ),
@@ -835,9 +842,11 @@ class AnalysisScreen extends StatelessWidget {
         if (key == 'sleep' || key == 'weather') return; // Skip
 
         if (value == true) {
+          if (_goalIds.contains(key)) return; // Filter Goals
           counts[key] = (counts[key] ?? 0) + 1;
         } else if (value is List) {
           for (var item in value) {
+            if (_goalIds.contains(item.toString())) continue; // Filter Goals
             counts[item.toString()] = (counts[item.toString()] ?? 0) + 1;
           }
         }
@@ -858,7 +867,7 @@ class AnalysisScreen extends StatelessWidget {
         return Container(
           height: MediaQuery.of(context).size.height * 0.8,
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+            color: Theme.of(context).cardColor, // Use theme card color
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
@@ -871,9 +880,9 @@ class AnalysisScreen extends StatelessWidget {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.analysisAllActivities,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
@@ -895,7 +904,7 @@ class AnalysisScreen extends StatelessWidget {
                     ? Center(
                         child: Text(
                           AppLocalizations.of(context)!.analysisNoActivities,
-                          style: GoogleFonts.nunito(color: Colors.grey),
+                          style: GoogleFonts.poppins(color: Colors.grey),
                         ),
                       )
                     : ListView.builder(
@@ -961,8 +970,8 @@ class AnalysisScreen extends StatelessWidget {
                                         children: [
                                           Text(
                                             label, // Using proper label
-                                            style: GoogleFonts.nunito(
-                                              fontWeight: FontWeight.bold,
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w600,
                                               color: isDark
                                                   ? Colors.white
                                                   : Colors.black87,
@@ -973,9 +982,9 @@ class AnalysisScreen extends StatelessWidget {
                                             AppLocalizations.of(
                                               context,
                                             )!.timesCount(count),
-                                            style: GoogleFonts.nunito(
+                                            style: GoogleFonts.poppins(
                                               color: Colors.grey,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                         ],
@@ -1014,6 +1023,19 @@ class AnalysisScreen extends StatelessWidget {
     );
   }
 
+  // --- GOAL IDS ---
+  static const Set<String> _goalIds = {
+    'no_smoking',
+    'social_media_detox',
+    'read_book',
+    'drink_water',
+    'meditation',
+    'early_rise',
+    'no_sugar',
+    'journaling',
+    '10k_steps',
+  };
+
   // --- CHART 3: TOP ACTIVITIES (LIST) ---
   Widget _buildActivityList(
     BuildContext context,
@@ -1030,11 +1052,14 @@ class AnalysisScreen extends StatelessWidget {
 
       e.activities.forEach((key, value) {
         if (key == 'header_date') return;
+        if (_goalIds.contains(key)) return; // Filter out GOALS
 
         if (value == true) {
           counts[key] = (counts[key] ?? 0) + 1;
         } else if (value is List) {
           for (var item in value) {
+            if (_goalIds.contains(item.toString()))
+              continue; // Filter out GOALS from lists if any
             counts[item.toString()] = (counts[item.toString()] ?? 0) + 1;
           }
         }
@@ -1058,6 +1083,7 @@ class AnalysisScreen extends StatelessWidget {
         final count = counts[key]!;
         final max = counts[top5.first]!;
         final color = _getColorForKey(key);
+        final icon = _getIconForKey(key);
 
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
@@ -1068,19 +1094,25 @@ class AnalysisScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    LocalizationHelper.getActivityName(context, key),
-                    style: GoogleFonts.nunito(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
+                  Row(
+                    children: [
+                      Icon(icon, size: 20, color: color),
+                      const SizedBox(width: 10),
+                      Text(
+                        LocalizationHelper.getActivityName(context, key),
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     '${count}x',
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 13,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: color,
                     ),
                   ),
@@ -1088,6 +1120,99 @@ class AnalysisScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               // THICK ROUNDED BAR
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: count / max,
+                  backgroundColor: isDark
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.grey.shade200,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                  minHeight: 14,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  // --- GOAL STATS ---
+  Widget _buildGoalStats(
+    BuildContext context,
+    List<DailyEntry> data,
+    bool isDark,
+  ) {
+    // Count frequencies for CURRENT YEAR
+    final Map<String, int> counts = {};
+    final currentYear = DateTime.now().year;
+
+    for (var e in data) {
+      if (e.date.year != currentYear) continue;
+
+      e.activities.forEach((key, value) {
+        if (!_goalIds.contains(key)) return; // Only count GOALS
+
+        if (value == true) {
+          counts[key] = (counts[key] ?? 0) + 1;
+        }
+      });
+    }
+
+    if (counts.isEmpty) {
+      return Center(
+        child: Text(AppLocalizations.of(context)!.analysisNoActivityData),
+      );
+    }
+
+    // Sort descending
+    final sortedKeys = counts.keys.toList()
+      ..sort((a, b) => counts[b]!.compareTo(counts[a]!));
+
+    return Column(
+      children: sortedKeys.map((key) {
+        final count = counts[key]!;
+        // Assuming max possible is 365 or similar, but relative to max in list is better for visuals
+        final max = sortedKeys.isNotEmpty ? counts[sortedKeys.first]! : 1;
+
+        // Goals usually have specific colors or we can use the same helper
+        final color = _getColorForKey(key);
+        final icon = _getIconForKey(key);
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(icon, size: 20, color: color),
+                      const SizedBox(width: 10),
+                      Text(
+                        LocalizationHelper.getActivityName(context, key),
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${count}x',
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
@@ -1135,6 +1260,17 @@ class AnalysisScreen extends StatelessWidget {
 
       'manicure': Colors.pink,
       'skincare': Colors.lightGreen,
+
+      // Goal Colors
+      'no_smoking': Colors.redAccent,
+      'social_media_detox': Colors.purpleAccent,
+      'read_book': Colors.brown,
+      'drink_water': Colors.blue,
+      'meditation': Colors.tealAccent,
+      'early_rise': Colors.amber,
+      'no_sugar': Colors.green,
+      'journaling': Colors.deepPurple,
+      '10k_steps': Colors.orange,
     };
 
     if (colorMap.containsKey(key)) return colorMap[key]!;
@@ -1151,5 +1287,144 @@ class AnalysisScreen extends StatelessWidget {
       Colors.indigo,
     ];
     return colors[key.hashCode.abs() % colors.length];
+  }
+
+  IconData _getIconForKey(String key) {
+    switch (key) {
+      // Sleep
+      case 'good':
+        return LineIcons.sun;
+      case 'medium':
+        return LineIcons.cloudWithMoon;
+      case 'bad':
+        return LineIcons.moon;
+
+      // Health
+      case 'sport':
+        return LineIcons.running;
+      case 'healthy_food':
+        return LineIcons.carrot;
+      case 'fast_food':
+        return LineIcons.hamburger;
+      case 'water':
+        return LineIcons.tint;
+      case 'walking':
+        return LineIcons.walking;
+      case 'vitamins':
+        return LineIcons.pills;
+      case 'sleep_health':
+        return LineIcons.bed;
+      case 'doctor':
+        return LineIcons.stethoscope;
+
+      // Social
+      case 'friends':
+        return LineIcons.userFriends;
+      case 'family':
+        return LineIcons.home;
+      case 'party':
+        return LineIcons.cocktail;
+      case 'partner':
+        return LineIcons.heartAlt;
+      case 'guests':
+        return Icons.people_outline;
+      case 'colleagues':
+        return LineIcons.briefcase;
+      case 'travel':
+        return LineIcons.plane;
+      case 'volunteer':
+        return LineIcons.heart;
+
+      // Hobbies
+      case 'gaming':
+        return LineIcons.gamepad;
+      case 'reading':
+        return LineIcons.book;
+      case 'movie':
+        return LineIcons.video;
+      case 'art':
+        return LineIcons.palette;
+      case 'music':
+        return LineIcons.music;
+      case 'coding':
+        return LineIcons.code;
+      case 'photography':
+        return LineIcons.camera;
+      case 'crafts':
+        return LineIcons.brush;
+
+      // Chores
+      case 'cleaning':
+        return LineIcons.broom;
+      case 'shopping':
+        return LineIcons.shoppingCart;
+      case 'laundry':
+        return LineIcons.tShirt;
+      case 'cooking':
+        return LineIcons.utensils;
+      case 'ironing':
+        return Icons.iron;
+      case 'dishes':
+        return Icons.kitchen;
+      case 'repair':
+        return LineIcons.tools;
+      case 'plants':
+        return LineIcons.leaf;
+
+      // Self Care
+      case 'manicure':
+        return LineIcons.handHoldingHeart;
+      case 'skincare':
+        return LineIcons.spa;
+      case 'hair':
+        return LineIcons.cut;
+      case 'massage':
+        return Icons.spa;
+      case 'facemask':
+        return Icons.face;
+      case 'bath':
+        return LineIcons.bath;
+      case 'digital_detox':
+        return Icons.phonelink_off;
+
+      // Weather
+      case 'sunny':
+        return LineIcons.sun;
+      case 'rainy':
+        return LineIcons.cloudWithRain;
+      case 'cloudy':
+        return LineIcons.cloud;
+      case 'snowy':
+        return LineIcons.snowflake;
+      case 'windy':
+        return LineIcons.wind;
+      case 'foggy':
+        return Icons.foggy;
+      case 'hail':
+        return Icons.ac_unit;
+
+      // Goals
+      case 'no_smoking':
+        return LineIcons.smokingBan;
+      case 'social_media_detox':
+        return LineIcons.mobilePhone;
+      case 'read_book':
+        return LineIcons.book;
+      case 'drink_water':
+        return LineIcons.tint;
+      case 'meditation':
+        return LineIcons.spa;
+      case 'early_rise':
+        return LineIcons.bell;
+      case 'no_sugar':
+        return Icons.no_food;
+      case 'journaling':
+        return LineIcons.bookOpen;
+      case '10k_steps':
+        return LineIcons.shoePrints;
+
+      default:
+        return Icons.circle;
+    }
   }
 }

@@ -149,7 +149,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                               Text(
                                 "Potansiyelini keşfet, en iyi versiyonuna ulaş.",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.nunito(
+                                style: GoogleFonts.poppins(
                                   fontSize: 16,
                                   color: Colors.white70,
                                 ),
@@ -260,7 +260,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                                       _selectedPlan == 'weekly'
                                           ? "Premium Ol"
                                           : "Ücretsiz Denemeyi Başlat",
-                                      style: GoogleFonts.nunito(
+                                      style: GoogleFonts.poppins(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -306,7 +306,7 @@ class _PaywallScreenState extends State<PaywallScreen>
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -369,7 +369,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -379,7 +379,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         color: goldColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -396,7 +396,7 @@ class _PaywallScreenState extends State<PaywallScreen>
               children: [
                 Text(
                   price,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
@@ -415,7 +415,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                     ),
                     child: Text(
                       "EN POPÜLER",
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -436,7 +436,7 @@ class _PaywallScreenState extends State<PaywallScreen>
       onTap: () {},
       child: Text(
         text,
-        style: GoogleFonts.nunito(
+        style: GoogleFonts.poppins(
           color: Colors.grey,
           fontSize: 11,
           decoration: TextDecoration.underline,

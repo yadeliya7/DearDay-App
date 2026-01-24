@@ -13,6 +13,7 @@ import 'dart:io';
 import '../core/theme.dart';
 import '../core/premium_effects.dart';
 import '../core/providers.dart';
+import '../providers/theme_provider.dart';
 import '../core/language_provider.dart';
 
 import '../models/poem_model.dart';
@@ -458,7 +459,7 @@ class _PremiumPoemCardState extends State<PremiumPoemCard>
                           opacity: _fadeAnimation,
                           child: Text(
                             '~ ${widget.poem.author}',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               color: secondaryTextColor,
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
@@ -629,7 +630,7 @@ class _PremiumPoemCardState extends State<PremiumPoemCard>
                     // Başlık ve TabBar
                     Text(
                       AppLocalizations.of(context)!.designBgTitle,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: isDark ? Colors.white : Colors.black87,

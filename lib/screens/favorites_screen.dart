@@ -30,7 +30,7 @@ class FavoritesScreen extends StatelessWidget {
         ),
         title: Text(
           AppLocalizations.of(context)!.favorites,
-          style: GoogleFonts.nunito(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -51,7 +51,10 @@ class FavoritesScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   Text(
                     AppLocalizations.of(context)!.emptyFavTitle,
-                    style: GoogleFonts.nunito(fontSize: 18, color: Colors.grey),
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),

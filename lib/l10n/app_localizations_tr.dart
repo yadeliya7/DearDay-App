@@ -641,7 +641,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumDesc => 'Sınırsız erişim ve reklamsız deneyim.';
 
   @override
-  String get sectionAppearance => 'APPEARANCE';
+  String get sectionAppearance => 'GÖRÜNÜM';
 
   @override
   String get sectionOther => 'DİĞER';
@@ -773,9 +773,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisTopActivities => 'En Sık Yapılanlar';
 
   @override
-  String mostFrequentActivities(int year) {
-    return 'En Sık Yapılanlar ($year)';
-  }
+  String get mostFrequentActivities => 'En Sık Yapılanlar';
 
   @override
   String get analysisAllActivities => 'Tüm Aktiviteler';
@@ -1194,4 +1192,45 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get dataCollectionDesc =>
       'Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!';
+
+  @override
+  String get themeSelectionTitle => 'TEMA SEÇİMİ';
+
+  @override
+  String get themeColorTitle => 'Renk Teması';
+
+  @override
+  String get themePeach => 'Şeftali';
+
+  @override
+  String get themeCoffee => 'Kahve';
+
+  @override
+  String get themeOcean => 'Okyanus';
+
+  @override
+  String get themeNature => 'Doğa';
+
+  @override
+  String get themeBerry => 'Böğürtlen';
+
+  @override
+  String get themeMidnight => 'Gece';
+
+  @override
+  String get appLock => 'Uygulama Kilidi';
+
+  @override
+  String get appLockDesc => 'Parmak izi veya FaceID ile kilitle';
+
+  @override
+  String get authenticationRequired =>
+      'Devam etmek için kimlik doğrulama gerekli';
+
+  @override
+  String get authenticationFailed => 'Kimlik doğrulama başarısız';
+
+  @override
+  String get biometricNotAvailable =>
+      'Cihazınızda biyometrik kimlik doğrulama kullanılamıyor';
 }

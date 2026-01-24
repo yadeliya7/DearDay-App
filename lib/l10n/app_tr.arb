@@ -451,14 +451,8 @@
     "analysisSleepQuality": "Uyku Kalitesi",
     "analysisTopActivities": "En Sık Yapılanlar",
     "@analysisTopActivities": {},
-    "mostFrequentActivities": "En Sık Yapılanlar ({year})",
-    "@mostFrequentActivities": {
-        "placeholders": {
-            "year": {
-                "type": "int"
-            }
-        }
-    },
+    "mostFrequentActivities": "En Sık Yapılanlar",
+    "@mostFrequentActivities": {},
     "analysisAllActivities": "Tüm Aktiviteler",
     "analysisNoData": "Yeterli veri yok",
     "analysisNoSleepData": "Uyku verisi yok",
@@ -474,6 +468,8 @@
     "streakCompleted": "\n{goal} hedefinde {days} günlük seriyi tamamladın!",
     "streakGoalCompleted": "\n{days} günlük seriyi tamamladın!",
     "sectionOther": "DİĞER",
+    "sectionAppearance": "GÖRÜNÜM",
+    "@sectionAppearance": {},
     "dayDetail": "Gün Detayı",
     "btnAddPhoto": "Fotoğraf Ekle",
     "introHighEnergy": "Bugün enerjim yerindeydi! {weather}",
@@ -600,5 +596,31 @@
     "insightTeaserSleepAnalysisTitle": "Uyku Analizi 🔒",
     "insightTeaserSleepAnalysisDesc": "Uykun gününü nasıl etkiliyor?",
     "dataCollectionTitle": "Veri Toplanıyor... ⏳",
-    "dataCollectionDesc": "Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!"
+    "dataCollectionDesc": "Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!",
+    "themeSelectionTitle": "TEMA SEÇİMİ",
+    "@themeSelectionTitle": {},
+    "themeColorTitle": "Renk Teması",
+    "@themeColorTitle": {},
+    "themePeach": "Şeftali",
+    "@themePeach": {},
+    "themeCoffee": "Kahve",
+    "@themeCoffee": {},
+    "themeOcean": "Okyanus",
+    "@themeOcean": {},
+    "themeNature": "Doğa",
+    "@themeNature": {},
+    "themeBerry": "Böğürtlen",
+    "@themeBerry": {},
+    "themeMidnight": "Gece",
+    "@themeMidnight": {},
+    "appLock": "Uygulama Kilidi",
+    "@appLock": {},
+    "appLockDesc": "Parmak izi veya FaceID ile kilitle",
+    "@appLockDesc": {},
+    "authenticationRequired": "Devam etmek için kimlik doğrulama gerekli",
+    "@authenticationRequired": {},
+    "authenticationFailed": "Kimlik doğrulama başarısız",
+    "@authenticationFailed": {},
+    "biometricNotAvailable": "Cihazınızda biyometrik kimlik doğrulama kullanılamıyor",
+    "@biometricNotAvailable": {}
 }

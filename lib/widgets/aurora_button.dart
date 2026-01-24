@@ -169,7 +169,7 @@ class _AuroraButtonState extends State<AuroraButton>
                           const SizedBox(width: 8),
                           Text(
                             widget.label!,
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               color: widget.isPrimary
                                   ? Colors.white
                                   : Colors.grey,

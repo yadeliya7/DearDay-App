@@ -766,7 +766,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                         children: [
                           Text(
                             '',
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: isDark ? Colors.white70 : Colors.grey,
@@ -833,7 +833,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                                       const SizedBox(width: 8),
                                       Text(
                                         label,
-                                        style: GoogleFonts.nunito(
+                                        style: GoogleFonts.poppins(
                                           color: contentColor,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -882,7 +882,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                                 const SizedBox(width: 8),
                                 Text(
                                   'AI Story',
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.amber[700],
@@ -938,7 +938,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
               'd MMMM yyyy',
               Provider.of<LanguageProvider>(context).currentLanguage,
             ).format(widget.date),
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : Colors.black87,
@@ -994,7 +994,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
             },
             child: Text(
               loc.save.toUpperCase(),
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white70 : Colors.black87,
@@ -1013,7 +1013,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
         alignment: Alignment.centerLeft,
         child: Text(
           title,
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.grey,
@@ -1043,9 +1043,9 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(
-                    horizontal: 4,
+                    horizontal: 6,
                   ), // Tighter margin
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? _getMoodColor(mood.code)
@@ -1059,14 +1059,14 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                   ),
                   child: Text(
                     mood.emoji,
-                    style: TextStyle(fontSize: isSelected ? 30 : 22),
+                    style: TextStyle(fontSize: isSelected ? 30 : 24),
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   _getMoodName(context, mood.code),
-                  style: GoogleFonts.nunito(
-                    fontSize: 9,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
                     fontWeight: isSelected
                         ? FontWeight.bold
                         : FontWeight.normal,
@@ -1235,7 +1235,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : Colors.black87,
@@ -1245,7 +1245,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 if (displayStreak > 0)
                   Text(
                     '🔥 ${AppLocalizations.of(context)!.dailyStreak(displayStreak)}',
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: Colors.orange,
@@ -1254,7 +1254,10 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 else
                   Text(
                     AppLocalizations.of(context)!.startStreak,
-                    style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey),
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
                   ),
               ],
             ),
@@ -1352,7 +1355,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 const SizedBox(width: 8),
                 Text(
                   AppLocalizations.of(context)!.btnAddPhoto,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
                   ),

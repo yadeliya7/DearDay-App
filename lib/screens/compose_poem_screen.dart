@@ -131,7 +131,7 @@ class _ComposePoemScreenState extends State<ComposePoemScreen> {
         SnackBar(
           content: Text(
             'Lütfen başlık ve şiir içeriğini girin.',
-            style: GoogleFonts.nunito(),
+            style: GoogleFonts.poppins(),
           ),
           backgroundColor: Colors.redAccent,
         ),
@@ -159,7 +159,7 @@ class _ComposePoemScreenState extends State<ComposePoemScreen> {
       SnackBar(
         content: Text(
           'Şiirin günlüğüne eklendi! ✨',
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.green,
       ),
@@ -203,7 +203,7 @@ class _ComposePoemScreenState extends State<ComposePoemScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.save,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

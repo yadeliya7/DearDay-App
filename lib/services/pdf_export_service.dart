@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -37,6 +37,9 @@ class PdfExportService {
     final ttf = await PdfGoogleFonts.notoSerifRegular();
     final ttfBold = await PdfGoogleFonts.notoSerifBold();
     final ttfItalic = await PdfGoogleFonts.notoSerifItalic();
+
+    // Load app icon
+    final appIcon = await _loadAppIcon();
 
     // COVER PAGE
     pdf.addPage(
@@ -190,13 +193,27 @@ class PdfExportService {
         pw.Container(
           alignment: pw.Alignment.centerRight,
           margin: const pw.EdgeInsets.only(top: 20),
-          child: pw.Text(
-            'Created with DearDay  •  ${_t('page', locale)} ${i + 2}',
-            style: pw.TextStyle(
-              font: ttfItalic,
-              fontSize: 10,
-              color: PdfColors.grey500,
-            ),
+          child: pw.Row(
+            mainAxisSize: pw.MainAxisSize.min,
+            children: [
+              if (appIcon != null) ...[
+                pw.Image(
+                  appIcon,
+                  width: 16,
+                  height: 16,
+                  fit: pw.BoxFit.contain,
+                ),
+                pw.SizedBox(width: 6),
+              ],
+              pw.Text(
+                'Created with DearDay  •  ${_t('page', locale)} ${i + 2}',
+                style: pw.TextStyle(
+                  font: ttfItalic,
+                  fontSize: 10,
+                  color: PdfColors.grey500,
+                ),
+              ),
+            ],
           ),
         ),
       ];
@@ -332,6 +349,17 @@ class PdfExportService {
         final bytes = await file.readAsBytes();
         return pw.MemoryImage(bytes);
       }
+    } catch (e) {
+      // Ignore errors
+    }
+    return null;
+  }
+
+  // Helper: Load app icon from assets
+  Future<pw.ImageProvider?> _loadAppIcon() async {
+    try {
+      final iconData = await rootBundle.load('assets/icon/app_icon2.png');
+      return pw.MemoryImage(iconData.buffer.asUint8List());
     } catch (e) {
       // Ignore errors
     }

@@ -477,14 +477,8 @@
     "@analysisSleepQuality": {},
     "analysisTopActivities": "Top Activities",
     "@analysisTopActivities": {},
-    "mostFrequentActivities": "Top Activities ({year})",
-    "@mostFrequentActivities": {
-        "placeholders": {
-            "year": {
-                "type": "int"
-            }
-        }
-    },
+    "mostFrequentActivities": "Top Activities",
+    "@mostFrequentActivities": {},
     "analysisAllActivities": "All Activities",
     "@analysisAllActivities": {},
     "analysisNoData": "Not enough data",
@@ -796,5 +790,31 @@
     "dataCollectionTitle": "Gathering Data... ⏳",
     "@dataCollectionTitle": {},
     "dataCollectionDesc": "You need to enter data for at least 3-5 days for analysis. Keep journaling!",
-    "@dataCollectionDesc": {}
+    "@dataCollectionDesc": {},
+    "themeSelectionTitle": "THEME SELECTION",
+    "@themeSelectionTitle": {},
+    "themeColorTitle": "Color Theme",
+    "@themeColorTitle": {},
+    "themePeach": "Peach",
+    "@themePeach": {},
+    "themeCoffee": "Coffee",
+    "@themeCoffee": {},
+    "themeOcean": "Ocean",
+    "@themeOcean": {},
+    "themeNature": "Nature",
+    "@themeNature": {},
+    "themeBerry": "Berry",
+    "@themeBerry": {},
+    "themeMidnight": "Midnight",
+    "@themeMidnight": {},
+    "appLock": "App Lock",
+    "@appLock": {},
+    "appLockDesc": "Lock with fingerprint or FaceID",
+    "@appLockDesc": {},
+    "authenticationRequired": "Authentication required to continue",
+    "@authenticationRequired": {},
+    "authenticationFailed": "Authentication failed",
+    "@authenticationFailed": {},
+    "biometricNotAvailable": "Biometric authentication is not available on your device",
+    "@biometricNotAvailable": {}
 }

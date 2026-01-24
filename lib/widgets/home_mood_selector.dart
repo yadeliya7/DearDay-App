@@ -94,7 +94,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
       children: [
         Text(
           AppLocalizations.of(context)!.checkInPrompt,
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: isDark ? Colors.white : Colors.black87,
@@ -135,7 +135,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
                         scale: isSelected ? 1.1 : 1.0,
                         duration: const Duration(milliseconds: 200),
                         child: Container(
-                          padding: const EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? Colors.blueAccent.withValues(alpha: 0.1)
@@ -165,11 +165,11 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         _getMoodName(context, mood.code),
-                        style: GoogleFonts.nunito(
-                          fontSize: 10,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.normal,

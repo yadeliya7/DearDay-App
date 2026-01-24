@@ -1499,8 +1499,8 @@ abstract class AppLocalizations {
   /// No description provided for @mostFrequentActivities.
   ///
   /// In en, this message translates to:
-  /// **'Top Activities ({year})'**
-  String mostFrequentActivities(int year);
+  /// **'Top Activities'**
+  String get mostFrequentActivities;
 
   /// No description provided for @analysisAllActivities.
   ///
@@ -2275,6 +2275,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You need to enter data for at least 3-5 days for analysis. Keep journaling!'**
   String get dataCollectionDesc;
+
+  /// No description provided for @themeSelectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'THEME SELECTION'**
+  String get themeSelectionTitle;
+
+  /// No description provided for @themeColorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Theme'**
+  String get themeColorTitle;
+
+  /// No description provided for @themePeach.
+  ///
+  /// In en, this message translates to:
+  /// **'Peach'**
+  String get themePeach;
+
+  /// No description provided for @themeCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get themeCoffee;
+
+  /// No description provided for @themeOcean.
+  ///
+  /// In en, this message translates to:
+  /// **'Ocean'**
+  String get themeOcean;
+
+  /// No description provided for @themeNature.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature'**
+  String get themeNature;
+
+  /// No description provided for @themeBerry.
+  ///
+  /// In en, this message translates to:
+  /// **'Berry'**
+  String get themeBerry;
+
+  /// No description provided for @themeMidnight.
+  ///
+  /// In en, this message translates to:
+  /// **'Midnight'**
+  String get themeMidnight;
+
+  /// No description provided for @appLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get appLock;
+
+  /// No description provided for @appLockDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock with fingerprint or FaceID'**
+  String get appLockDesc;
+
+  /// No description provided for @authenticationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication required to continue'**
+  String get authenticationRequired;
+
+  /// No description provided for @authenticationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed'**
+  String get authenticationFailed;
+
+  /// No description provided for @biometricNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication is not available on your device'**
+  String get biometricNotAvailable;
 }
 
 class _AppLocalizationsDelegate

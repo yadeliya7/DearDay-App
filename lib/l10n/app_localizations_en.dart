@@ -783,9 +783,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analysisTopActivities => 'Top Activities';
 
   @override
-  String mostFrequentActivities(int year) {
-    return 'Top Activities ($year)';
-  }
+  String get mostFrequentActivities => 'Top Activities';
 
   @override
   String get analysisAllActivities => 'All Activities';
@@ -1205,4 +1203,44 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dataCollectionDesc =>
       'You need to enter data for at least 3-5 days for analysis. Keep journaling!';
+
+  @override
+  String get themeSelectionTitle => 'THEME SELECTION';
+
+  @override
+  String get themeColorTitle => 'Color Theme';
+
+  @override
+  String get themePeach => 'Peach';
+
+  @override
+  String get themeCoffee => 'Coffee';
+
+  @override
+  String get themeOcean => 'Ocean';
+
+  @override
+  String get themeNature => 'Nature';
+
+  @override
+  String get themeBerry => 'Berry';
+
+  @override
+  String get themeMidnight => 'Midnight';
+
+  @override
+  String get appLock => 'App Lock';
+
+  @override
+  String get appLockDesc => 'Lock with fingerprint or FaceID';
+
+  @override
+  String get authenticationRequired => 'Authentication required to continue';
+
+  @override
+  String get authenticationFailed => 'Authentication failed';
+
+  @override
+  String get biometricNotAvailable =>
+      'Biometric authentication is not available on your device';
 }

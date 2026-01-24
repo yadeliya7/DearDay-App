@@ -34,7 +34,7 @@ class MoodResultsScreen extends StatelessWidget {
         ),
         title: Text(
           '${mood.emoji} ${LocalizationHelper.getMoodName(context, mood.code)}',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -49,7 +49,10 @@ class MoodResultsScreen extends StatelessWidget {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.msgNoMoodPoems,
-                    style: GoogleFonts.nunito(fontSize: 18, color: Colors.grey),
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../core/providers.dart';
+import '../providers/theme_provider.dart';
 import '../core/language_provider.dart';
 
 import 'package:poem_diary/l10n/app_localizations.dart';
@@ -22,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.settings,
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -33,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
           SwitchListTile(
             title: Text(
               AppLocalizations.of(context)!.darkMode,
-              style: GoogleFonts.nunito(),
+              style: GoogleFonts.poppins(),
             ),
             value: themeProvider.isDarkMode,
             activeThumbColor: Colors.cyanAccent,
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.settingsLanguage,
-              style: GoogleFonts.nunito(),
+              style: GoogleFonts.poppins(),
             ),
             trailing: DropdownButtonHideUnderline(
               child: DropdownButton<Locale>(
@@ -78,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.settingFontTitle,
-              style: GoogleFonts.nunito(),
+              style: GoogleFonts.poppins(),
             ), // Font name usually stays same
             trailing: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -107,7 +108,7 @@ class SettingsScreen extends StatelessWidget {
                       value: font,
                       child: Text(
                         font,
-                        style: GoogleFonts.nunito(fontWeight: FontWeight.w600),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
                       ),
                     );
                   },
@@ -126,7 +127,7 @@ class SettingsScreen extends StatelessWidget {
             leading: const Icon(Icons.share, color: Colors.blueAccent),
             title: Text(
               AppLocalizations.of(context)!.shareApp,
-              style: GoogleFonts.nunito(fontWeight: FontWeight.w600),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () => _shareApp(context),

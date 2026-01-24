@@ -2,6 +2,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:poem_diary/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'auth_lock_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   final bool isSetupDone;
@@ -59,9 +61,49 @@ class _IntroScreenState extends State<IntroScreen> {
                 ],
                 totalRepeatCount: 1,
                 displayFullTextOnTap: true,
-                onFinished: () {
-                  // Wait a tiny bit after typing finishes before navigating
-                  Future.delayed(const Duration(milliseconds: 800), () {
+                onFinished: () async {
+                  // Wait a tiny bit after typing finishes before checking auth
+                  await Future.delayed(const Duration(milliseconds: 800));
+
+                  if (!mounted) return;
+
+                  // Check if app lock is enabled
+                  final prefs = await SharedPreferences.getInstance();
+                  final isLockEnabled =
+                      prefs.getBool('app_lock_enabled') ?? false;
+
+                  if (!mounted) return;
+
+                  if (isLockEnabled) {
+                    // Show authentication screen
+                    final authenticated = await Navigator.of(context)
+                        .push<bool>(
+                          MaterialPageRoute(
+                            builder: (context) => const AuthLockScreen(),
+                          ),
+                        );
+
+                    if (!mounted) return;
+
+                    // Only proceed if authenticated
+                    if (authenticated == true) {
+                      Navigator.of(context).pushReplacement(
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) =>
+                              PoemDiaryApp.getMainScreen(widget.isSetupDone),
+                          transitionsBuilder: (_, animation, __, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 800),
+                        ),
+                      );
+                    }
+                    // If not authenticated, user can retry or exit from AuthLockScreen
+                  } else {
+                    // No lock enabled, proceed normally
                     Navigator.of(context).pushReplacement(
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) =>
@@ -75,7 +117,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         transitionDuration: const Duration(milliseconds: 800),
                       ),
                     );
-                  });
+                  }
                 },
               ),
             ),

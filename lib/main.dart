@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'core/theme.dart';
 import 'core/providers.dart';
 import 'core/language_provider.dart';
+import 'providers/theme_provider.dart';
 import 'screens/main_scaffold.dart';
 import 'screens/setup_profile_screen.dart';
 import 'screens/intro_screen.dart';
@@ -23,19 +23,28 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool isSetupDone = prefs.getBool('is_setup_done') ?? false;
 
-  runApp(PoemDiaryApp(isSetupDone: isSetupDone));
+  // Initialize ThemeProvider and wait for prefs to load
+  final themeProvider = ThemeProvider();
+  await themeProvider.loadInitialization();
+
+  runApp(PoemDiaryApp(isSetupDone: isSetupDone, themeProvider: themeProvider));
 }
 
 class PoemDiaryApp extends StatelessWidget {
   final bool isSetupDone;
+  final ThemeProvider themeProvider;
 
-  const PoemDiaryApp({super.key, required this.isSetupDone});
+  const PoemDiaryApp({
+    super.key,
+    required this.isSetupDone,
+    required this.themeProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider(create: (_) => PoemProvider()),
         ChangeNotifierProvider(create: (_) => MoodProvider()),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
@@ -45,11 +54,9 @@ class PoemDiaryApp extends StatelessWidget {
         builder: (context, themeProvider, languageProvider, _) {
           return MaterialApp(
             title: 'DearDay',
-            theme: AppTheme.lightTheme(),
-            darkTheme: AppTheme.darkTheme(),
-            themeMode: themeProvider.isDarkMode
-                ? ThemeMode.dark
-                : ThemeMode.light,
+            theme: themeProvider.currentLightTheme,
+            darkTheme: themeProvider.currentDarkTheme,
+            themeMode: themeProvider.themeMode,
 
             // Localization Setup
             // Localization Setup

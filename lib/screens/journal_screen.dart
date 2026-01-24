@@ -143,10 +143,10 @@ class _JournalScreenState extends State<JournalScreen> {
               child: Center(
                 child: Text(
                   monthFormat.format(month),
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: isSelected ? 16 : 14,
                     fontWeight: isSelected
-                        ? FontWeight.bold
+                        ? FontWeight.w600
                         : FontWeight.normal,
                     color: isSelected ? Colors.white : Colors.grey,
                   ),
@@ -230,7 +230,7 @@ class _JournalScreenState extends State<JournalScreen> {
           const SizedBox(height: 16),
           Text(
             'Bu ay henüz bir hikaye yazılmadı.',
-            style: GoogleFonts.nunito(fontSize: 16, color: Colors.grey),
+            style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
           ),
         ],
       ),
@@ -324,16 +324,16 @@ class _JournalCardState extends State<_JournalCard> {
                   children: [
                     Text(
                       dayFormat.format(widget.entry.date),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 40,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : Colors.black87,
                         height: 0.9,
                       ),
                     ),
                     Text(
                       dayNameFormat.format(widget.entry.date).toUpperCase(),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.5,
@@ -353,7 +353,7 @@ class _JournalCardState extends State<_JournalCard> {
                     const SizedBox(width: 8),
                     Text(
                       LocalizationHelper.getMoodName(context, widget.mood.code),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: widget.mood.color,
@@ -397,7 +397,7 @@ class _JournalCardState extends State<_JournalCard> {
               const SizedBox(height: 8),
               Text(
                 widget.entry.note!,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: isDark ? Colors.white60 : Colors.black54,
                   fontStyle: FontStyle.italic,
@@ -415,10 +415,10 @@ class _JournalCardState extends State<_JournalCard> {
                       lang.currentLanguage == 'tr'
                           ? 'Devamını Oku'
                           : 'Read More',
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: widget.mood.color,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -549,7 +549,7 @@ class _JournalCardState extends State<_JournalCard> {
             ),
             child: Text(
               LocalizationHelper.getActivityName(context, key),
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 11,
                 color: isDark ? Colors.grey : Colors.black54,
               ),
@@ -573,9 +573,9 @@ class _JournalCardState extends State<_JournalCard> {
         backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         title: Text(
           lang.currentLanguage == 'tr' ? 'Hikayeni Düzenle' : 'Edit Your Story',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: isDark ? Colors.white : Colors.black87,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         content: TextField(

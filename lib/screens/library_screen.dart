@@ -116,7 +116,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           automaticallyImplyLeading: false,
           title: Text(
             AppLocalizations.of(context)!.libraryTitle,
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               color: isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 24,
@@ -127,7 +127,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             labelColor: isDarkMode ? Colors.white : Colors.black,
             unselectedLabelColor: Colors.grey,
             indicatorColor: isDarkMode ? Colors.white : Colors.black,
-            labelStyle: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+            labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             tabs: [
               Tab(
                 icon: const Icon(LineIcons.feather),
@@ -218,7 +218,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             icon: const Icon(Icons.refresh),
             label: Text(
               AppLocalizations.of(context)!.btnNewPoem,
-              style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
             style: TextButton.styleFrom(
               foregroundColor: isDark ? Colors.white70 : Colors.black87,
@@ -270,7 +270,7 @@ class _UserPoemsTab extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.msgNoPoemYet,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 18,
                   color: Colors.grey,
                   fontWeight: FontWeight.w600,
@@ -279,7 +279,7 @@ class _UserPoemsTab extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 AppLocalizations.of(context)!.msgStartWriting,
-                style: GoogleFonts.nunito(fontSize: 14, color: Colors.grey),
+                style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
               ),
             ],
           ),
@@ -329,7 +329,7 @@ class _UserPoemsTab extends StatelessWidget {
                       poem.content,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 14,
                         color: isDark ? Colors.white70 : Colors.black54,
                         fontStyle: FontStyle.italic,
@@ -338,7 +338,7 @@ class _UserPoemsTab extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       "${poem.createdAt.day}.${poem.createdAt.month}.${poem.createdAt.year}",
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.grey,
                       ),
@@ -363,7 +363,7 @@ class _UserPoemsTab extends StatelessWidget {
                                 : Colors.white,
                             title: Text(
                               AppLocalizations.of(context)!.titleDeletePoem,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.bold,
                                 color: isDark ? Colors.white : Colors.black,
                               ),
@@ -372,7 +372,7 @@ class _UserPoemsTab extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.msgDeleteConfirmation,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 color: isDark ? Colors.white70 : Colors.black87,
                               ),
                             ),
@@ -381,7 +381,9 @@ class _UserPoemsTab extends StatelessWidget {
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
                                   AppLocalizations.of(context)!.btnCancel,
-                                  style: GoogleFonts.nunito(color: Colors.grey),
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                               TextButton(
@@ -391,7 +393,7 @@ class _UserPoemsTab extends StatelessWidget {
                                 },
                                 child: Text(
                                   AppLocalizations.of(context)!.btnDelete,
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.redAccent,
                                     fontWeight: FontWeight.bold,
                                   ),

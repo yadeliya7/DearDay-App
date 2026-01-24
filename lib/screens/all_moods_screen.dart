@@ -83,7 +83,7 @@ class AllMoodsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.titleSelectMood,
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -164,7 +164,7 @@ class AllMoodsScreen extends StatelessWidget {
                         const Spacer(),
                         Text(
                           LocalizationHelper.getMoodName(context, mood.code),
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -175,7 +175,7 @@ class AllMoodsScreen extends StatelessWidget {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.btnSeePoems,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 color: Colors.white70,
                               ),

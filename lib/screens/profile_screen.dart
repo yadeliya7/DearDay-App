@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 
 import '../core/providers.dart';
+import '../providers/theme_provider.dart';
 import 'setup_profile_screen.dart';
 import 'about_screen.dart';
 import 'paywall_screen.dart';
@@ -14,10 +15,16 @@ import 'paywall_screen.dart';
 import '../core/language_provider.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 import '../services/pdf_export_service.dart';
+import '../services/auth_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -58,13 +65,7 @@ class ProfileScreen extends StatelessWidget {
                                 ? FileImage(
                                     File(moodProvider.profileImagePath!),
                                   )
-                                : const AssetImage('assets/images/bg_1.jpg')
-                                      as ImageProvider,
-                            onBackgroundImageError: (exception, stackTrace) {
-                              debugPrint(
-                                'Error loading profile image: $exception',
-                              );
-                            },
+                                : null,
                             child: moodProvider.profileImagePath == null
                                 ? const Icon(
                                     LineIcons.user,
@@ -99,9 +100,9 @@ class ProfileScreen extends StatelessWidget {
                             moodProvider.userName == "Misafir Kullanıcı"
                                 ? AppLocalizations.of(context)!.guestUser
                                 : moodProvider.userName,
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: isDark ? Colors.white : Colors.black87,
                             ),
                           ),
@@ -169,16 +170,16 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.goPremium,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               AppLocalizations.of(context)!.premiumDesc,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 color: Colors.white70,
                               ),
@@ -200,9 +201,9 @@ class ProfileScreen extends StatelessWidget {
               // --- GÖRÜNÜM (APPEARANCE) ---
               Text(
                 AppLocalizations.of(context)!.sectionAppearance,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.grey,
                   letterSpacing: 1.2,
                 ),
@@ -212,28 +213,28 @@ class ProfileScreen extends StatelessWidget {
               // Theme Switch
               Container(
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.grey.withValues(alpha: 0.05),
+                  color: Theme.of(
+                    context,
+                  ).cardColor, // Use card color instead of transparent
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: SwitchListTile(
                   secondary: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isDark ? Colors.black26 : Colors.white,
+                      color: isDark ? Colors.white12 : Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      isDark ? LineIcons.moon : LineIcons.sun,
-                      color: isDark ? Colors.purpleAccent : Colors.orange,
+                      isDark ? Icons.dark_mode : Icons.light_mode,
+                      color: Colors.purpleAccent,
                       size: 20,
                     ),
                   ),
                   title: Text(
-                    AppLocalizations.of(context)!.darkMode,
-                    style: GoogleFonts.nunito(
-                      fontWeight: FontWeight.bold,
+                    'Dark Mod',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
                       color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
@@ -248,12 +249,213 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
+              // App Lock Switch
+              Builder(
+                builder: (context) {
+                  final isPremium = Provider.of<PremiumProvider>(
+                    context,
+                  ).isPremium;
+                  final isLocked = !isPremium;
+
+                  return GestureDetector(
+                    onTap: isLocked
+                        ? () {
+                            // Redirect to paywall when tapped and locked
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PaywallScreen(),
+                              ),
+                            );
+                          }
+                        : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: SwitchListTile(
+                        secondary: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.white12 : Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            LineIcons.lock,
+                            color: isLocked ? Colors.grey : Colors.deepOrange,
+                            size: 20,
+                          ),
+                        ),
+                        title: Text(
+                          AppLocalizations.of(context)!.appLock,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            color: isLocked
+                                ? Colors.grey
+                                : (isDark ? Colors.white : Colors.black87),
+                          ),
+                        ),
+                        subtitle: Text(
+                          isLocked
+                              ? '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}'
+                              : AppLocalizations.of(context)!.appLockDesc,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        value: isPremium ? moodProvider.isLockEnabled : false,
+                        activeTrackColor: Colors.deepOrange,
+                        activeThumbColor: Colors.white,
+                        onChanged: isLocked
+                            ? null // Disable switch for non-premium
+                            : (val) async {
+                                if (val) {
+                                  // Check if biometric is available before enabling
+                                  final authService = AuthService();
+                                  final isAvailable = await authService
+                                      .isBiometricAvailable();
+
+                                  if (!mounted) return;
+
+                                  if (!isAvailable) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.biometricNotAvailable,
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                }
+                                moodProvider.setLockEnabled(val);
+                              },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+
+              // Theme Selection
+              Text(
+                AppLocalizations.of(context)!.themeSelectionTitle,
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor, // Use card color
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.palette,
+                          color: isDark ? Colors.white70 : Colors.black54,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.themeColorTitle,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? Colors.white : Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 90, // Fixed height for horizontal scroll
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'peach',
+                            color: const Color(0xFFFF7043),
+                            label: AppLocalizations.of(context)!.themePeach,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'peach',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'coffee',
+                            color: const Color(0xFF6D4C41),
+                            label: AppLocalizations.of(context)!.themeCoffee,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'coffee',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'ocean',
+                            color: const Color(0xFF0277BD),
+                            label: AppLocalizations.of(context)!.themeOcean,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'ocean',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'nature',
+                            color: const Color(0xFF2E7D32),
+                            label: AppLocalizations.of(context)!.themeNature,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'nature',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'berry',
+                            color: const Color(0xFFAD1457),
+                            label: AppLocalizations.of(context)!.themeBerry,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'berry',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildThemeCircle(
+                            context,
+                            themeKey: 'midnight',
+                            color: const Color(0xFF424242),
+                            label: AppLocalizations.of(context)!.themeMidnight,
+                            isSelected:
+                                themeProvider.selectedThemeKey == 'midnight',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
               // Language Switch
               Container(
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.grey.withValues(alpha: 0.05),
+                  color: Theme.of(
+                    context,
+                  ).cardColor, // Use card color for visibility
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: SwitchListTile(
@@ -271,8 +473,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   title: Text(
                     '${AppLocalizations.of(context)!.settingsLanguage}: ${languageProvider.currentLanguage == 'tr' ? 'Türkçe' : 'English'}',
-                    style: GoogleFonts.nunito(
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
                       color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
@@ -291,9 +493,9 @@ class ProfileScreen extends StatelessWidget {
               // --- AYARLAR (SETTINGS) ---
               Text(
                 AppLocalizations.of(context)!.sectionOther,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.grey,
                   letterSpacing: 1.2,
                 ),
@@ -303,9 +505,7 @@ class ProfileScreen extends StatelessWidget {
               // Goal Duration Setting
               Container(
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.grey.withValues(alpha: 0.05),
+                  color: Theme.of(context).cardColor, // Use card color
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.all(16),
@@ -321,7 +521,7 @@ class ProfileScreen extends StatelessWidget {
                         const SizedBox(width: 12),
                         Text(
                           AppLocalizations.of(context)!.goalDuration,
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             fontSize: 16,
                             color: isDark ? Colors.white : Colors.black87,
                           ),
@@ -378,10 +578,10 @@ class ProfileScreen extends StatelessWidget {
                                     AppLocalizations.of(
                                       context,
                                     )!.daysSuffix(days),
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       fontWeight: isSelected
-                                          ? FontWeight.bold
+                                          ? FontWeight.w600
                                           : FontWeight.normal,
                                       color: isSelected
                                           ? Colors.white
@@ -460,8 +660,8 @@ class ProfileScreen extends StatelessWidget {
                 child: SwitchListTile(
                   title: Text(
                     "Test: Premium Status",
-                    style: GoogleFonts.nunito(
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
                       color: isDark
                           ? Colors.amberAccent
                           : Colors.amber.shade800,
@@ -469,7 +669,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   subtitle: Text(
                     "Toggle to see Free vs Premium UI",
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 12,
                       color: isDark ? Colors.white70 : Colors.black54,
                     ),
@@ -509,9 +709,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.05)
-            : Colors.grey.withValues(alpha: 0.05),
+        color: Theme.of(context).cardColor, // Use card color
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
@@ -531,8 +729,8 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: GoogleFonts.nunito(
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
             color: isLocked
                 ? Colors.grey
                 : (isDark ? Colors.white : Colors.black87),
@@ -541,7 +739,7 @@ class ProfileScreen extends StatelessWidget {
         subtitle: subtitle != null
             ? Text(
                 subtitle,
-                style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey),
+                style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
               )
             : null,
         trailing: Icon(
@@ -581,7 +779,7 @@ class ProfileScreen extends StatelessWidget {
         SnackBar(
           content: Text(
             AppLocalizations.of(context)!.noEntriesForPdf,
-            style: GoogleFonts.nunito(),
+            style: GoogleFonts.poppins(),
           ),
           backgroundColor: Colors.orange,
         ),
@@ -609,9 +807,9 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.creatingPdf,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -638,7 +836,7 @@ class ProfileScreen extends StatelessWidget {
         SnackBar(
           content: Text(
             AppLocalizations.of(context)!.pdfError(e.toString()),
-            style: GoogleFonts.nunito(),
+            style: GoogleFonts.poppins(),
           ),
           backgroundColor: Colors.red,
         ),
@@ -661,5 +859,57 @@ class ProfileScreen extends StatelessWidget {
         ),
       );
     }
+  }
+
+  Widget _buildThemeCircle(
+    BuildContext context, {
+    required String themeKey,
+    required Color color,
+    required String label,
+    required bool isSelected,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Provider.of<ThemeProvider>(context, listen: false).setTheme(themeKey);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              border: isSelected
+                  ? Border.all(color: Colors.white, width: 3)
+                  : null,
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: isSelected ? 0.5 : 0.3),
+                  blurRadius: isSelected ? 12 : 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: isSelected
+                ? const Icon(Icons.check, color: Colors.white, size: 30)
+                : null,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 11,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white70
+                  : Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

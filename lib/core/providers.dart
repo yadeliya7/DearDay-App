@@ -7,22 +7,6 @@ import 'package:flutter/material.dart';
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  bool _isDarkMode = true;
-
-  bool get isDarkMode => _isDarkMode;
-
-  void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
-    notifyListeners();
-  }
-
-  void setDarkMode(bool isDark) {
-    _isDarkMode = isDark;
-    notifyListeners();
-  }
-}
-
 class PoemProvider extends ChangeNotifier {
   List<Poem> _poems = [];
 
@@ -84,7 +68,7 @@ class PoemProvider extends ChangeNotifier {
         author: 'Sistem',
         mood: 'happy',
         createdAt: date,
-        backgroundImage: 'assets/images/bg_1.jpg',
+        backgroundImage: '', // Removed invalid asset fallback
       );
     }
 
@@ -321,6 +305,7 @@ class MoodProvider extends ChangeNotifier {
   String _userName = "Misafir Kullanıcı";
   String _userTitle = "Şiir Tutkunu";
   String? _profileImagePath;
+  bool _isLockEnabled = false; // App lock state
 
   MoodProvider() {
     _loadJournal();
@@ -331,12 +316,20 @@ class MoodProvider extends ChangeNotifier {
   String get userName => _userName;
   String get userTitle => _userTitle;
   String? get profileImagePath => _profileImagePath;
+  bool get isLockEnabled => _isLockEnabled;
 
   Future<void> setGoalDuration(int days) async {
     _goalDuration = days;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goal_duration', days);
+  }
+
+  Future<void> setLockEnabled(bool enabled) async {
+    _isLockEnabled = enabled;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('app_lock_enabled', enabled);
   }
 
   Future<void> updateUserProfile(
@@ -364,6 +357,7 @@ class MoodProvider extends ChangeNotifier {
     _userName = prefs.getString('user_name') ?? "Misafir Kullanıcı";
     _userTitle = prefs.getString('user_title') ?? "Şiir Tutkunu";
     _profileImagePath = prefs.getString('user_image');
+    _isLockEnabled = prefs.getBool('app_lock_enabled') ?? false;
 
     // Legacy migration: Check for old 'mood_history'
     if (prefs.containsKey('mood_history')) {

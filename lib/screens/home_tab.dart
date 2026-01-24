@@ -96,9 +96,9 @@ class _HomeTabState extends State<HomeTab> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.today,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white70 : Colors.black54,
                       ),
                     ),
@@ -122,9 +122,9 @@ class _HomeTabState extends State<HomeTab> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   AppLocalizations.of(context)!.pastRecords,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: isDark ? Colors.white70 : Colors.black54,
                   ),
                 ),
@@ -325,7 +325,7 @@ class _HomeTabState extends State<HomeTab> {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.95),
                         height: 1.5,
@@ -333,10 +333,10 @@ class _HomeTabState extends State<HomeTab> {
                       children: [
                         TextSpan(
                           text: days > 30 ? "Durmak Yok! 🚀\n" : "Tebrikler! ",
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             fontSize: days > 30 ? 24 : 16,
                             fontWeight: days > 30
-                                ? FontWeight.w900
+                                ? FontWeight.bold
                                 : FontWeight.normal,
                             color: Colors.white,
                           ),
@@ -358,7 +358,7 @@ class _HomeTabState extends State<HomeTab> {
                           TextSpan(
                             text: label,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
@@ -366,7 +366,7 @@ class _HomeTabState extends State<HomeTab> {
                           TextSpan(
                             text: "$days. güne ",
                             style: const TextStyle(
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Colors.yellowAccent,
                             ),
@@ -393,9 +393,9 @@ class _HomeTabState extends State<HomeTab> {
                       child: Text(
                         "🚀 Hedefin otomatik olarak $nextLevel güne yükseltildi!",
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(
+                        style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                       ),
@@ -418,8 +418,8 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     child: Text(
                       nextLevel != null ? "Yeni Hedefe Başla" : "Harika!",
-                      style: GoogleFonts.nunito(
-                        fontWeight: FontWeight.bold,
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                     ),
@@ -688,9 +688,9 @@ class _HomeTabState extends State<HomeTab> {
                           children: [
                             Text(
                               label,
-                              style: GoogleFonts.nunito(
+                              style: GoogleFonts.poppins(
                                 fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: isDone
                                     ? Colors.white
                                     : (isDark
@@ -715,7 +715,7 @@ class _HomeTabState extends State<HomeTab> {
                                   const SizedBox(width: 2),
                                   Text(
                                     "$displayStreak/$goalMax",
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 10,
                                       color: isDone
                                           ? Colors.white.withValues(alpha: 0.8)
@@ -786,7 +786,7 @@ class _HomeTabState extends State<HomeTab> {
                               const SizedBox(height: 12),
                               Text(
                                 "Dosya bulunamadı",
-                                style: GoogleFonts.nunito(
+                                style: GoogleFonts.poppins(
                                   color: Colors.white70,
                                   decoration: TextDecoration.none,
                                   fontSize: 14,
@@ -872,16 +872,16 @@ class _HomeTabState extends State<HomeTab> {
               lang.currentLanguage == 'tr'
                   ? 'Merhaba, $firstName 👋'
                   : 'Hello, $firstName 👋',
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: isDark ? Colors.white : Colors.black87,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               formattedDate,
-              style: GoogleFonts.nunito(fontSize: 14, color: Colors.grey),
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -907,9 +907,9 @@ class _HomeTabState extends State<HomeTab> {
             child: provider.profileImagePath == null
                 ? Text(
                     _getInitials(firstName),
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   )
@@ -976,9 +976,9 @@ class _HomeTabState extends State<HomeTab> {
                   'd MMM yyyy, EEEE',
                   Provider.of<LanguageProvider>(context).currentLanguage,
                 ).format(entry.date),
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white70 : Colors.black54,
                 ),
               ),
@@ -1051,9 +1051,9 @@ class _HomeTabState extends State<HomeTab> {
                   children: [
                     Text(
                       LocalizationHelper.getMoodName(context, mood.code),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
@@ -1064,7 +1064,7 @@ class _HomeTabState extends State<HomeTab> {
                           entry.note!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             fontSize: 14,
                             color: isDark ? Colors.white60 : Colors.black45,
                             fontStyle: FontStyle.italic,
@@ -1375,9 +1375,18 @@ class _HomeTabState extends State<HomeTab> {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: isDark ? 0.15 : 0.1),
+          // Fix: Use White background in Light Mode to prevent color blending on colored cards (like Berry theme)
+          color: isDark
+              ? color.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(20), // Stadium-like
-          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+          // Fix: Stronger border in Light Mode
+          border: Border.all(
+            color: isDark
+                ? color.withValues(alpha: 0.3)
+                : color.withValues(alpha: 0.6),
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -1390,10 +1399,10 @@ class _HomeTabState extends State<HomeTab> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 color: isDark ? color : const Color(0xFF4E342E),
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
