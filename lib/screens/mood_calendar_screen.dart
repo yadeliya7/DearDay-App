@@ -22,6 +22,7 @@ import 'package:poem_diary/screens/paywall_screen.dart';
 import '../widgets/monthly_mood_share_card.dart';
 import '../widgets/yearly_mood_share_card.dart';
 import 'package:line_icons/line_icons.dart';
+import 'daily_detail_screen.dart';
 
 enum CalendarViewMode { month, year }
 
@@ -98,6 +99,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         ],
       ),
       body: SafeArea(
+        bottom: false, // Allow content to flow behind floating nav bar
         child: Consumer<MoodProvider>(
           builder: (context, moodProvider, child) {
             return SingleChildScrollView(
@@ -244,19 +246,14 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                             _focusedDay = focusedDay;
                           });
 
-                          // Open Entry Dialog directly if no entry exists, or Details if exists
-                          final hasEntry =
-                              moodProvider.getEntryForDate(selectedDay) != null;
-
-                          if (hasEntry) {
-                            _showDayDetails(context, selectedDay, moodProvider);
-                          } else {
-                            showMoodEntryDialog(
-                              context,
-                              date: selectedDay,
-                              provider: moodProvider,
-                            );
-                          }
+                          // Navigate to DailyDetailScreen (replaces old modal)
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DailyDetailScreen(initialDate: selectedDay),
+                            ),
+                          );
                         },
                         onPageChanged: (focusedDay) {
                           _focusedDay = focusedDay;
@@ -425,6 +422,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                   // Daily Check-in Button (if not focused on past)
                   // Actually, HomeScreen handles the check-in mostly, but nice to have here too maybe?
                   // Leaving it clean for now as requested.
+                  const SizedBox(
+                    height: 100,
+                  ), // Bottom padding for floating nav bar
                 ],
               ),
             );

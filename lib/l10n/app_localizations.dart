@@ -2300,6 +2300,42 @@ abstract class AppLocalizations {
   /// **'Coffee'**
   String get themeCoffee;
 
+  /// No description provided for @notificationDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your day? 🌙'**
+  String get notificationDailyTitle;
+
+  /// No description provided for @notificationDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to leave a note for yourself?'**
+  String get notificationDailyBody;
+
+  /// No description provided for @notificationTrialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2 days left in your trial! 🔔'**
+  String get notificationTrialTitle;
+
+  /// No description provided for @notificationTrialBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder: Your subscription starts in 48 hours.'**
+  String get notificationTrialBody;
+
+  /// No description provided for @dailyReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Reminder'**
+  String get dailyReminder;
+
+  /// No description provided for @dailyReminderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get daily reminders'**
+  String get dailyReminderDesc;
+
   /// No description provided for @themeOcean.
   ///
   /// In en, this message translates to:
@@ -2353,6 +2389,250 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Biometric authentication is not available on your device'**
   String get biometricNotAvailable;
+
+  /// No description provided for @journalEmptyMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No story has been written for this month yet.'**
+  String get journalEmptyMonth;
+
+  /// No description provided for @insightMagicDuoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic Duo'**
+  String get insightMagicDuoTitle;
+
+  /// No description provided for @insightMagicDuoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'{activity1} & {activity2} together boost your mood by {percent}%!'**
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  );
+
+  /// No description provided for @insightBestDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Week Champion'**
+  String get insightBestDayTitle;
+
+  /// No description provided for @insightBestDayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} is your day! ⭐'**
+  String insightBestDayDesc(String day);
+
+  /// No description provided for @insightStabilityRockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional Rock'**
+  String get insightStabilityRockTitle;
+
+  /// No description provided for @insightStabilityRockDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced and consistent mood'**
+  String get insightStabilityRockDesc;
+
+  /// No description provided for @insightStabilityWaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional Rollercoaster'**
+  String get insightStabilityWaveTitle;
+
+  /// No description provided for @insightStabilityWaveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fluctuating mood pattern'**
+  String get insightStabilityWaveDesc;
+
+  /// No description provided for @paywallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DearDay Premium'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock your potential, reach your best version.'**
+  String get paywallSubtitle;
+
+  /// No description provided for @featureUnlimitedStories.
+  ///
+  /// In en, this message translates to:
+  /// **'Story Variations 📝'**
+  String get featureUnlimitedStories;
+
+  /// No description provided for @featureDetailedAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Relational & Detailed Analysis 📊'**
+  String get featureDetailedAnalysis;
+
+  /// No description provided for @featureYearInPixels.
+  ///
+  /// In en, this message translates to:
+  /// **'Year in Pixels 📅'**
+  String get featureYearInPixels;
+
+  /// No description provided for @featurePdfExport.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Journal Export 📕'**
+  String get featurePdfExport;
+
+  /// No description provided for @planWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Plan'**
+  String get planWeekly;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Plan'**
+  String get planMonthly;
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly Plan'**
+  String get planYearly;
+
+  /// No description provided for @planLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get planLifetime;
+
+  /// No description provided for @priceWeeklyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺29.99 / week'**
+  String get priceWeeklyMock;
+
+  /// No description provided for @priceMonthlyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺49.99 / month'**
+  String get priceMonthlyMock;
+
+  /// No description provided for @priceYearlyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺299.99 / year'**
+  String get priceYearlyMock;
+
+  /// No description provided for @priceMonthlyBreakdownMock.
+  ///
+  /// In en, this message translates to:
+  /// **'Just ₺24.99 / month'**
+  String get priceMonthlyBreakdownMock;
+
+  /// No description provided for @priceLifetimeMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺999.99'**
+  String get priceLifetimeMock;
+
+  /// No description provided for @priceOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time payment'**
+  String get priceOneTime;
+
+  /// No description provided for @bestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'BEST VALUE'**
+  String get bestValue;
+
+  /// No description provided for @badgeOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'ONE TIME'**
+  String get badgeOneTime;
+
+  /// No description provided for @btnStartTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Free Trial'**
+  String get btnStartTrial;
+
+  /// No description provided for @btnBecomePremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get btnBecomePremium;
+
+  /// No description provided for @restorePurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchase'**
+  String get restorePurchase;
+
+  /// No description provided for @trialToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get trialToday;
+
+  /// No description provided for @trialTodayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Premium'**
+  String get trialTodayDesc;
+
+  /// No description provided for @trialDay5.
+  ///
+  /// In en, this message translates to:
+  /// **'Day 5'**
+  String get trialDay5;
+
+  /// No description provided for @trialDay5Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Sent'**
+  String get trialDay5Desc;
+
+  /// No description provided for @trialDay7.
+  ///
+  /// In en, this message translates to:
+  /// **'Day 7'**
+  String get trialDay7;
+
+  /// No description provided for @trialDay7Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts'**
+  String get trialDay7Desc;
+
+  /// No description provided for @trialGuarantee.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel anytime via Play Store settings. No commitment.'**
+  String get trialGuarantee;
+
+  /// No description provided for @btnSubscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe'**
+  String get btnSubscribe;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
 }
 
 class _AppLocalizationsDelegate

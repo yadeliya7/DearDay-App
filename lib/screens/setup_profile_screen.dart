@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/providers.dart';
 import 'main_scaffold.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
+import 'package:poem_diary/services/notification_service.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   final bool isEditMode;
@@ -20,6 +21,8 @@ class SetupProfileScreen extends StatefulWidget {
 class _SetupProfileScreenState extends State<SetupProfileScreen> {
   late TextEditingController _nameController;
   String? _selectedImagePath;
+  bool _isReminderEnabled = false;
+  TimeOfDay _reminderTime = const TimeOfDay(hour: 21, minute: 0);
 
   @override
   void initState() {
@@ -32,6 +35,17 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     if (widget.isEditMode) {
       _selectedImagePath = provider.profileImagePath;
     }
+    _loadNotificationSettings();
+  }
+
+  Future<void> _loadNotificationSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isReminderEnabled = prefs.getBool('daily_reminder_enabled') ?? false;
+      final hour = prefs.getInt('daily_reminder_hour') ?? 21;
+      final minute = prefs.getInt('daily_reminder_minute') ?? 0;
+      _reminderTime = TimeOfDay(hour: hour, minute: minute);
+    });
   }
 
   @override
@@ -62,7 +76,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     final provider = Provider.of<MoodProvider>(context, listen: false);
     await provider.updateUserProfile(
       name,
-      "", // Title removed
+      provider.userTitle,
       _selectedImagePath,
     );
 
@@ -210,6 +224,15 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 color: isDark ? Colors.white24 : Colors.black12,
               ),
 
+              const SizedBox(height: 32),
+
+              // Daily Reminder Section
+              _buildDailyReminderSection(context, isDark),
+
+              if (_isReminderEnabled) _buildTestButton(),
+
+              const SizedBox(height: 32),
+
               const SizedBox(height: 60),
 
               // Start/Save Button
@@ -242,6 +265,114 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDailyReminderSection(BuildContext context, bool isDark) {
+    return Column(
+      children: [
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            AppLocalizations.of(context)!.dailyReminder,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+          ),
+          subtitle: Text(
+            AppLocalizations.of(context)!.dailyReminderDesc,
+            style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
+          ),
+          value: _isReminderEnabled,
+          onChanged: (val) async {
+            setState(() => _isReminderEnabled = val);
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('daily_reminder_enabled', val);
+
+            if (val) {
+              await NotificationService().requestPermissions();
+              if (mounted) {
+                await NotificationService().scheduleDailyReminder(
+                  _reminderTime,
+                  AppLocalizations.of(context)!.notificationDailyTitle,
+                  AppLocalizations.of(context)!.notificationDailyBody,
+                );
+              }
+            } else {
+              await NotificationService().cancelDailyReminder();
+            }
+          },
+          activeColor: Colors.blueAccent,
+        ),
+        if (_isReminderEnabled)
+          GestureDetector(
+            onTap: () async {
+              final pickedTime = await showTimePicker(
+                context: context,
+                initialTime: _reminderTime,
+              );
+              if (pickedTime != null) {
+                setState(() => _reminderTime = pickedTime);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setInt('daily_reminder_hour', pickedTime.hour);
+                await prefs.setInt('daily_reminder_minute', pickedTime.minute);
+
+                if (mounted) {
+                  await NotificationService().scheduleDailyReminder(
+                    _reminderTime,
+                    AppLocalizations.of(context)!.notificationDailyTitle,
+                    AppLocalizations.of(context)!.notificationDailyBody,
+                  );
+                }
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white10 : Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isDark ? Colors.white24 : Colors.grey[300]!,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${_reminderTime.format(context)}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.access_time_rounded,
+                    color: Colors.blueAccent,
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildTestButton() {
+    return TextButton.icon(
+      onPressed: () async {
+        await NotificationService().showTestNotification();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Test bildirimi gönderildi!')),
+          );
+        }
+      },
+      icon: const Icon(Icons.notification_important),
+      label: const Text('Test Bildirimi Gönder'),
     );
   }
 }

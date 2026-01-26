@@ -14,11 +14,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 
 import 'package:poem_diary/services/story_content_service.dart';
+import 'package:poem_diary/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
   await StoryContentService.load();
+  await NotificationService().init();
+  await NotificationService().requestPermissions();
 
   final prefs = await SharedPreferences.getInstance();
   final bool isSetupDone = prefs.getBool('is_setup_done') ?? false;

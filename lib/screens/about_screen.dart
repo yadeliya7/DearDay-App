@@ -118,7 +118,6 @@ class _AboutScreenState extends State<AboutScreen> {
               context,
               AppLocalizations.of(context)!.aboutPrivacyTitle,
               AppLocalizations.of(context)!.aboutPrivacyDesc,
-              isBold: true,
             ),
             _buildSection(
               context,
@@ -215,9 +214,9 @@ class _AboutScreenState extends State<AboutScreen> {
               '**',
               '',
             ), // Removing markdown markers for cleaner plain text
-            style: GoogleFonts.nunito(
-              fontSize: 15,
-              height: 1.5,
+            style: GoogleFonts.poppins(
+              fontSize: 14, // Slightly adjusted for Poppins readability
+              height: 1.6,
               color: isDark ? Colors.white70 : Colors.black87,
               fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
             ),

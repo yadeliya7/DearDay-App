@@ -1217,6 +1217,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeCoffee => 'Coffee';
 
   @override
+  String get notificationDailyTitle => 'How was your day? 🌙';
+
+  @override
+  String get notificationDailyBody =>
+      'Would you like to leave a note for yourself?';
+
+  @override
+  String get notificationTrialTitle => '2 days left in your trial! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Reminder: Your subscription starts in 48 hours.';
+
+  @override
+  String get dailyReminder => 'Daily Reminder';
+
+  @override
+  String get dailyReminderDesc => 'Get daily reminders';
+
+  @override
   String get themeOcean => 'Ocean';
 
   @override
@@ -1243,4 +1263,135 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get biometricNotAvailable =>
       'Biometric authentication is not available on your device';
+
+  @override
+  String get journalEmptyMonth =>
+      'No story has been written for this month yet.';
+
+  @override
+  String get insightMagicDuoTitle => 'Magic Duo';
+
+  @override
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  ) {
+    return '$activity1 & $activity2 together boost your mood by $percent%!';
+  }
+
+  @override
+  String get insightBestDayTitle => 'Week Champion';
+
+  @override
+  String insightBestDayDesc(String day) {
+    return '$day is your day! ⭐';
+  }
+
+  @override
+  String get insightStabilityRockTitle => 'Emotional Rock';
+
+  @override
+  String get insightStabilityRockDesc => 'Balanced and consistent mood';
+
+  @override
+  String get insightStabilityWaveTitle => 'Emotional Rollercoaster';
+
+  @override
+  String get insightStabilityWaveDesc => 'Fluctuating mood pattern';
+
+  @override
+  String get paywallTitle => 'DearDay Premium';
+
+  @override
+  String get paywallSubtitle =>
+      'Unlock your potential, reach your best version.';
+
+  @override
+  String get featureUnlimitedStories => 'Story Variations 📝';
+
+  @override
+  String get featureDetailedAnalysis => 'Relational & Detailed Analysis 📊';
+
+  @override
+  String get featureYearInPixels => 'Year in Pixels 📅';
+
+  @override
+  String get featurePdfExport => 'PDF Journal Export 📕';
+
+  @override
+  String get planWeekly => 'Weekly Plan';
+
+  @override
+  String get planMonthly => 'Monthly Plan';
+
+  @override
+  String get planYearly => 'Yearly Plan';
+
+  @override
+  String get planLifetime => 'Lifetime';
+
+  @override
+  String get priceWeeklyMock => '₺29.99 / week';
+
+  @override
+  String get priceMonthlyMock => '₺49.99 / month';
+
+  @override
+  String get priceYearlyMock => '₺299.99 / year';
+
+  @override
+  String get priceMonthlyBreakdownMock => 'Just ₺24.99 / month';
+
+  @override
+  String get priceLifetimeMock => '₺999.99';
+
+  @override
+  String get priceOneTime => 'One-time payment';
+
+  @override
+  String get bestValue => 'BEST VALUE';
+
+  @override
+  String get badgeOneTime => 'ONE TIME';
+
+  @override
+  String get btnStartTrial => 'Start Free Trial';
+
+  @override
+  String get btnBecomePremium => 'Go Premium';
+
+  @override
+  String get restorePurchase => 'Restore Purchase';
+
+  @override
+  String get trialToday => 'Today';
+
+  @override
+  String get trialTodayDesc => 'Unlock Premium';
+
+  @override
+  String get trialDay5 => 'Day 5';
+
+  @override
+  String get trialDay5Desc => 'Reminder Sent';
+
+  @override
+  String get trialDay7 => 'Day 7';
+
+  @override
+  String get trialDay7Desc => 'Starts';
+
+  @override
+  String get trialGuarantee =>
+      'Cancel anytime via Play Store settings. No commitment.';
+
+  @override
+  String get btnSubscribe => 'Subscribe';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
 }

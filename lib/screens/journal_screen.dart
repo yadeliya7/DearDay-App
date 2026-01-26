@@ -10,6 +10,7 @@ import '../models/poem_model.dart';
 
 import '../helpers/localization_helper.dart';
 import '../core/language_provider.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
 import 'full_screen_gallery.dart';
 
 class JournalScreen extends StatefulWidget {
@@ -229,7 +230,7 @@ class _JournalScreenState extends State<JournalScreen> {
           Icon(Icons.auto_stories, size: 80, color: Colors.grey.withAlpha(100)),
           const SizedBox(height: 16),
           Text(
-            'Bu ay henüz bir hikaye yazılmadı.',
+            AppLocalizations.of(context)!.journalEmptyMonth,
             style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
           ),
         ],

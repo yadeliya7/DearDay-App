@@ -14,10 +14,10 @@ class MainScaffold extends StatefulWidget {
   const MainScaffold({super.key});
 
   @override
-  State<MainScaffold> createState() => _MainScaffoldState();
+  State<MainScaffold> createState() => MainScaffoldState();
 }
 
-class _MainScaffoldState extends State<MainScaffold> {
+class MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = 0; // Default to Home
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -28,7 +28,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     const ProfileScreen(), // Index 4: Profil
   ];
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -36,12 +36,22 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   Widget _buildNavItem(IconData icon, int index) {
     bool isSelected = _selectedIndex == index;
-    const coralAccent = Color(0xFFFF7043); // Vibrant coral for selected
-    const brownMedium = Color(0xFF8D6E63); // Medium brown for unselected
+    const coralAccent = Color.fromARGB(
+      255,
+      162,
+      178,
+      253,
+    ); // Vibrant coral for selected
+    const brownMedium = Color.fromARGB(
+      255,
+      202,
+      201,
+      201,
+    ); // Medium brown for unselected
 
     return IconButton(
       icon: Icon(icon, color: isSelected ? coralAccent : brownMedium, size: 28),
-      onPressed: () => _onItemTapped(index),
+      onPressed: () => onItemTapped(index),
     );
   }
 
@@ -61,8 +71,8 @@ class _MainScaffoldState extends State<MainScaffold> {
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor.withValues(
                   alpha: Theme.of(context).brightness == Brightness.dark
-                      ? 0.75 // Dark mode: 75% opacity
-                      : 0.55, // Light mode: 55% opacity (more transparent)
+                      ? 0.5 // Dark mode: 75% opacity
+                      : 0.1, // Light mode: 55% opacity (more transparent)
                 ),
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
@@ -70,8 +80,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.black.withValues(alpha: 0.3)
                         : const Color(0xFFD4A574).withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                    blurRadius: 20,
+                    offset: const Offset(0, 20),
                   ),
                 ],
               ),

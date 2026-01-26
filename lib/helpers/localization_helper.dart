@@ -210,4 +210,35 @@ class LocalizationHelper {
         return loc.descAll;
     }
   }
+
+  static List<String> getWeekdayNames(BuildContext context) {
+    // Returns weekday names in order: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+    // This is a simple implementation - could be improved with proper intl package
+
+    // For now, return hardcoded weekday names
+    // TODO: Add proper weekday localization keys to arb files if needed
+    final langCode = Localizations.localeOf(context).languageCode;
+
+    if (langCode == 'tr') {
+      return [
+        'Pazartesi',
+        'Salı',
+        'Çarşamba',
+        'Perşembe',
+        'Cuma',
+        'Cumartesi',
+        'Pazar',
+      ];
+    } else {
+      return [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ];
+    }
+  }
 }

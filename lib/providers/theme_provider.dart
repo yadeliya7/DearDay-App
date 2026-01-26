@@ -207,6 +207,10 @@ class ThemeProvider extends ChangeNotifier {
         useM2StyleDividerInM3: true,
         alignedDropdown: true,
         useInputDecoratorThemeInDialogs: true,
+        // Ensure transparent Bottom Nav for floating effect
+        bottomNavigationBarType: BottomNavigationBarType.fixed,
+        bottomNavigationBarElevation: 0,
+        bottomNavigationBarBackgroundSchemeColor: SchemeColor.transparent,
       ),
       visualDensity: FlexColorScheme.comfortablePlatformDensity,
       useMaterial3: true,
@@ -218,6 +222,14 @@ class ThemeProvider extends ChangeNotifier {
         color: cardColors[_selectedThemeKey],
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      // CRITICAL: Ensure transparent background for floating nav bar
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Color(0xFFFF7043), // Peach accent
+        unselectedItemColor: Color(0xFF8D6E63), // Brownish
       ),
     );
   }
@@ -259,6 +271,10 @@ class ThemeProvider extends ChangeNotifier {
         useM2StyleDividerInM3: true,
         alignedDropdown: true,
         useInputDecoratorThemeInDialogs: true,
+        // Ensure transparent Bottom Nav for floating effect
+        bottomNavigationBarType: BottomNavigationBarType.fixed,
+        bottomNavigationBarElevation: 0,
+        bottomNavigationBarBackgroundSchemeColor: SchemeColor.transparent,
       ),
       visualDensity: FlexColorScheme.comfortablePlatformDensity,
       useMaterial3: true,
@@ -270,6 +286,14 @@ class ThemeProvider extends ChangeNotifier {
         color: darkCardColors[_selectedThemeKey],
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      // CRITICAL: Ensure transparent background for floating nav bar
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Color(0xFFFF8A65), // Light Peach accent
+        unselectedItemColor: Color(0xFFBCAAA4), // Light Brownish
       ),
     );
   }

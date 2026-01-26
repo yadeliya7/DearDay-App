@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 import '../core/providers.dart';
 import '../providers/theme_provider.dart';
@@ -35,16 +35,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
+
               // Header
               Center(
                 child: GestureDetector(
                   onTap: () {
+                    // Navigate to SetupProfileScreen for Editing
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -687,7 +690,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 100), // Increased for floating bottom bar
             ],
           ),
         ),
@@ -805,13 +808,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text(
-                AppLocalizations.of(context)!.creatingPdf,
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text("PDF Oluşturuluyor...", style: GoogleFonts.poppins()),
             ],
           ),
         ),
@@ -819,46 +816,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     try {
-      final pdfService = PdfExportService();
-      await pdfService.previewAndSharePdf(
+      final pdfBytes = await PdfExportService().generateJournalPdf(
         entries,
         userName: moodProvider.userName,
-        locale: languageProvider.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
+        locale: languageProvider.currentLocale.toString(),
       );
 
-      // Close loading dialog
-      Navigator.of(context).pop();
+      // Save to temp file to share
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/diary_export.pdf');
+      await file.writeAsBytes(pdfBytes);
+
+      if (context.mounted) {
+        Navigator.pop(context); // Hide loading
+        await Share.shareXFiles([
+          XFile(file.path),
+        ], text: 'My Poem Diary Export');
+      }
     } catch (e) {
-      // Close loading dialog
-      Navigator.of(context).pop();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.pdfError(e.toString()),
-            style: GoogleFonts.poppins(),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (context.mounted) {
+        Navigator.pop(context); // Hide loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("PDF Error: $e"), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
   void _shareApp(BuildContext context) {
-    // Turkish marketing message
-    final String message = AppLocalizations.of(context)!.shareMessage;
-    //     + "https://example.com"; // Placeholder link
-
-    // Share using share_plus
-    try {
-      Share.share(message);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.shareError(e.toString())),
-        ),
-      );
-    }
+    Share.share(
+      'Check out this amazing journaling app: DearDay! \n\n[App Store Link]',
+    );
   }
 
   Widget _buildThemeCircle(
@@ -873,39 +861,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Provider.of<ThemeProvider>(context, listen: false).setTheme(themeKey);
       },
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: 56,
-            height: 56,
+          Container(
+            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
-              color: color,
               shape: BoxShape.circle,
-              border: isSelected
-                  ? Border.all(color: Colors.white, width: 3)
-                  : null,
-              boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: isSelected ? 0.5 : 0.3),
-                  blurRadius: isSelected ? 12 : 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              border: Border.all(
+                color: isSelected ? color : Colors.transparent,
+                width: 2,
+              ),
             ),
-            child: isSelected
-                ? const Icon(Icons.check, color: Colors.white, size: 30)
-                : null,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              child: isSelected
+                  ? const Icon(Icons.check, color: Colors.white)
+                  : null,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Text(
             label,
             style: GoogleFonts.poppins(
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white70
-                  : Colors.black54,
+              color: Theme.of(
+                context,
+              ).textTheme.bodySmall?.color, // Adapt to theme
             ),
           ),
         ],

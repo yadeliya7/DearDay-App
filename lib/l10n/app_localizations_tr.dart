@@ -1206,6 +1206,26 @@ class AppLocalizationsTr extends AppLocalizations {
   String get themeCoffee => 'Kahve';
 
   @override
+  String get notificationDailyTitle => 'Günün nasıl geçti? 🌙';
+
+  @override
+  String get notificationDailyBody => 'Kendine bir not bırakmak ister misin?';
+
+  @override
+  String get notificationTrialTitle =>
+      'Deneme sürenin bitmesine 2 gün kaldı! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Hatırlatma: Aboneliğin 48 saat içinde başlayacak.';
+
+  @override
+  String get dailyReminder => 'Günlük Hatırlatıcı';
+
+  @override
+  String get dailyReminderDesc => 'Her gün hatırlatma al';
+
+  @override
   String get themeOcean => 'Okyanus';
 
   @override
@@ -1233,4 +1253,135 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get biometricNotAvailable =>
       'Cihazınızda biyometrik kimlik doğrulama kullanılamıyor';
+
+  @override
+  String get journalEmptyMonth => 'Bu ay henüz bir hikaye yazılmadı.';
+
+  @override
+  String get insightMagicDuoTitle => 'Sihirli İkili';
+
+  @override
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  ) {
+    return '$activity1 & $activity2 beraberken modun %$percent artıyor!';
+  }
+
+  @override
+  String get insightBestDayTitle => 'Haftanın Şampiyonu';
+
+  @override
+  String insightBestDayDesc(String day) {
+    return '$day senin günün! ⭐';
+  }
+
+  @override
+  String get insightStabilityRockTitle => 'Duygusal Kaya';
+
+  @override
+  String get insightStabilityRockDesc => 'Dengeli ve tutarlı bir mod';
+
+  @override
+  String get insightStabilityWaveTitle => 'Duygusal Lunapark';
+
+  @override
+  String get insightStabilityWaveDesc => 'Dalgalı bir ruh hali';
+
+  @override
+  String get paywallTitle => 'DearDay Premium';
+
+  @override
+  String get paywallSubtitle =>
+      'Potansiyelini keşfet, en iyi versiyonuna ulaş.';
+
+  @override
+  String get featureUnlimitedStories => 'Hikaye Varyasyonları 📝';
+
+  @override
+  String get featureDetailedAnalysis => 'İlişkisel & Detaylı Analizler 📊';
+
+  @override
+  String get featureYearInPixels =>
+      'Yıllık Piksel Haritası (Year in Pixels) 📅';
+
+  @override
+  String get featurePdfExport => 'PDF Günlük Çıktısı 📕';
+
+  @override
+  String get planWeekly => 'Haftalık Plan';
+
+  @override
+  String get planMonthly => 'Aylık Plan';
+
+  @override
+  String get planYearly => 'Yıllık Plan';
+
+  @override
+  String get planLifetime => 'Ömür Boyu';
+
+  @override
+  String get priceWeeklyMock => '₺29.99 / hafta';
+
+  @override
+  String get priceMonthlyMock => '₺49.99 / ay';
+
+  @override
+  String get priceYearlyMock => '₺299.99 / yıl';
+
+  @override
+  String get priceMonthlyBreakdownMock => 'Sadece ₺24.99 / ay';
+
+  @override
+  String get priceLifetimeMock => '₺999.99';
+
+  @override
+  String get priceOneTime => 'Tek seferlik ödeme';
+
+  @override
+  String get bestValue => 'EN POPÜLER';
+
+  @override
+  String get badgeOneTime => 'TEK SEFERLİK';
+
+  @override
+  String get btnStartTrial => 'Ücretsiz Denemeyi Başlat';
+
+  @override
+  String get btnBecomePremium => 'Premium Ol';
+
+  @override
+  String get restorePurchase => 'Satın Alımı Geri Yükle';
+
+  @override
+  String get trialToday => 'Bugün';
+
+  @override
+  String get trialTodayDesc => 'Premium\'u Aç';
+
+  @override
+  String get trialDay5 => '5. Gün';
+
+  @override
+  String get trialDay5Desc => 'Hatırlatma';
+
+  @override
+  String get trialDay7 => '7. Gün';
+
+  @override
+  String get trialDay7Desc => 'Abonelik Başlar';
+
+  @override
+  String get trialGuarantee =>
+      'İstediğin zaman Play Store ayarlarından iptal edebilirsin. Taahhüt yok.';
+
+  @override
+  String get btnSubscribe => 'Abone Ol';
+
+  @override
+  String get termsOfUse => 'Kullanım Koşulları';
+
+  @override
+  String get privacyPolicy => 'Gizlilik Politikası';
 }

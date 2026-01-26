@@ -6,7 +6,7 @@ import '../core/providers.dart';
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
 
-import 'mood_entry_dialog.dart';
+import '../screens/daily_detail_screen.dart';
 
 class HomeMoodSelector extends StatefulWidget {
   final DailyEntry? todayEntry;
@@ -116,15 +116,15 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
                     _selectedMoodCode = mood.code;
                   });
 
-                  // 2. Open Dialog
-                  showMoodEntryDialog(
+                  // 2. Navigate to DailyDetailScreen
+                  Navigator.push(
                     context,
-                    date: DateTime.now(),
-                    provider: moodProvider,
-                    currentMood: mood.code,
-                    currentNote: widget.todayEntry?.note,
-                    currentMedia: widget.todayEntry?.mediaPaths ?? [],
-                    currentActivities: widget.todayEntry?.activities ?? {},
+                    MaterialPageRoute(
+                      builder: (context) => DailyDetailScreen(
+                        initialDate: DateTime.now(),
+                        initialMoodCode: mood.code,
+                      ),
+                    ),
                   );
                 },
                 child: Padding(

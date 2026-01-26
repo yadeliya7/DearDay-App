@@ -11,11 +11,12 @@ import '../core/language_provider.dart';
 
 import '../models/poem_model.dart';
 import 'package:line_icons/line_icons.dart';
+import 'main_scaffold.dart';
 
-import '../widgets/mood_entry_dialog.dart';
 import '../widgets/home_mood_selector.dart';
 import '../helpers/localization_helper.dart';
 import '../helpers/story_generator.dart';
+import 'daily_detail_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -889,9 +890,10 @@ class _HomeTabState extends State<HomeTab> {
         // Right side: Profile Avatar
         GestureDetector(
           onTap: () {
-            // For now, profile navigation would require accessing MainScaffold
-            // This is a placeholder - proper implementation would use a callback or state management
-            // Navigator.pushNamed doesn't work well with tab-based navigation
+            // Navigate to Profile tab (index 4) by accessing MainScaffold state
+            context.findAncestorStateOfType<MainScaffoldState>()?.onItemTapped(
+              4,
+            );
           },
           child: CircleAvatar(
             radius: 22,
@@ -1022,15 +1024,13 @@ class _HomeTabState extends State<HomeTab> {
                   IconButton(
                     icon: const Icon(Icons.edit, size: 18, color: Colors.grey),
                     onPressed: () {
-                      showMoodEntryDialog(
+                      // Navigate to DailyDetailScreen (replaces old modal)
+                      Navigator.push(
                         context,
-                        date: entry.date,
-                        provider: provider,
-                        currentMood: entry.moodCode,
-                        currentNote: entry.note,
-                        currentMedia: entry.mediaPaths,
-                        currentActivities: entry.activities,
-                        currentSavedStory: entry.savedStory,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DailyDetailScreen(initialDate: entry.date),
+                        ),
                       );
                     },
                   ),
