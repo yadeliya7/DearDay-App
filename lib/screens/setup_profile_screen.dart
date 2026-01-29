@@ -230,8 +230,6 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               // Daily Reminder Section
               _buildDailyReminderSection(context, isDark),
 
-              if (_isReminderEnabled) _buildTestButton(),
-
               const SizedBox(height: 32),
 
               const SizedBox(height: 60),
@@ -300,10 +298,6 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 await NotificationPermissionHelper.showExactAlarmPermissionDialog(
                   context,
                 );
-                await Future.delayed(const Duration(milliseconds: 500));
-                await NotificationPermissionHelper.showBatteryOptimizationDialog(
-                  context,
-                );
               }
 
               if (mounted) {
@@ -370,66 +364,6 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               ),
             ),
           ),
-      ],
-    );
-  }
-
-  Widget _buildTestButton() {
-    return Column(
-      children: [
-        TextButton.icon(
-          onPressed: () async {
-            await NotificationService().showTestNotification();
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Test bildirimi gönderildi!')),
-              );
-            }
-          },
-          icon: const Icon(Icons.notification_important),
-          label: const Text('Test Bildirimi Gönder (Anında)'),
-        ),
-        TextButton.icon(
-          onPressed: () async {
-            await NotificationService().scheduleTestReminderIn1Minute();
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    '1 dakika sonrası için bildirim zamanlandı! Konsolu kontrol et.',
-                  ),
-                  duration: Duration(seconds: 3),
-                ),
-              );
-            }
-          },
-          icon: const Icon(Icons.schedule, color: Colors.orange),
-          label: const Text(
-            '⏰ 1 Dakika Sonra Bildirim Zamanla',
-            style: TextStyle(color: Colors.orange),
-          ),
-        ),
-        TextButton.icon(
-          onPressed: () async {
-            await NotificationService().scheduleTestIn10Seconds();
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    '⚡ 10 saniye sonra bildirim gelecek - uygulamayı arka plana at!',
-                  ),
-                  duration: Duration(seconds: 4),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          },
-          icon: const Icon(Icons.flash_on, color: Colors.green),
-          label: const Text(
-            '⚡ 10 Saniye Sonra (HIZLI TEST)',
-            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-          ),
-        ),
       ],
     );
   }

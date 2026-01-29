@@ -207,7 +207,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String dayNote(Object note) {
+  String dayNote(String note) {
     return 'Note of the day: $note';
   }
 
@@ -427,7 +427,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleep_bad => 'However, I didn\'t sleep very well.';
 
   @override
-  String weather_context(Object weather) {
+  String weather_context(String weather) {
     return 'The weather was $weather.';
   }
 
@@ -780,7 +780,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analysisMoodTrend => 'Mood Trend (Last 7 Days)';
 
   @override
-  String get analysisSleepQuality => 'Sleep Quality';
+  String get analysisSleepQuality => 'Sleep Status';
 
   @override
   String get analysisTopActivities => 'Top Activities';
@@ -1128,7 +1128,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightWeekdayTitle => 'Weekday Effect';
 
   @override
-  String get insightSleepTitle => 'Sleep Factor';
+  String get insightSleepTitle => 'Sleep Quality';
 
   @override
   String insightWeekendDesc(String percent) {
@@ -1197,11 +1197,33 @@ class AppLocalizationsEn extends AppLocalizations {
       'Find hidden reasons draining your mood.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Sleep Quality';
+  String get insightTeaserSleepAnalysisTitle => 'Sleep Status';
 
   @override
   String get insightTeaserSleepAnalysisDesc =>
       'How does your sleep quality affect you?';
+
+  @override
+  String get insightTeaserGoPremiumTitle => 'Go Premium for more';
+
+  @override
+  String get insightTeaserGoPremiumDesc =>
+      'Unlock unlimited analysis and content.';
+
+  @override
+  String get insightBadSleepTitle => 'Poor Sleep Quality';
+
+  @override
+  String insightBadSleepDesc(String percent) {
+    return 'Poor sleep lowers your mood by %$percent.';
+  }
+
+  @override
+  String get insightAverageSleepTitle => 'Average Sleep';
+
+  @override
+  String get insightAverageSleepDesc =>
+      'Your sleep quality has a neutral impact.';
 
   @override
   String get dataCollectionTitle => 'Gathering Data... ⏳';
@@ -1221,26 +1243,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeCoffee => 'Coffee';
-
-  @override
-  String get notificationDailyTitle => 'How was your day? 🌙';
-
-  @override
-  String get notificationDailyBody =>
-      'Would you like to leave a note for yourself?';
-
-  @override
-  String get notificationTrialTitle => '2 days left in your trial! 🔔';
-
-  @override
-  String get notificationTrialBody =>
-      'Reminder: Your subscription starts in 48 hours.';
-
-  @override
-  String get dailyReminder => 'Daily Reminder';
-
-  @override
-  String get dailyReminderDesc => 'Get daily reminders';
 
   @override
   String get themeOcean => 'Ocean';
@@ -1400,4 +1402,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get dailyReminder => 'Daily Reminder';
+
+  @override
+  String get dailyReminderDesc => 'Get reminded every day';
+
+  @override
+  String get notificationDailyTitle => 'How was your day? 🌙';
+
+  @override
+  String get notificationDailyBody =>
+      'Would you like to leave a note for yourself?';
+
+  @override
+  String get exactAlarmPermissionTitle => '⏰ Notification Permission Required';
+
+  @override
+  String get exactAlarmPermissionMessage =>
+      'For daily reminders to work precisely, we need the \"Alarms & reminders\" permission.\n\nOn the next screen:\n1. Find \"DearDay\" app\n2. Turn ON \"Alarms & reminders\" permission\n3. Go back';
+
+  @override
+  String get notificationTrialTitle => '2 days left in your trial! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Reminder: Your subscription starts in 48 hours.';
+
+  @override
+  String get btnGoToSettings => 'Go to Settings';
 }

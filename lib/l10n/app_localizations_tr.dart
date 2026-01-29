@@ -208,7 +208,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String dayNote(Object note) {
+  String dayNote(String note) {
     return 'Günün Notu: $note';
   }
 
@@ -417,7 +417,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleep_bad => 'Ancak uykumu pek alamamıştım.';
 
   @override
-  String weather_context(Object weather) {
+  String weather_context(String weather) {
     return 'Hava da $weather.';
   }
 
@@ -770,7 +770,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisMoodTrend => 'Duygu Değişimi (Son 7 Gün)';
 
   @override
-  String get analysisSleepQuality => 'Uyku Kalitesi';
+  String get analysisSleepQuality => 'Uyku Durumu';
 
   @override
   String get analysisTopActivities => 'En Sık Yapılanlar';
@@ -1118,7 +1118,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get insightWeekdayTitle => 'Hafta İçi Etkisi';
 
   @override
-  String get insightSleepTitle => 'Uyku Faktörü';
+  String get insightSleepTitle => 'Uyku Kalitesi';
 
   @override
   String insightWeekendDesc(String percent) {
@@ -1187,14 +1187,35 @@ class AppLocalizationsTr extends AppLocalizations {
       'Modunu düşüren gizli sebepleri bul.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Uyku Kalitesi';
+  String get insightTeaserSleepAnalysisTitle => 'Uyku Durumu';
 
   @override
   String get insightTeaserSleepAnalysisDesc =>
       'Uyku kaliten seni nasıl etkiliyor?';
 
   @override
-  String get dataCollectionTitle => 'Veri Toplanıyor... ⏳';
+  String get insightTeaserGoPremiumTitle => 'Daha fazlası için Premium ol';
+
+  @override
+  String get insightTeaserGoPremiumDesc => 'Sınırsız analiz ve içerik erişimi.';
+
+  @override
+  String get insightBadSleepTitle => 'Düşük Uyku Kalitesi';
+
+  @override
+  String insightBadSleepDesc(String percent) {
+    return 'Kötü uyku modunu %$percent düşürüyor.';
+  }
+
+  @override
+  String get insightAverageSleepTitle => 'Ortalama Uyku';
+
+  @override
+  String get insightAverageSleepDesc =>
+      'Uyku kaliten modunu fazla etkilemiyor.';
+
+  @override
+  String get dataCollectionTitle => 'Gathering Data... ⏳';
 
   @override
   String get dataCollectionDesc =>
@@ -1211,26 +1232,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get themeCoffee => 'Kahve';
-
-  @override
-  String get notificationDailyTitle => 'Günün nasıl geçti? 🌙';
-
-  @override
-  String get notificationDailyBody => 'Kendine bir not bırakmak ister misin?';
-
-  @override
-  String get notificationTrialTitle =>
-      'Deneme sürenin bitmesine 2 gün kaldı! 🔔';
-
-  @override
-  String get notificationTrialBody =>
-      'Hatırlatma: Aboneliğin 48 saat içinde başlayacak.';
-
-  @override
-  String get dailyReminder => 'Günlük Hatırlatıcı';
-
-  @override
-  String get dailyReminderDesc => 'Her gün hatırlatma al';
 
   @override
   String get themeOcean => 'Okyanus';
@@ -1391,4 +1392,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Gizlilik Politikası';
+
+  @override
+  String get dailyReminder => 'Günlük Hatırlatıcı';
+
+  @override
+  String get dailyReminderDesc => 'Her gün hatırlatma al';
+
+  @override
+  String get notificationDailyTitle => 'Günün nasıl geçti? 🌙';
+
+  @override
+  String get notificationDailyBody => 'Kendine bir not bırakmak ister misin?';
+
+  @override
+  String get exactAlarmPermissionTitle => '⏰ Bildirim İzni Gerekli';
+
+  @override
+  String get exactAlarmPermissionMessage =>
+      'Günlük hatırlatıcıların tam zamanında çalışması için \"Alarmlar ve Hatırlatıcılar\" iznine ihtiyaç var.\n\nSonraki ekranda:\n1. \"DearDay\" uygulamasını bul\n2. \"Alarms & reminders\" iznini AÇ\n3. Geri dön';
+
+  @override
+  String get notificationTrialTitle =>
+      'Deneme sürenin bitmesine 2 gün kaldı! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Hatırlatma: Aboneliğin 48 saat içinde başlayacak.';
+
+  @override
+  String get btnGoToSettings => 'Ayarlara Git';
 }

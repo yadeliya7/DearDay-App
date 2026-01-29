@@ -462,7 +462,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Note of the day: {note}'**
-  String dayNote(Object note);
+  String dayNote(String note);
 
   /// No description provided for @journal_sport.
   ///
@@ -816,7 +816,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'The weather was {weather}.'**
-  String weather_context(Object weather);
+  String weather_context(String weather);
 
   /// No description provided for @weather_sentence_sunny.
   ///
@@ -1493,7 +1493,7 @@ abstract class AppLocalizations {
   /// No description provided for @analysisSleepQuality.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Quality'**
+  /// **'Sleep Status'**
   String get analysisSleepQuality;
 
   /// No description provided for @analysisTopActivities.
@@ -2147,7 +2147,7 @@ abstract class AppLocalizations {
   /// No description provided for @insightSleepTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Factor'**
+  /// **'Sleep Quality'**
   String get insightSleepTitle;
 
   /// No description provided for @insightWeekendDesc.
@@ -2267,7 +2267,7 @@ abstract class AppLocalizations {
   /// No description provided for @insightTeaserSleepAnalysisTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Quality'**
+  /// **'Sleep Status'**
   String get insightTeaserSleepAnalysisTitle;
 
   /// No description provided for @insightTeaserSleepAnalysisDesc.
@@ -2275,6 +2275,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'How does your sleep quality affect you?'**
   String get insightTeaserSleepAnalysisDesc;
+
+  /// No description provided for @insightTeaserGoPremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium for more'**
+  String get insightTeaserGoPremiumTitle;
+
+  /// No description provided for @insightTeaserGoPremiumDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock unlimited analysis and content.'**
+  String get insightTeaserGoPremiumDesc;
+
+  /// No description provided for @insightBadSleepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor Sleep Quality'**
+  String get insightBadSleepTitle;
+
+  /// No description provided for @insightBadSleepDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor sleep lowers your mood by %{percent}.'**
+  String insightBadSleepDesc(String percent);
+
+  /// No description provided for @insightAverageSleepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Sleep'**
+  String get insightAverageSleepTitle;
+
+  /// No description provided for @insightAverageSleepDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your sleep quality has a neutral impact.'**
+  String get insightAverageSleepDesc;
 
   /// No description provided for @dataCollectionTitle.
   ///
@@ -2311,42 +2347,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coffee'**
   String get themeCoffee;
-
-  /// No description provided for @notificationDailyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'How was your day? 🌙'**
-  String get notificationDailyTitle;
-
-  /// No description provided for @notificationDailyBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Would you like to leave a note for yourself?'**
-  String get notificationDailyBody;
-
-  /// No description provided for @notificationTrialTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'2 days left in your trial! 🔔'**
-  String get notificationTrialTitle;
-
-  /// No description provided for @notificationTrialBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Reminder: Your subscription starts in 48 hours.'**
-  String get notificationTrialBody;
-
-  /// No description provided for @dailyReminder.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Reminder'**
-  String get dailyReminder;
-
-  /// No description provided for @dailyReminderDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Get daily reminders'**
-  String get dailyReminderDesc;
 
   /// No description provided for @themeOcean.
   ///
@@ -2645,6 +2645,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get privacyPolicy;
+
+  /// No description provided for @dailyReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Reminder'**
+  String get dailyReminder;
+
+  /// No description provided for @dailyReminderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get reminded every day'**
+  String get dailyReminderDesc;
+
+  /// No description provided for @notificationDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your day? 🌙'**
+  String get notificationDailyTitle;
+
+  /// No description provided for @notificationDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to leave a note for yourself?'**
+  String get notificationDailyBody;
+
+  /// No description provided for @exactAlarmPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'⏰ Notification Permission Required'**
+  String get exactAlarmPermissionTitle;
+
+  /// No description provided for @exactAlarmPermissionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'For daily reminders to work precisely, we need the \"Alarms & reminders\" permission.\n\nOn the next screen:\n1. Find \"DearDay\" app\n2. Turn ON \"Alarms & reminders\" permission\n3. Go back'**
+  String get exactAlarmPermissionMessage;
+
+  /// No description provided for @notificationTrialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2 days left in your trial! 🔔'**
+  String get notificationTrialTitle;
+
+  /// No description provided for @notificationTrialBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder: Your subscription starts in 48 hours.'**
+  String get notificationTrialBody;
+
+  /// No description provided for @btnGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get btnGoToSettings;
 }
 
 class _AppLocalizationsDelegate

@@ -63,6 +63,7 @@ class AnalysisScreen extends StatelessWidget {
               AppLocalizations.of(context)!.analysisInsightsTitle,
               _buildInsightsCarousel(context, entries, isDark),
               isDark,
+              showPremiumBadge: !isPremium,
             ),
             const SizedBox(height: 20),
 
@@ -73,6 +74,7 @@ class AnalysisScreen extends StatelessWidget {
               _buildSleepPieChart(context, entries, isDark),
               isDark,
               isLocked: !isPremium, // Show lock if not premium
+              showPremiumBadge: !isPremium,
             ),
             const SizedBox(height: 20),
 
@@ -108,6 +110,7 @@ class AnalysisScreen extends StatelessWidget {
     bool isDark, {
     VoidCallback? onSeeAll,
     bool isLocked = false,
+    bool showPremiumBadge = false,
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -138,12 +141,49 @@ class AnalysisScreen extends StatelessWidget {
                       color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
-                  if (isLocked) ...[
+                  if (showPremiumBadge) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.amber.shade600,
+                            Colors.amber.shade800,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.workspace_premium,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            'PREMIUM',
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (isLocked && !showPremiumBadge) ...[
                     const SizedBox(width: 8),
                     Icon(
                       LineIcons.lock,
                       size: 20,
-                      color: isDark ? Colors.white70 : Colors.black54,
+                      color: Colors.amber.shade700,
                     ),
                   ],
                 ],
@@ -357,11 +397,8 @@ class AnalysisScreen extends StatelessWidget {
 
     // Non-Premium: Solid Lock State (Teaser Style)
     if (!isPremium) {
-      // Using the same gradient as the "Sleep Analysis" teaser in _buildTeaserCarousel
-      final gradientColors = [
-        Colors.purple.shade400.withOpacity(0.9),
-        Colors.purple.shade600.withOpacity(0.9),
-      ];
+      // Black gradient for locked Sleep Status card
+      final gradientColors = [Colors.grey.shade800, Colors.black];
 
       return GestureDetector(
         onTap: () {
@@ -603,14 +640,77 @@ class AnalysisScreen extends StatelessWidget {
     final service = RelationalAnalysisService();
     final insights = service.generateInsights(context, data);
 
-    // 2. Handle empty state with teaser carousel
+    // 2. Handle Non-Premium UI (Teaser Cards) - Always show this if not premium
+    if (!isPremium) {
+      return Column(
+        children: [
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            child: SizedBox(
+              height: 140,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  // 1. Super Power Card (Locked Placeholder)
+                  Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    child: _buildInsightCard(
+                      context,
+                      title: AppLocalizations.of(
+                        context,
+                      )!.insightTeaserSuperPowerTitle,
+                      description: AppLocalizations.of(
+                        context,
+                      )!.insightTeaserSuperPowerDesc,
+                      icon: LineIcons.lightningBolt,
+                      gradientColors: [
+                        Colors.grey.shade800,
+                        Colors.black,
+                      ], // Black Gradient
+                      isLocked: true,
+                      width: 280, // Wider card
+                    ),
+                  ),
+
+                  // 2. Go Premium Card (CTA)
+                  Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    child: _buildInsightCard(
+                      context,
+                      title: AppLocalizations.of(
+                        context,
+                      )!.insightTeaserGoPremiumTitle,
+                      description: AppLocalizations.of(
+                        context,
+                      )!.insightPremiumDesc,
+                      icon: Icons.workspace_premium, // Premium Icon
+                      gradientColors: [
+                        Colors.grey.shade800,
+                        Colors.black,
+                      ], // Black Gradient
+                      isLocked: false,
+                      isTeaser: true,
+                      width: 280, // Wider card
+                      onTap: () => _openPaywall(context),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    // 3. Handle Premium User - Empty State
     if (insights.isEmpty) {
       // Premium User: Should NEVER see teaser. If empty, show "No Data / Finding Patterns"
       if (isPremium) {
         return _buildNoDataCard(context, isDark);
       }
-      // Free User: Show Teaser
-      return _buildTeaserCarousel(context, isDark);
+      // Free User Logic Removed (Handled above)
+      return _buildNoDataCard(context, isDark); // Fallback
     }
 
     // 2. Filter/Modify for Display
@@ -624,7 +724,7 @@ class AnalysisScreen extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         SizedBox(
-          height: 140,
+          height: 160, // Increased height
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount:
@@ -690,12 +790,13 @@ class AnalysisScreen extends StatelessWidget {
     bool isLocked = false,
     bool isTeaser = false, // Added isTeaser
     VoidCallback? onTap,
+    double? width = 280, // Default width increased to 280
   }) {
     // Default gradients if not provided
     final colors = gradientColors ?? [Colors.blueAccent, Colors.purpleAccent];
 
     final cardContent = Container(
-      width: 260,
+      width: width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -735,6 +836,8 @@ class AnalysisScreen extends StatelessWidget {
                   children: [
                     Text(
                       title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -758,7 +861,8 @@ class AnalysisScreen extends StatelessWidget {
                               fontSize: 12,
                               color: Colors.white.withValues(alpha: 0.9),
                             ),
-                            maxLines: 2,
+                            maxLines:
+                                4, // Increased lines for long descriptions (Magic Duo)
                             overflow: TextOverflow.ellipsis,
                           ),
                   ],
@@ -768,16 +872,8 @@ class AnalysisScreen extends StatelessWidget {
           ),
 
           // Lock Overlay for non-teaser locked items
-          if (isLocked && !isTeaser)
-            Positioned.fill(
-              child: Center(
-                child: Icon(
-                  LineIcons.lock,
-                  color: Colors.white.withValues(alpha: 0.5),
-                  size: 40,
-                ),
-              ),
-            ),
+          // Blur Overlay only (No icon, no text)
+          // Blur Overlay removed
 
           // Teaser 'Upgrade' arrow
           if (isTeaser)
@@ -799,79 +895,6 @@ class AnalysisScreen extends StatelessWidget {
       return GestureDetector(onTap: onTap, child: cardContent);
     }
     return cardContent;
-  }
-
-  // --- BUILD TEASER CAROUSEL (FOR EMPTY STATE) ---
-  Widget _buildTeaserCarousel(BuildContext context, bool isDark) {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 140,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              // Card A: Superpower
-              _buildInsightCard(
-                context,
-                title: AppLocalizations.of(
-                  context,
-                )!.insightTeaserSuperPowerTitle,
-                description: AppLocalizations.of(
-                  context,
-                )!.insightTeaserSuperPowerDesc,
-                icon: Icons.flash_on,
-                gradientColors: [
-                  Colors.green.shade400.withOpacity(0.8),
-                  Colors.green.shade600.withOpacity(0.8),
-                ],
-                isLocked: false,
-                isTeaser: true,
-                onTap: () => _openPaywall(context),
-              ),
-              const SizedBox(width: 16),
-              // Card B: Energy Drainers
-              _buildInsightCard(
-                context,
-                title: AppLocalizations.of(
-                  context,
-                )!.insightTeaserEnergyDrainersTitle,
-                description: AppLocalizations.of(
-                  context,
-                )!.insightTeaserEnergyDrainersDesc,
-                icon: LineIcons.batteryEmpty,
-                gradientColors: [
-                  Colors.red.shade400.withOpacity(0.8),
-                  Colors.red.shade600.withOpacity(0.8),
-                ],
-                isLocked: false,
-                isTeaser: true,
-                onTap: () => _openPaywall(context),
-              ),
-              const SizedBox(width: 16),
-              // Card C: Sleep Analysis
-              _buildInsightCard(
-                context,
-                title: AppLocalizations.of(
-                  context,
-                )!.insightTeaserSleepAnalysisTitle,
-                description: AppLocalizations.of(
-                  context,
-                )!.insightTeaserSleepAnalysisDesc,
-                icon: LineIcons.moon,
-                gradientColors: [
-                  Colors.purple.shade400.withOpacity(0.8),
-                  Colors.purple.shade600.withOpacity(0.8),
-                ],
-                isLocked: false,
-                isTeaser: true,
-                onTap: () => _openPaywall(context),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   // --- BUILD NO DATA CARD (FOR PREMIUM USERS WITH INSUFFICIENT DATA) ---

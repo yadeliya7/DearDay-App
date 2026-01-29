@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
 
 class NotificationPermissionHelper {
   /// Shows a dialog explaining why exact alarm permission is needed
@@ -14,15 +15,11 @@ class NotificationPermissionHelper {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          '⏰ Bildirim İzni Gerekli',
+          AppLocalizations.of(context)!.exactAlarmPermissionTitle,
           style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
         content: Text(
-          'Günlük hatırlatıcıların tam zamanında çalışması için "Alarmlar ve Hatırlatıcılar" iznine ihtiyaç var.\n\n'
-          'Sonraki ekranda:\n'
-          '1. "DearDay" uygulamasını bul\n'
-          '2. "Alarms & reminders" iznini AÇ\n'
-          '3. Geri dön',
+          AppLocalizations.of(context)!.exactAlarmPermissionMessage,
           style: GoogleFonts.poppins(fontSize: 14),
         ),
         actions: [
@@ -34,7 +31,7 @@ class NotificationPermissionHelper {
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
             child: Text(
-              'Ayarlara Git',
+              AppLocalizations.of(context)!.btnGoToSettings,
               style: GoogleFonts.poppins(color: Colors.white),
             ),
           ),
@@ -52,7 +49,7 @@ class NotificationPermissionHelper {
         // Fallback to app settings
         const AndroidIntent fallbackIntent = AndroidIntent(
           action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
-          data: 'package:com.ydliya.poem_diary',
+          data: 'package:com.poem_diary.poem_diary',
         );
         await fallbackIntent.launch();
       }
@@ -100,7 +97,7 @@ class NotificationPermissionHelper {
     if (shouldProceed == true && Platform.isAndroid) {
       const AndroidIntent intent = AndroidIntent(
         action: 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
-        data: 'package:com.ydliya.poem_diary',
+        data: 'package:com.poem_diary.poem_diary',
       );
       await intent.launch();
     }

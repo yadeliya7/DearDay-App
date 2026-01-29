@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  String _selectedThemeKey = 'peach';
-  ThemeMode _themeMode = ThemeMode.light;
+  String _selectedThemeKey = 'midnight';
+  ThemeMode _themeMode = ThemeMode.dark;
 
   ThemeProvider() {
     loadInitialization();
@@ -334,10 +334,10 @@ class ThemeProvider extends ChangeNotifier {
   // Load preferences (Public for main initialization)
   Future<void> loadInitialization() async {
     final prefs = await SharedPreferences.getInstance();
-    _selectedThemeKey = prefs.getString('selected_theme') ?? 'peach';
+    _selectedThemeKey = prefs.getString('selected_theme') ?? 'midnight';
 
     // Load theme mode
-    final themeModeIndex = prefs.getInt('theme_mode') ?? 1; // Default to light
+    final themeModeIndex = prefs.getInt('theme_mode') ?? 2; // Default to dark
     _themeMode = ThemeMode.values[themeModeIndex];
 
     notifyListeners();

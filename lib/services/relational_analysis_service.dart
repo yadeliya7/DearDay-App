@@ -222,33 +222,80 @@ class RelationalAnalysisService {
     return null;
   }
 
-  /// 3. Sleep Factor Analysis
+  /// 3. Sleep Factor Analysis (Comprehensive)
   InsightModel? _analyzeSleep(BuildContext context, List<DailyEntry> data) {
-    // Find correlation between "Sleep: Good" and Mood
+    if (data.isEmpty) return null;
+
     List<double> goodSleepMoods = [];
+    List<double> mediumSleepMoods = [];
+    List<double> badSleepMoods = [];
     List<double> allMoods = [];
 
+    // 1. Data Collection
     for (var e in data) {
       final val = _getMoodValue(e.moodCode);
       allMoods.add(val);
 
-      // Assuming sleep is stored in 'activities' or separate field depending on implementation.
-      // Based on previous files, 'sleep_good' key in activities map.
-      if (e.activities['sleep_good'] == true) {
+      final sleepQuality = e.activities['sleep'];
+      if (sleepQuality == 'good') {
         goodSleepMoods.add(val);
+      } else if (sleepQuality == 'medium' || sleepQuality == 'average') {
+        mediumSleepMoods.add(val);
+      } else if (sleepQuality == 'bad' || sleepQuality == 'poor') {
+        badSleepMoods.add(val);
       }
     }
 
-    if (goodSleepMoods.length < 3 || allMoods.isEmpty) return null;
-
+    if (allMoods.isEmpty) return null;
     final globalAvg = allMoods.reduce((a, b) => a + b) / allMoods.length;
-    final goodSleepAvg =
-        goodSleepMoods.reduce((a, b) => a + b) / goodSleepMoods.length;
 
-    final diff = goodSleepAvg - globalAvg;
+    // 2. Calculate Impacts
+    // Helper to get average or null if insufficient data
+    double? getAvg(List<double> list) {
+      if (list.length < 3) return null; // Minimum 3 entries required
+      return list.reduce((a, b) => a + b) / list.length;
+    }
 
-    if (diff > 0.5) {
-      final percent = (diff * 10).toStringAsFixed(0);
+    final goodAvg = getAvg(goodSleepMoods);
+    final mediumAvg = getAvg(mediumSleepMoods);
+    final badAvg = getAvg(badSleepMoods);
+
+    double bestImpactVal = 0.0;
+    String? direction = 'neutral'; // 'positive', 'negative', 'neutral'
+
+    // Compare Good Sleep
+    if (goodAvg != null) {
+      final impact = goodAvg - globalAvg;
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'good';
+      }
+    }
+
+    // Compare Bad Sleep
+    if (badAvg != null) {
+      final impact = badAvg - globalAvg;
+      // We care about NEGATIVE impact for bad sleep usually, but magnitude matters
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'bad';
+      }
+    }
+
+    // Compare Medium Sleep (optional, usually less interesting)
+    if (mediumAvg != null) {
+      final impact = mediumAvg - globalAvg;
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'medium';
+      }
+    }
+
+    // 3. Construct Insight based on strongest factor
+    final percent = (bestImpactVal.abs() * 10).toStringAsFixed(0);
+
+    if (direction == 'good' && bestImpactVal > 0.3) {
+      // Good sleep helps (Positive)
       return InsightModel(
         type: InsightType.sleepFactor,
         title: AppLocalizations.of(context)!.insightSleepTitle,
@@ -257,9 +304,30 @@ class RelationalAnalysisService {
         gradientColors: [Colors.indigo, Colors.blueGrey],
         isLocked: true,
       );
+    } else if (direction == 'bad' && bestImpactVal < -0.3) {
+      // Bad sleep hurts (Negative)
+      return InsightModel(
+        type: InsightType.sleepFactor,
+        title: AppLocalizations.of(context)!.insightBadSleepTitle,
+        description: AppLocalizations.of(context)!.insightBadSleepDesc(percent),
+        icon: LineIcons.bed, // Or dizzy face
+        gradientColors: [Colors.blueGrey.shade700, Colors.black54],
+        isLocked: true,
+      );
+    } else if (direction == 'medium') {
+      // Medium sleep impact (Neutral/Interesting?)
+      // Often we might skip this unless it's strongly positive/negative surprisingly
+      return InsightModel(
+        type: InsightType.sleepFactor,
+        title: AppLocalizations.of(context)!.insightAverageSleepTitle,
+        description: AppLocalizations.of(context)!.insightAverageSleepDesc,
+        icon: LineIcons.cloudWithMoon,
+        gradientColors: [Colors.teal.shade300, Colors.teal.shade700],
+        isLocked: true,
+      );
     }
 
-    return null;
+    return null; // No significant insight found
   }
 
   /// 4. Magic Duo Analysis (Activity Pair Synergy)

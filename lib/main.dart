@@ -24,6 +24,21 @@ void main() async {
   await NotificationService().requestPermissions();
 
   final prefs = await SharedPreferences.getInstance();
+
+  // Restore daily notification if previously set
+  final reminderEnabled = prefs.getBool('daily_reminder_enabled') ?? false;
+  final reminderHour = prefs.getInt('daily_reminder_hour');
+  final reminderMinute = prefs.getInt('daily_reminder_minute');
+
+  if (reminderEnabled && reminderHour != null && reminderMinute != null) {
+    await NotificationService().scheduleDailyReminder(
+      TimeOfDay(hour: reminderHour, minute: reminderMinute),
+      'Günlük Hatırlatıcı',
+      'Bugünün günlüğünü yazmayı unutma! ✨',
+    );
+    debugPrint('✅ Daily reminder restored: $reminderHour:$reminderMinute');
+  }
+
   final bool isSetupDone = prefs.getBool('is_setup_done') ?? false;
 
   // Initialize ThemeProvider and wait for prefs to load

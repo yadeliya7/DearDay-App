@@ -173,21 +173,23 @@ class _JournalScreenState extends State<JournalScreen> {
       orElse: () => provider.moods.first,
     );
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // LEFT: Timeline Column
-          _buildTimelineColumn(mood, isLast),
+    return Stack(
+      children: [
+        // LEFT: Timeline Column
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 40,
+          child: _buildTimelineColumn(mood, isLast),
+        ),
 
-          const SizedBox(width: 16),
-
-          // RIGHT: Entry Card (now stateful)
-          Expanded(
-            child: _JournalCard(entry: entry, mood: mood, provider: provider),
-          ),
-        ],
-      ),
+        // RIGHT: Entry Card
+        Padding(
+          padding: const EdgeInsets.only(left: 56), // 40 (col) + 16 (gap)
+          child: _JournalCard(entry: entry, mood: mood, provider: provider),
+        ),
+      ],
     );
   }
 
