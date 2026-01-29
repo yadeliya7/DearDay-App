@@ -520,6 +520,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msgEntrySaved => 'Diary entry saved';
 
   @override
+  String get msgEntryUpdated => 'Entry updated successfully! ✨';
+
+  @override
   String get shareText => 'Share Text';
 
   @override
@@ -834,6 +837,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String streakGoalCompleted(int days) {
     return '\nYou completed $days days streak!';
   }
+
+  @override
+  String get trialBadge => '7 Days Free';
 
   @override
   String get sectionSocial => 'Social';
@@ -1191,11 +1197,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Find hidden reasons draining your mood.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Sleep Analysis 🔒';
+  String get insightTeaserSleepAnalysisTitle => 'Sleep Quality';
 
   @override
   String get insightTeaserSleepAnalysisDesc =>
-      'How does sleep affect your day?';
+      'How does your sleep quality affect you?';
 
   @override
   String get dataCollectionTitle => 'Gathering Data... ⏳';

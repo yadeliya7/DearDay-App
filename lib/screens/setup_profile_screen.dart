@@ -8,6 +8,7 @@ import '../core/providers.dart';
 import 'main_scaffold.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 import 'package:poem_diary/services/notification_service.dart';
+import '../helpers/notification_permission_helper.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   final bool isEditMode;
@@ -293,6 +294,18 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
 
             if (val) {
               await NotificationService().requestPermissions();
+
+              // Show permission dialogs for Android
+              if (mounted && Platform.isAndroid) {
+                await NotificationPermissionHelper.showExactAlarmPermissionDialog(
+                  context,
+                );
+                await Future.delayed(const Duration(milliseconds: 500));
+                await NotificationPermissionHelper.showBatteryOptimizationDialog(
+                  context,
+                );
+              }
+
               if (mounted) {
                 await NotificationService().scheduleDailyReminder(
                   _reminderTime,
@@ -362,17 +375,62 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
   }
 
   Widget _buildTestButton() {
-    return TextButton.icon(
-      onPressed: () async {
-        await NotificationService().showTestNotification();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Test bildirimi gönderildi!')),
-          );
-        }
-      },
-      icon: const Icon(Icons.notification_important),
-      label: const Text('Test Bildirimi Gönder'),
+    return Column(
+      children: [
+        TextButton.icon(
+          onPressed: () async {
+            await NotificationService().showTestNotification();
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Test bildirimi gönderildi!')),
+              );
+            }
+          },
+          icon: const Icon(Icons.notification_important),
+          label: const Text('Test Bildirimi Gönder (Anında)'),
+        ),
+        TextButton.icon(
+          onPressed: () async {
+            await NotificationService().scheduleTestReminderIn1Minute();
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    '1 dakika sonrası için bildirim zamanlandı! Konsolu kontrol et.',
+                  ),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            }
+          },
+          icon: const Icon(Icons.schedule, color: Colors.orange),
+          label: const Text(
+            '⏰ 1 Dakika Sonra Bildirim Zamanla',
+            style: TextStyle(color: Colors.orange),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () async {
+            await NotificationService().scheduleTestIn10Seconds();
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    '⚡ 10 saniye sonra bildirim gelecek - uygulamayı arka plana at!',
+                  ),
+                  duration: Duration(seconds: 4),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          },
+          icon: const Icon(Icons.flash_on, color: Colors.green),
+          label: const Text(
+            '⚡ 10 Saniye Sonra (HIZLI TEST)',
+            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
     );
   }
 }

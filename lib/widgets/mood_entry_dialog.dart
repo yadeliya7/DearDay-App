@@ -1,17 +1,17 @@
 import 'dart:io';
-import 'package:poem_diary/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
-import '../models/poem_model.dart';
-import '../models/daily_entry_model.dart';
-import '../helpers/story_generator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
+
 import '../core/providers.dart';
 import '../core/language_provider.dart';
-
-import 'package:intl/intl.dart';
+import '../models/daily_entry_model.dart';
+import '../models/poem_model.dart';
+import '../helpers/story_generator.dart';
 
 Future<void> showMoodEntryDialog(
   BuildContext context, {
@@ -261,9 +261,7 @@ class MoodEntrySheetState extends State<MoodEntrySheet> {
       // STAY ON SCREEN for seamless editing
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            "Kayıt başarıyla güncellendi! ✨",
-          ), // Or use loc.saveSuccess + icon
+          content: Text(loc.msgEntryUpdated), // Or use loc.saveSuccess + icon
           backgroundColor: Theme.of(context).primaryColor,
           duration: const Duration(seconds: 1),
           behavior: SnackBarBehavior.floating,

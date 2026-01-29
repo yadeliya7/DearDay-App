@@ -986,6 +986,12 @@ abstract class AppLocalizations {
   /// **'Diary entry saved'**
   String get msgEntrySaved;
 
+  /// No description provided for @msgEntryUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry updated successfully! ✨'**
+  String get msgEntryUpdated;
+
   /// No description provided for @shareText.
   ///
   /// In en, this message translates to:
@@ -1585,6 +1591,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'\nYou completed {days} days streak!'**
   String streakGoalCompleted(int days);
+
+  /// No description provided for @trialBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'7 Days Free'**
+  String get trialBadge;
 
   /// No description provided for @sectionSocial.
   ///
@@ -2255,13 +2267,13 @@ abstract class AppLocalizations {
   /// No description provided for @insightTeaserSleepAnalysisTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Analysis 🔒'**
+  /// **'Sleep Quality'**
   String get insightTeaserSleepAnalysisTitle;
 
   /// No description provided for @insightTeaserSleepAnalysisDesc.
   ///
   /// In en, this message translates to:
-  /// **'How does sleep affect your day?'**
+  /// **'How does your sleep quality affect you?'**
   String get insightTeaserSleepAnalysisDesc;
 
   /// No description provided for @dataCollectionTitle.

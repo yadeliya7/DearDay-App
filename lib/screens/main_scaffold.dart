@@ -36,21 +36,37 @@ class MainScaffoldState extends State<MainScaffold> {
 
   Widget _buildNavItem(IconData icon, int index) {
     bool isSelected = _selectedIndex == index;
-    const coralAccent = Color.fromARGB(
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Existing colors for Dark Mode
+    const darkSelected = Color.fromARGB(
       255,
       162,
       178,
       253,
-    ); // Vibrant coral for selected
-    const brownMedium = Color.fromARGB(
+    ); // Vibrant coral/periwinkle
+    const darkUnselected = Color.fromARGB(
       255,
       202,
       201,
       201,
-    ); // Medium brown for unselected
+    ); // Medium brown/grey
+
+    // New colors for Light Mode (Darker for visibility)
+    // Using a dark warm grey/brown for broader appeal in a journal app
+    const lightSelected = Color(0xFF2D2D2D); // Very Dark Grey (almost black)
+    const lightUnselected = Color(0xFF8D8D8D); // Darker Grey
+
+    // Determine effective colors
+    final Color effectiveSelected = isDark ? darkSelected : lightSelected;
+    final Color effectiveUnselected = isDark ? darkUnselected : lightUnselected;
 
     return IconButton(
-      icon: Icon(icon, color: isSelected ? coralAccent : brownMedium, size: 28),
+      icon: Icon(
+        icon,
+        color: isSelected ? effectiveSelected : effectiveUnselected,
+        size: 28,
+      ),
       onPressed: () => onItemTapped(index),
     );
   }

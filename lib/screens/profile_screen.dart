@@ -235,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   title: Text(
-                    'Dark Mod',
+                    AppLocalizations.of(context)!.darkMode,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w600,
                       color: isDark ? Colors.white : Colors.black87,
@@ -856,9 +856,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String label,
     required bool isSelected,
   }) {
+    final isPremium = Provider.of<PremiumProvider>(context).isPremium;
+    // Premium Lock Check:
+    // If user is NOT premium AND theme is NOT 'midnight' -> Locked
+    final isLocked = !isPremium && themeKey != 'midnight';
+
     return GestureDetector(
       onTap: () {
-        Provider.of<ThemeProvider>(context, listen: false).setTheme(themeKey);
+        if (isLocked) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PaywallScreen()),
+          );
+        } else {
+          Provider.of<ThemeProvider>(context, listen: false).setTheme(themeKey);
+        }
       },
       child: Column(
         children: [
@@ -871,13 +883,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: 2,
               ),
             ),
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-              child: isSelected
-                  ? const Icon(Icons.check, color: Colors.white)
-                  : null,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: isLocked ? color.withOpacity(0.5) : color,
+                    shape: BoxShape.circle,
+                  ),
+                  child: isSelected
+                      ? const Icon(Icons.check, color: Colors.white)
+                      : null,
+                ),
+                if (isLocked)
+                  const Icon(LineIcons.lock, color: Colors.white, size: 20),
+              ],
             ),
           ),
           const SizedBox(height: 4),
@@ -886,9 +908,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: Theme.of(
-                context,
-              ).textTheme.bodySmall?.color, // Adapt to theme
+              color: isLocked
+                  ? Colors.grey
+                  : Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
         ],

@@ -146,6 +146,8 @@
     "@btnSave": {},
     "msgEntrySaved": "Günlük kaydedildi",
     "@msgEntrySaved": {},
+    "msgEntryUpdated": "Kayıt başarıyla güncellendi! ✨",
+    "@msgEntryUpdated": {},
     "shareText": "Metni Paylaş",
     "@shareText": {},
     "shareImage": "Resim Olarak Paylaş",
@@ -593,8 +595,8 @@
     "insightTeaserSuperPowerDesc": "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
     "insightTeaserEnergyDrainersTitle": "Enerji Emiciler 🔒",
     "insightTeaserEnergyDrainersDesc": "Modunu düşüren gizli sebepleri bul.",
-    "insightTeaserSleepAnalysisTitle": "Uyku Analizi 🔒",
-    "insightTeaserSleepAnalysisDesc": "Uykun gününü nasıl etkiliyor?",
+    "insightTeaserSleepAnalysisTitle": "Uyku Kalitesi",
+    "insightTeaserSleepAnalysisDesc": "Uyku kaliten seni nasıl etkiliyor?",
     "dataCollectionTitle": "Veri Toplanıyor... ⏳",
     "dataCollectionDesc": "Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!",
     "themeSelectionTitle": "TEMA SEÇİMİ",
@@ -651,6 +653,8 @@
             }
         }
     },
+    "trialBadge": "7 Gün Ücretsiz",
+    "@trialBadge": {},
     "insightStabilityRockTitle": "Duygusal Kaya",
     "@insightStabilityRockTitle": {},
     "insightStabilityRockDesc": "Dengeli ve tutarlı bir mod",

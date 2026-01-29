@@ -211,6 +211,9 @@ class _PaywallScreenState extends State<PaywallScreen>
                                 badgeText: AppLocalizations.of(
                                   context,
                                 )!.bestValue,
+                                trialText: AppLocalizations.of(
+                                  context,
+                                )!.trialBadge,
                                 goldColor: goldColor,
                               ),
                               const SizedBox(height: 12),
@@ -251,9 +254,7 @@ class _PaywallScreenState extends State<PaywallScreen>
                           child: Column(
                             children: [
                               // Trial Timeline (Only for Yearly)
-                              if (_selectedPlan == 'yearly')
-                                _buildTrialTimeline(context, goldColor),
-
+                              // Removed as per request
                               ScaleTransition(
                                 scale: _pulseAnimation,
                                 child: Container(
@@ -311,9 +312,14 @@ class _PaywallScreenState extends State<PaywallScreen>
                                   ),
                                 ),
                               ),
-                              if (_selectedPlan == 'yearly') ...[
-                                const SizedBox(height: 12),
-                                Text(
+                              const SizedBox(height: 12),
+                              // Use Visibility with maintainSize to prevent layout shift
+                              Visibility(
+                                visible: _selectedPlan == 'yearly',
+                                maintainSize: true,
+                                maintainAnimation: true,
+                                maintainState: true,
+                                child: Text(
                                   AppLocalizations.of(context)!.trialGuarantee,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
@@ -321,7 +327,8 @@ class _PaywallScreenState extends State<PaywallScreen>
                                     color: Colors.white54,
                                   ),
                                 ),
-                              ],
+                              ),
+
                               const SizedBox(height: 16),
                               // Footer Links
                               Row(
@@ -388,6 +395,7 @@ class _PaywallScreenState extends State<PaywallScreen>
     required String price,
     String? subtitle,
     String? badgeText,
+    String? trialText,
     required Color goldColor,
   }) {
     final isSelected = _selectedPlan == id;
@@ -487,6 +495,27 @@ class _PaywallScreenState extends State<PaywallScreen>
                     ),
                   ),
                 ],
+                if (trialText != null) ...[
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      trialText,
+                      style: GoogleFonts.poppins(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ],
@@ -560,80 +589,6 @@ class _PaywallScreenState extends State<PaywallScreen>
           ),
         );
       }),
-    );
-  }
-
-  Widget _buildTrialTimeline(BuildContext context, Color goldColor) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          // Line
-          Padding(
-            padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-            child: Container(height: 2, color: goldColor.withOpacity(0.3)),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTimelineStep(
-                title: AppLocalizations.of(context)!.trialToday,
-                desc: AppLocalizations.of(context)!.trialTodayDesc,
-                icon: Icons.lock_open_rounded,
-                goldColor: goldColor,
-              ),
-              _buildTimelineStep(
-                title: AppLocalizations.of(context)!.trialDay5,
-                desc: AppLocalizations.of(context)!.trialDay5Desc,
-                icon: Icons.notifications_active_rounded,
-                goldColor: goldColor,
-              ),
-              _buildTimelineStep(
-                title: AppLocalizations.of(context)!.trialDay7,
-                desc: AppLocalizations.of(context)!.trialDay7Desc,
-                icon: Icons.star_rounded,
-                goldColor: goldColor,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTimelineStep({
-    required String title,
-    required String desc,
-    required IconData icon,
-    required Color goldColor,
-  }) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: const Color(0xFF121212), // Match bg to hide line behind icon
-            shape: BoxShape.circle,
-            border: Border.all(color: goldColor, width: 2),
-          ),
-          child: Icon(icon, size: 16, color: goldColor),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          title,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          desc,
-          style: GoogleFonts.poppins(fontSize: 10, color: Colors.white70),
-        ),
-      ],
     );
   }
 }

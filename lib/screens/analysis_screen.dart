@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../services/relational_analysis_service.dart';
 // import '../models/insight_model.dart'; // Unused import removal
@@ -19,6 +20,8 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check Premium Status
+    final isPremium = Provider.of<PremiumProvider>(context).isPremium;
     final provider = Provider.of<MoodProvider>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -69,6 +72,7 @@ class AnalysisScreen extends StatelessWidget {
               AppLocalizations.of(context)!.analysisSleepQuality,
               _buildSleepPieChart(context, entries, isDark),
               isDark,
+              isLocked: !isPremium, // Show lock if not premium
             ),
             const SizedBox(height: 20),
 
@@ -103,6 +107,7 @@ class AnalysisScreen extends StatelessWidget {
     Widget content,
     bool isDark, {
     VoidCallback? onSeeAll,
+    bool isLocked = false,
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -123,13 +128,25 @@ class AnalysisScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : Colors.black87,
-                ),
+              Row(
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                  if (isLocked) ...[
+                    const SizedBox(width: 8),
+                    Icon(
+                      LineIcons.lock,
+                      size: 20,
+                      color: isDark ? Colors.white70 : Colors.black54,
+                    ),
+                  ],
+                ],
               ),
               if (onSeeAll != null)
                 TextButton(
@@ -335,6 +352,109 @@ class AnalysisScreen extends StatelessWidget {
     List<DailyEntry> data,
     bool isDark,
   ) {
+    // Check Premium Status
+    final isPremium = Provider.of<PremiumProvider>(context).isPremium;
+
+    // Non-Premium: Solid Lock State (Teaser Style)
+    if (!isPremium) {
+      // Using the same gradient as the "Sleep Analysis" teaser in _buildTeaserCarousel
+      final gradientColors = [
+        Colors.purple.shade400.withOpacity(0.9),
+        Colors.purple.shade600.withOpacity(0.9),
+      ];
+
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PaywallScreen()),
+          );
+        },
+        child: Container(
+          height: 140, // Match typical insight card height or compact it
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: gradientColors.last.withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      LineIcons.moon,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.insightTeaserSleepAnalysisTitle,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.insightTeaserSleepAnalysisDesc,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // Arrow indicator at bottom right
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  size: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Premium: Show Real Data
     int good = 0, medium = 0, bad = 0;
 
     for (var e in data) {

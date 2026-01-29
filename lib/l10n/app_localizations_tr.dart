@@ -510,6 +510,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get msgEntrySaved => 'Günlük kaydedildi';
 
   @override
+  String get msgEntryUpdated => 'Kayıt başarıyla güncellendi! ✨';
+
+  @override
   String get shareText => 'Metni Paylaş';
 
   @override
@@ -824,6 +827,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String streakGoalCompleted(int days) {
     return '\n$days günlük seriyi tamamladın!';
   }
+
+  @override
+  String get trialBadge => '7 Gün Ücretsiz';
 
   @override
   String get sectionSocial => 'Sosyal';
@@ -1181,10 +1187,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Modunu düşüren gizli sebepleri bul.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Uyku Analizi 🔒';
+  String get insightTeaserSleepAnalysisTitle => 'Uyku Kalitesi';
 
   @override
-  String get insightTeaserSleepAnalysisDesc => 'Uykun gününü nasıl etkiliyor?';
+  String get insightTeaserSleepAnalysisDesc =>
+      'Uyku kaliten seni nasıl etkiliyor?';
 
   @override
   String get dataCollectionTitle => 'Veri Toplanıyor... ⏳';
