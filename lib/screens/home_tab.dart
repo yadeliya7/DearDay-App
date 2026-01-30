@@ -333,7 +333,11 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       children: [
                         TextSpan(
-                          text: days > 30 ? "Durmak Yok! 🚀\n" : "Tebrikler! ",
+                          text: days > 30
+                              ? "${AppLocalizations.of(context)!.celebrationKeepGoing}\n"
+                              : AppLocalizations.of(
+                                  context,
+                                )!.celebrationCongrats,
                           style: GoogleFonts.poppins(
                             fontSize: days > 30 ? 24 : 16,
                             fontWeight: days > 30
@@ -355,7 +359,11 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                         ] else ...[
-                          TextSpan(text: "İnanılmaz! "),
+                          TextSpan(
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part1,
+                          ),
                           TextSpan(
                             text: label,
                             style: const TextStyle(
@@ -363,9 +371,13 @@ class _HomeTabState extends State<HomeTab> {
                               color: Colors.white,
                             ),
                           ),
-                          TextSpan(text: " alışkanlığında "),
                           TextSpan(
-                            text: "$days. güne ",
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part2,
+                          ),
+                          TextSpan(
+                            text: "$days",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -373,8 +385,9 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                "ulaştın.\nHer 15 günde bir yeni zaferini kutlayacağız!",
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part3,
                           ),
                         ],
                       ],
@@ -392,7 +405,9 @@ class _HomeTabState extends State<HomeTab> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
-                        "🚀 Hedefin otomatik olarak $nextLevel güne yükseltildi!",
+                        AppLocalizations.of(
+                          context,
+                        )!.celebrationGoalUpgraded(nextLevel),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
                           fontSize: 14,
@@ -418,7 +433,13 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                     child: Text(
-                      nextLevel != null ? "Yeni Hedefe Başla" : "Harika!",
+                      nextLevel != null
+                          ? AppLocalizations.of(
+                              context,
+                            )!.celebrationNewGoalButton
+                          : AppLocalizations.of(
+                              context,
+                            )!.celebrationGreatButton,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -786,7 +807,7 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                "Dosya bulunamadı",
+                                AppLocalizations.of(context)!.fileNotFound,
                                 style: GoogleFonts.poppins(
                                   color: Colors.white70,
                                   decoration: TextDecoration.none,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
+import 'package:poem_diary/l10n/app_localizations.dart';
 
 class FullScreenGallery extends StatefulWidget {
   final List<String> imagePaths;
@@ -72,12 +73,58 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
           });
         },
         itemBuilder: (context, index) {
+          final path = widget.imagePaths[index];
+          final ext = path.split('.').last.toLowerCase();
+          final isVideo = ['mp4', 'mov', 'avi', 'mkv'].contains(ext);
+
+          if (isVideo) {
+            // Video placeholder - show play icon and message
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.play_circle_fill,
+                      color: Colors.white,
+                      size: 80,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    AppLocalizations.of(context)!.videoFileTitle,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppLocalizations.of(context)!.videoPlaybackComing,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white54,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Image file - show with zoom
           return InteractiveViewer(
             minScale: 0.5,
             maxScale: 4.0,
             child: Center(
               child: Image.file(
-                File(widget.imagePaths[index]),
+                File(path),
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   return Center(
@@ -91,7 +138,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Unable to load image',
+                          AppLocalizations.of(context)!.unableToLoadImage,
                           style: GoogleFonts.poppins(
                             color: Colors.white54,
                             fontSize: 14,

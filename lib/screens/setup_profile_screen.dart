@@ -311,7 +311,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               await NotificationService().cancelDailyReminder();
             }
           },
-          activeColor: Colors.blueAccent,
+          activeThumbColor: Colors.blueAccent,
         ),
         if (_isReminderEnabled)
           GestureDetector(
@@ -349,7 +349,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${_reminderTime.format(context)}",
+                    _reminderTime.format(context),
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

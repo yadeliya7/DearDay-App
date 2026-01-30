@@ -110,13 +110,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
               final isSelected = _selectedMoodCode == mood.code;
               return GestureDetector(
                 onTap: () {
-                  // 1. Immediate Visual Update
-                  setState(() {
-                    _activeMoodColor = mood.color;
-                    _selectedMoodCode = mood.code;
-                  });
-
-                  // 2. Navigate to DailyDetailScreen
+                  // Navigate to DailyDetailScreen with selected mood
                   Navigator.push(
                     context,
                     MaterialPageRoute(

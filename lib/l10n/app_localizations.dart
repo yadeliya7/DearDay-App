@@ -1088,6 +1088,24 @@ abstract class AppLocalizations {
   /// **'Created with'**
   String get createdWith;
 
+  /// No description provided for @shareMonthlyMood.
+  ///
+  /// In en, this message translates to:
+  /// **'My monthly mood calendar! 📅✨ #DearDay'**
+  String get shareMonthlyMood;
+
+  /// No description provided for @shareYearlyMood.
+  ///
+  /// In en, this message translates to:
+  /// **'My yearly mood calendar! 📅✨ #DearDay'**
+  String get shareYearlyMood;
+
+  /// No description provided for @moodStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'MOOD STATUS'**
+  String get moodStatusLabel;
+
   /// No description provided for @dailyGoals.
   ///
   /// In en, this message translates to:
@@ -1267,6 +1285,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Photo'**
   String get btnAddPhoto;
+
+  /// No description provided for @btnAddVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Video'**
+  String get btnAddVideo;
+
+  /// No description provided for @celebrationKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Going! 🚀'**
+  String get celebrationKeepGoing;
+
+  /// No description provided for @celebrationCongrats.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! '**
+  String get celebrationCongrats;
+
+  /// No description provided for @celebrationOver30Part1.
+  ///
+  /// In en, this message translates to:
+  /// **'Amazing! '**
+  String get celebrationOver30Part1;
+
+  /// No description provided for @celebrationOver30Part2.
+  ///
+  /// In en, this message translates to:
+  /// **' habit reached day '**
+  String get celebrationOver30Part2;
+
+  /// No description provided for @celebrationOver30Part3.
+  ///
+  /// In en, this message translates to:
+  /// **'.\nWe\'ll celebrate your victory every 15 days!'**
+  String get celebrationOver30Part3;
+
+  /// No description provided for @celebrationGoalUpgraded.
+  ///
+  /// In en, this message translates to:
+  /// **'🚀 Your goal has been automatically upgraded to {nextLevel} days!'**
+  String celebrationGoalUpgraded(int nextLevel);
+
+  /// No description provided for @celebrationNewGoalButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Goal'**
+  String get celebrationNewGoalButton;
+
+  /// No description provided for @celebrationGreatButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Great!'**
+  String get celebrationGreatButton;
+
+  /// No description provided for @cannotGoToFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t go to the future yet!'**
+  String get cannotGoToFuture;
+
+  /// No description provided for @videoFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video File'**
+  String get videoFileTitle;
+
+  /// No description provided for @videoPlaybackComing.
+  ///
+  /// In en, this message translates to:
+  /// **'Video playback coming soon'**
+  String get videoPlaybackComing;
+
+  /// No description provided for @unableToLoadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load image'**
+  String get unableToLoadImage;
+
+  /// No description provided for @fileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File not found'**
+  String get fileNotFound;
 
   /// No description provided for @goalDuration.
   ///
@@ -2267,7 +2369,7 @@ abstract class AppLocalizations {
   /// No description provided for @insightTeaserSleepAnalysisTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Status'**
+  /// **'Sleep Status 🔒'**
   String get insightTeaserSleepAnalysisTitle;
 
   /// No description provided for @insightTeaserSleepAnalysisDesc.
@@ -2699,6 +2801,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Settings'**
   String get btnGoToSettings;
+
+  /// No description provided for @exportFileName.
+  ///
+  /// In en, this message translates to:
+  /// **'DearDay Export'**
+  String get exportFileName;
+
+  /// No description provided for @generatingPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating PDF...'**
+  String get generatingPdf;
 }
 
 class _AppLocalizationsDelegate

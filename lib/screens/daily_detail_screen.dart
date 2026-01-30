@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../core/providers.dart';
 import '../core/language_provider.dart';
 import '../widgets/mood_entry_dialog.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
 
 /// DailyDetailScreen: Full-screen daily entry view with horizontal date timeline
 /// Replaces the old modal entry dialog for a more immersive editing experience
@@ -89,7 +90,7 @@ class _DailyDetailScreenState extends State<DailyDetailScreen> {
               isEmbedded: true, // Hide internal header
               date: _selectedDate,
               provider: moodProvider,
-              initialMood: currentEntry?.moodCode ?? widget.initialMoodCode,
+              initialMood: widget.initialMoodCode ?? currentEntry?.moodCode,
               initialNote: currentEntry?.note,
               initialMedia: currentEntry?.mediaPaths ?? [],
               initialActivities: currentEntry?.activities ?? {},
@@ -134,7 +135,7 @@ class _DailyDetailScreenState extends State<DailyDetailScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  "Geleceğe henüz gidemezsin!",
+                  AppLocalizations.of(context)!.cannotGoToFuture,
                   style: GoogleFonts.nunito(color: Colors.white),
                 ),
                 backgroundColor: Colors.orangeAccent,

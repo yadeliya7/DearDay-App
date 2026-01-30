@@ -182,7 +182,7 @@ class MoodEntrySheetState extends State<MoodEntrySheet> {
     });
   }
 
-  Future<void> _pickMedia() async {
+  Future<void> _pickImage() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -197,6 +197,25 @@ class MoodEntrySheetState extends State<MoodEntrySheet> {
       }
       setState(() {
         selectedMedia.add(image.path);
+      });
+    }
+  }
+
+  Future<void> _pickVideo() async {
+    final picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
+
+    if (!mounted) return;
+    final loc = AppLocalizations.of(context)!;
+    if (video != null) {
+      if (selectedMedia.length >= 5) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(loc.maxMediaWarning)));
+        return;
+      }
+      setState(() {
+        selectedMedia.add(video.path);
       });
     }
   }
@@ -1388,40 +1407,98 @@ class MoodEntrySheetState extends State<MoodEntrySheet> {
             ),
           ),
         const SizedBox(height: 12),
-        InkWell(
-          onTap: _pickMedia,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.05)
-                  : Colors.grey[200],
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isDark ? Colors.white24 : Colors.grey[300]!,
-                width: 1,
-                style: BorderStyle.solid,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.add_photo_alternate,
-                  color: Theme.of(context).primaryColor,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  AppLocalizations.of(context)!.btnAddPhoto,
-                  style: GoogleFonts.poppins(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            // Photo Button
+            Expanded(
+              child: InkWell(
+                onTap: _pickImage,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : Colors.grey[300]!,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate,
+                        color: Theme.of(context).primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.btnAddPhoto,
+                        style: GoogleFonts.poppins(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(width: 12),
+            // Video Button
+            Expanded(
+              child: InkWell(
+                onTap: _pickVideo,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : Colors.grey[300]!,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.videocam,
+                        color: Theme.of(context).primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.btnAddVideo,
+                        style: GoogleFonts.poppins(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

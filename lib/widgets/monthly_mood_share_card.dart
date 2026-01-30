@@ -12,6 +12,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
   final Map<String, String> localizedLabels; // For translated names
   final String locale; // e.g. 'tr' or 'en'
   final String footerText; // "Created with DearDay"
+  final String moodStatusLabel; // "MOOD STATUS" or "DUYGU DURUMU"
 
   const MonthlyMoodShareCard({
     super.key,
@@ -23,6 +24,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
     required this.localizedLabels,
     required this.locale,
     required this.footerText,
+    required this.moodStatusLabel,
   });
 
   @override
@@ -84,7 +86,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
 
           // 3. Mood Legend (ALL Moods)
           Text(
-            "DUYGU DURUMU",
+            moodStatusLabel,
             style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: FontWeight.bold,

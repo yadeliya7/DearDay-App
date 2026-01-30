@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../services/relational_analysis_service.dart';
 // import '../models/insight_model.dart'; // Unused import removal
@@ -1203,8 +1202,9 @@ class AnalysisScreen extends StatelessWidget {
           counts[key] = (counts[key] ?? 0) + 1;
         } else if (value is List) {
           for (var item in value) {
-            if (_goalIds.contains(item.toString()))
+            if (_goalIds.contains(item.toString())) {
               continue; // Filter out GOALS from lists if any
+            }
             counts[item.toString()] = (counts[item.toString()] ?? 0) + 1;
           }
         }

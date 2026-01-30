@@ -650,6 +650,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
           localizedLabels: localizedLabels,
           locale: lang.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
           footerText: "${AppLocalizations.of(context)!.createdWith} DearDay",
+          moodStatusLabel: AppLocalizations.of(context)!.moodStatusLabel,
         ),
         delay: const Duration(milliseconds: 100),
         context: context,
@@ -666,7 +667,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
       if (!mounted) return;
       await Share.shareXFiles([
         XFile(imagePath),
-      ], text: 'Bu ayki duygu takvimim! 📅✨ #PoemDiary');
+      ], text: AppLocalizations.of(context)!.shareMonthlyMood);
     } catch (e) {
       debugPrint('Share Error: $e');
       if (mounted) {
@@ -737,6 +738,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
           localizedLabels: localizedLabels,
           locale: lang.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
           footerText: "${AppLocalizations.of(context)!.createdWith} DearDay",
+          moodStatusLabel: AppLocalizations.of(context)!.moodStatusLabel,
         ),
         delay: const Duration(milliseconds: 100),
         context: context,
@@ -750,12 +752,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
 
       // 6. Share
       if (!mounted) return;
-      await Share.shareXFiles(
-        [XFile(imagePath)],
-        text: lang.currentLanguage == 'tr'
-            ? 'Bu yılki duygu takvimim! 📅✨ #DearDay'
-            : 'My yearly mood calendar! 📅✨ #DearDay',
-      );
+      await Share.shareXFiles([
+        XFile(imagePath),
+      ], text: AppLocalizations.of(context)!.shareYearlyMood);
     } catch (e) {
       debugPrint('Share Error: $e');
       if (mounted) {
@@ -976,16 +975,20 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                     padding: const EdgeInsets.only(right: 8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        if (!isImage) return;
-                                        showDialog(
-                                          context: context,
-                                          builder: (ctx) => Dialog(
-                                            backgroundColor: Colors.transparent,
-                                            child: InteractiveViewer(
-                                              child: Image.file(File(path)),
+                                        // Only show dialog for images, skip videos
+                                        if (isImage) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => Dialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: InteractiveViewer(
+                                                child: Image.file(File(path)),
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
+                                        // TODO: Add video player for video files
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),

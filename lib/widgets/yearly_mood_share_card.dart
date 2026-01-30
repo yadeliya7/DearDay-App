@@ -11,6 +11,7 @@ class YearlyMoodShareCard extends StatelessWidget {
   final Map<String, String> localizedLabels;
   final String locale;
   final String footerText;
+  final String moodStatusLabel; // "MOOD STATUS" or "DUYGU DURUMU"
 
   const YearlyMoodShareCard({
     super.key,
@@ -21,13 +22,14 @@ class YearlyMoodShareCard extends StatelessWidget {
     required this.localizedLabels,
     required this.locale,
     required this.footerText,
+    required this.moodStatusLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 450, // Slightly wider for year view
-      padding: const EdgeInsets.all(24),
+      width: 420, // Optimized width for 3 columns
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F9FA),
         borderRadius: BorderRadius.circular(20),
@@ -74,18 +76,18 @@ class YearlyMoodShareCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // 2. Year Grid (12 months in mini format)
           _buildYearGrid(),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           const Divider(),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           // 3. Mood Legend
           Text(
-            locale == 'tr_TR' ? "DUYGU DURUMU" : "MOOD LEGEND",
+            moodStatusLabel,
             style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: FontWeight.bold,
@@ -93,10 +95,10 @@ class YearlyMoodShareCard extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           _buildLegend(),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // 4. Footer
           Row(
@@ -132,9 +134,9 @@ class YearlyMoodShareCard extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3, // 3 months per row = 4 rows
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        childAspectRatio: 1.1,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 0.95, // Taller boxes for better visibility
       ),
       itemCount: 12,
       itemBuilder: (context, index) {
@@ -153,37 +155,46 @@ class YearlyMoodShareCard extends StatelessWidget {
     final firstWeekday = DateTime(year, month, 1).weekday; // 1=Mon, 7=Sun
     final offset = firstWeekday - 1;
 
+    // Calculate how many rows we need (important for 6-week months)
+    final totalCells = offset + daysInMonth;
+    final rowCount = (totalCells / 7).ceil();
+
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(4), // Reduced from 5 to prevent overflow
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Month name
           Text(
             monthName,
             style: GoogleFonts.poppins(
-              fontSize: 11,
+              fontSize: 8,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
           ),
-          const SizedBox(height: 6),
-          // Mini grid
-          Expanded(
+          const SizedBox(height: 2),
+          // Mini grid - Dynamic height based on row count
+          SizedBox(
+            height:
+                rowCount * 14.0 +
+                (rowCount - 1) * 1.0, // Increased cell size for taller boxes
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 2,
+                mainAxisSpacing: 1.0,
+                crossAxisSpacing: 1.0,
+                childAspectRatio: 1.0,
               ),
-              itemCount: offset + daysInMonth,
+              itemCount: totalCells,
               itemBuilder: (context, index) {
                 if (index < offset) {
                   return const SizedBox(); // Empty

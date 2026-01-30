@@ -180,6 +180,12 @@
     "@msgNoPoemSelected": {},
     "createdWith": "ile oluşturuldu",
     "@createdWith": {},
+    "shareMonthlyMood": "Bu ayki duygu takvimim! 📅✨ #DearDay",
+    "@shareMonthlyMood": {},
+    "shareYearlyMood": "Bu yılki duygu takvimim! 📅✨ #DearDay",
+    "@shareYearlyMood": {},
+    "moodStatusLabel": "DUYGU DURUMU",
+    "@moodStatusLabel": {},
     "dailyGoals": "Günlük Hedefler",
     "@dailyGoals": {},
     "homeTitle": "DearDay",
@@ -474,6 +480,27 @@
     "@sectionAppearance": {},
     "dayDetail": "Gün Detayı",
     "btnAddPhoto": "Fotoğraf Ekle",
+    "btnAddVideo": "Video Ekle",
+    "celebrationKeepGoing": "Durmak Yok! 🚀",
+    "celebrationCongrats": "Tebrikler! ",
+    "celebrationOver30Part1": "İnanılmaz! ",
+    "celebrationOver30Part2": " alışkanlığında ",
+    "celebrationOver30Part3": " ulaştın.\nHer 15 günde bir yeni zaferini kutlayacağız!",
+    "celebrationGoalUpgraded": "🚀 Hedefin otomatik olarak {nextLevel} güne yükseltildi!",
+    "@celebrationGoalUpgraded": {
+        "placeholders": {
+            "nextLevel": {
+                "type": "int"
+            }
+        }
+    },
+    "celebrationNewGoalButton": "Yeni Hedefe Başla",
+    "celebrationGreatButton": "Harika!",
+    "cannotGoToFuture": "Geleceğe henüz gidemezsin!",
+    "videoFileTitle": "Video Dosyası",
+    "videoPlaybackComing": "Video oynatma yakında gelecek",
+    "unableToLoadImage": "Resim yüklenemedi",
+    "fileNotFound": "Dosya bulunamadı",
     "introHighEnergy": "Bugün enerjim yerindeydi! {weather}",
     "introLowEnergy": "Biraz yorgun hissettiğim bir gündü. {weather}",
     "introNeutral": "Sakin bir gün geçirdim. {weather}",
@@ -595,7 +622,7 @@
     "insightTeaserSuperPowerDesc": "Hangi aktivite seni %40 daha mutlu ediyor keşfet.",
     "insightTeaserEnergyDrainersTitle": "Enerji Emiciler 🔒",
     "insightTeaserEnergyDrainersDesc": "Modunu düşüren gizli sebepleri bul.",
-    "insightTeaserSleepAnalysisTitle": "Uyku Durumu",
+    "insightTeaserSleepAnalysisTitle": "Uyku Durumu 🔒",
     "insightTeaserSleepAnalysisDesc": "Uyku kaliten seni nasıl etkiliyor?",
     "insightTeaserGoPremiumTitle": "Daha fazlası için Premium ol",
     "insightTeaserGoPremiumDesc": "Sınırsız analiz ve içerik erişimi.",
@@ -747,5 +774,7 @@
     "exactAlarmPermissionMessage": "Günlük hatırlatıcıların tam zamanında çalışması için \"Alarmlar ve Hatırlatıcılar\" iznine ihtiyaç var.\n\nSonraki ekranda:\n1. \"DearDay\" uygulamasını bul\n2. \"Alarms & reminders\" iznini AÇ\n3. Geri dön",
     "@exactAlarmPermissionMessage": {},
     "btnGoToSettings": "Ayarlara Git",
-    "@btnGoToSettings": {}
+    "@btnGoToSettings": {},
+    "exportFileName": "DearDay Dışa Aktarım",
+    "generatingPdf": "PDF Oluşturuluyor..."
 }

@@ -561,6 +561,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get createdWith => 'ile oluşturuldu';
 
   @override
+  String get shareMonthlyMood => 'Bu ayki duygu takvimim! 📅✨ #DearDay';
+
+  @override
+  String get shareYearlyMood => 'Bu yılki duygu takvimim! 📅✨ #DearDay';
+
+  @override
+  String get moodStatusLabel => 'DUYGU DURUMU';
+
+  @override
   String get dailyGoals => 'Günlük Hedefler';
 
   @override
@@ -654,6 +663,51 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get btnAddPhoto => 'Fotoğraf Ekle';
+
+  @override
+  String get btnAddVideo => 'Video Ekle';
+
+  @override
+  String get celebrationKeepGoing => 'Durmak Yok! 🚀';
+
+  @override
+  String get celebrationCongrats => 'Tebrikler! ';
+
+  @override
+  String get celebrationOver30Part1 => 'İnanılmaz! ';
+
+  @override
+  String get celebrationOver30Part2 => ' alışkanlığında ';
+
+  @override
+  String get celebrationOver30Part3 =>
+      ' ulaştın.\nHer 15 günde bir yeni zaferini kutlayacağız!';
+
+  @override
+  String celebrationGoalUpgraded(int nextLevel) {
+    return '🚀 Hedefin otomatik olarak $nextLevel güne yükseltildi!';
+  }
+
+  @override
+  String get celebrationNewGoalButton => 'Yeni Hedefe Başla';
+
+  @override
+  String get celebrationGreatButton => 'Harika!';
+
+  @override
+  String get cannotGoToFuture => 'Geleceğe henüz gidemezsin!';
+
+  @override
+  String get videoFileTitle => 'Video Dosyası';
+
+  @override
+  String get videoPlaybackComing => 'Video oynatma yakında gelecek';
+
+  @override
+  String get unableToLoadImage => 'Resim yüklenemedi';
+
+  @override
+  String get fileNotFound => 'Dosya bulunamadı';
 
   @override
   String get goalDuration => 'Hedef Takip Süresi';
@@ -1187,7 +1241,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Modunu düşüren gizli sebepleri bul.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Uyku Durumu';
+  String get insightTeaserSleepAnalysisTitle => 'Uyku Durumu 🔒';
 
   @override
   String get insightTeaserSleepAnalysisDesc =>
@@ -1422,4 +1476,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get btnGoToSettings => 'Ayarlara Git';
+
+  @override
+  String get exportFileName => 'DearDay Dışa Aktarım';
+
+  @override
+  String get generatingPdf => 'PDF Oluşturuluyor...';
 }

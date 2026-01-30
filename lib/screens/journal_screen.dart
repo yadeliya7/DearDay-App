@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 
 import '../core/providers.dart';
 import '../models/daily_entry_model.dart';
@@ -12,6 +11,7 @@ import '../helpers/localization_helper.dart';
 import '../core/language_provider.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 import 'full_screen_gallery.dart';
+import '../widgets/mood_entry_dialog.dart'; // For buildMediaThumbnail
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -465,17 +465,13 @@ class _JournalCardState extends State<_JournalCard> {
         onTap: () => _openGallery(0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.file(
-            File(paths[0]),
+          child: SizedBox(
             height: 200,
             width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
+            child: buildMediaThumbnail(
+              paths[0],
+              width: double.infinity,
               height: 200,
-              color: Colors.grey.withAlpha(50),
-              child: const Center(
-                child: Icon(Icons.broken_image, color: Colors.grey),
-              ),
             ),
           ),
         ),
@@ -495,20 +491,12 @@ class _JournalCardState extends State<_JournalCard> {
               onTap: () => _openGallery(index),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(paths[index]),
+                child: SizedBox(
                   height: 180,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
+                  child: buildMediaThumbnail(
+                    paths[index],
+                    width: 150,
                     height: 180,
-                    color: Colors.grey.withAlpha(50),
-                    child: const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        color: Colors.white38,
-                        size: 32,
-                      ),
-                    ),
                   ),
                 ),
               ),

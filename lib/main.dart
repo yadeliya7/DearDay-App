@@ -31,12 +31,27 @@ void main() async {
   final reminderMinute = prefs.getInt('daily_reminder_minute');
 
   if (reminderEnabled && reminderHour != null && reminderMinute != null) {
+    // Determine language logic
+    final String languageCode = prefs.getString('language_code') ?? 'tr';
+    String nTit;
+    String nBody;
+
+    if (languageCode == 'tr') {
+      nTit = "Günün nasıl geçti? 🌙";
+      nBody = "Kendine bir not bırakmak ister misin?";
+    } else {
+      nTit = "How was your day? 🌙";
+      nBody = "Would you like to leave a note for yourself?";
+    }
+
     await NotificationService().scheduleDailyReminder(
       TimeOfDay(hour: reminderHour, minute: reminderMinute),
-      'Günlük Hatırlatıcı',
-      'Bugünün günlüğünü yazmayı unutma! ✨',
+      nTit,
+      nBody,
     );
-    debugPrint('✅ Daily reminder restored: $reminderHour:$reminderMinute');
+    debugPrint(
+      '✅ Daily reminder restored: $reminderHour:$reminderMinute ($languageCode)',
+    );
   }
 
   final bool isSetupDone = prefs.getBool('is_setup_done') ?? false;

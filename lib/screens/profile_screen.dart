@@ -100,7 +100,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            moodProvider.userName == "Misafir Kullanıcı"
+                            moodProvider.userName ==
+                                    AppLocalizations.of(context)!.guestUser
                                 ? AppLocalizations.of(context)!.guestUser
                                 : moodProvider.userName,
                             style: GoogleFonts.poppins(
@@ -808,7 +809,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text("PDF Oluşturuluyor...", style: GoogleFonts.poppins()),
+              Text(
+                AppLocalizations.of(context)!.generatingPdf,
+                style: GoogleFonts.poppins(),
+              ),
             ],
           ),
         ),
@@ -831,7 +835,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Navigator.pop(context); // Hide loading
         await Share.shareXFiles([
           XFile(file.path),
-        ], text: 'My Poem Diary Export');
+        ], text: AppLocalizations.of(context)!.exportFileName);
       }
     } catch (e) {
       if (context.mounted) {
@@ -844,9 +848,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _shareApp(BuildContext context) {
-    Share.share(
-      'Check out this amazing journaling app: DearDay! \n\n[App Store Link]',
-    );
+    Share.share(AppLocalizations.of(context)!.shareMessage);
   }
 
   Widget _buildThemeCircle(

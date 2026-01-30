@@ -101,14 +101,37 @@ class PdfExportService {
         locale,
       ).format(entry.date);
 
-      // Load image if exists
-      pw.ImageProvider? entryImage;
-      if (entry.mediaPaths.isNotEmpty) {
-        entryImage = await _loadImage(entry.mediaPaths.first);
+      // 0. Calculate Text Length & Max Photos
+      final storyText = entry.customStory ?? entry.savedStory;
+      final textLength = (storyText?.length ?? 0) + (entry.note?.length ?? 0);
+
+      int maxPhotos = 5;
+      if (textLength > 2500) {
+        maxPhotos = 0;
+      } else if (textLength > 1800) {
+        maxPhotos = 1;
+      } else if (textLength > 1200) {
+        maxPhotos = 2;
+      } else if (textLength > 800) {
+        maxPhotos = 3;
       }
 
-      // 1. Prep Story Text
-      final storyText = entry.customStory ?? entry.savedStory;
+      // Filter for valid images (skip videos) and take max allowed
+      final validImages = entry.mediaPaths
+          .where((path) {
+            final ext = path.toLowerCase();
+            return ext.endsWith('.jpg') ||
+                ext.endsWith('.jpeg') ||
+                ext.endsWith('.png');
+          })
+          .take(maxPhotos)
+          .toList();
+
+      final loadedImages = <pw.ImageProvider>[];
+      for (var path in validImages) {
+        final img = await _loadImage(path);
+        if (img != null) loadedImages.add(img);
+      }
 
       // Build page content
       final pageContent = <pw.Widget>[
@@ -172,20 +195,13 @@ class PdfExportService {
         ],
 
         // Separator between text and media
-        if (entry.mediaPaths.isNotEmpty) ...[
+        if (loadedImages.isNotEmpty) ...[
           pw.SizedBox(height: 20),
           pw.Divider(color: PdfColors.grey300, thickness: 0.5),
           pw.SizedBox(height: 20),
         ],
 
-        pw.SizedBox(height: 20),
-
-        // Photo if exists
-        if (entryImage != null)
-          pw.Container(
-            alignment: pw.Alignment.center,
-            child: pw.Image(entryImage, height: 200, fit: pw.BoxFit.contain),
-          ),
+        pw.Expanded(child: _buildImageGallery(loadedImages)),
 
         pw.Spacer(),
 
@@ -477,6 +493,95 @@ class PdfExportService {
           ),
         ),
       ],
+    );
+  }
+
+  // Helper: Build image gallery based on count
+  pw.Widget _buildImageGallery(List<pw.ImageProvider> images) {
+    if (images.isEmpty) return pw.Container();
+
+    if (images.length == 1) {
+      return pw.Center(
+        child: pw.Image(images.first, height: 250, fit: pw.BoxFit.contain),
+      );
+    }
+
+    if (images.length == 2) {
+      return pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+        children: images
+            .map(
+              (img) => pw.Expanded(
+                child: pw.Container(
+                  height: 180,
+                  margin: const pw.EdgeInsets.all(4),
+                  child: pw.Image(img, fit: pw.BoxFit.cover),
+                ),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (images.length == 3) {
+      return pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+        children: images
+            .map(
+              (img) => pw.Expanded(
+                child: pw.Container(
+                  height: 150,
+                  margin: const pw.EdgeInsets.all(4),
+                  child: pw.Image(img, fit: pw.BoxFit.cover),
+                ),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (images.length == 4) {
+      return pw.Column(
+        children: [
+          pw.Row(
+            children: [_buildGridImage(images[0]), _buildGridImage(images[1])],
+          ),
+          pw.SizedBox(height: 8),
+          pw.Row(
+            children: [_buildGridImage(images[2]), _buildGridImage(images[3])],
+          ),
+        ],
+      );
+    }
+
+    // 5 images
+    return pw.Column(
+      children: [
+        pw.Row(
+          children: [
+            _buildGridImage(images[0], height: 120),
+            _buildGridImage(images[1], height: 120),
+            _buildGridImage(images[2], height: 120),
+          ],
+        ),
+        pw.SizedBox(height: 8),
+        pw.Row(
+          children: [
+            _buildGridImage(images[3], height: 150),
+            _buildGridImage(images[4], height: 150),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget _buildGridImage(pw.ImageProvider img, {double height = 140}) {
+    return pw.Expanded(
+      child: pw.Container(
+        height: height,
+        margin: const pw.EdgeInsets.symmetric(horizontal: 4),
+        child: pw.Image(img, fit: pw.BoxFit.cover),
+      ),
     );
   }
 }

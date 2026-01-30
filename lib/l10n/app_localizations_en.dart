@@ -571,6 +571,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createdWith => 'Created with';
 
   @override
+  String get shareMonthlyMood => 'My monthly mood calendar! 📅✨ #DearDay';
+
+  @override
+  String get shareYearlyMood => 'My yearly mood calendar! 📅✨ #DearDay';
+
+  @override
+  String get moodStatusLabel => 'MOOD STATUS';
+
+  @override
   String get dailyGoals => 'Daily Goals';
 
   @override
@@ -664,6 +673,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btnAddPhoto => 'Add Photo';
+
+  @override
+  String get btnAddVideo => 'Add Video';
+
+  @override
+  String get celebrationKeepGoing => 'Keep Going! 🚀';
+
+  @override
+  String get celebrationCongrats => 'Congratulations! ';
+
+  @override
+  String get celebrationOver30Part1 => 'Amazing! ';
+
+  @override
+  String get celebrationOver30Part2 => ' habit reached day ';
+
+  @override
+  String get celebrationOver30Part3 =>
+      '.\nWe\'ll celebrate your victory every 15 days!';
+
+  @override
+  String celebrationGoalUpgraded(int nextLevel) {
+    return '🚀 Your goal has been automatically upgraded to $nextLevel days!';
+  }
+
+  @override
+  String get celebrationNewGoalButton => 'Start New Goal';
+
+  @override
+  String get celebrationGreatButton => 'Great!';
+
+  @override
+  String get cannotGoToFuture => 'You can\'t go to the future yet!';
+
+  @override
+  String get videoFileTitle => 'Video File';
+
+  @override
+  String get videoPlaybackComing => 'Video playback coming soon';
+
+  @override
+  String get unableToLoadImage => 'Unable to load image';
+
+  @override
+  String get fileNotFound => 'File not found';
 
   @override
   String get goalDuration => 'Goal Duration';
@@ -1197,7 +1251,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Find hidden reasons draining your mood.';
 
   @override
-  String get insightTeaserSleepAnalysisTitle => 'Sleep Status';
+  String get insightTeaserSleepAnalysisTitle => 'Sleep Status 🔒';
 
   @override
   String get insightTeaserSleepAnalysisDesc =>
@@ -1432,4 +1486,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btnGoToSettings => 'Go to Settings';
+
+  @override
+  String get exportFileName => 'DearDay Export';
+
+  @override
+  String get generatingPdf => 'Generating PDF...';
 }
