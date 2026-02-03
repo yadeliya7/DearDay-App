@@ -1495,4 +1495,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get generatingPdf => 'Generating PDF...';
+
+  @override
+  String get restoreSuccess => 'Subscription restored successfully! 🎉';
+
+  @override
+  String get restoreNoSubscription => 'No active subscription found';
+
+  @override
+  String get restoreError => 'An error occurred, please try again';
 }

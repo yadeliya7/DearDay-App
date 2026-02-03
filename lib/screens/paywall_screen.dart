@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 import 'package:poem_diary/services/notification_service.dart';
+import 'package:poem_diary/services/purchase_service.dart';
+import 'package:provider/provider.dart';
+import 'package:poem_diary/core/providers.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'dart:ui';
 import 'dart:math';
 
@@ -18,6 +22,11 @@ class _PaywallScreenState extends State<PaywallScreen>
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
+  // RevenueCat state
+  Offerings? _offerings;
+  bool _isLoading = true;
+  bool _isPurchasing = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +37,135 @@ class _PaywallScreenState extends State<PaywallScreen>
 
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    _loadOfferings();
+  }
+
+  Future<void> _loadOfferings() async {
+    try {
+      final offerings = await PurchaseService().getOfferings();
+      if (mounted) {
+        setState(() {
+          _offerings = offerings;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading offerings: $e');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _handlePurchase() async {
+    if (_offerings?.current == null) {
+      _showError(context, 'No offerings available');
+      return;
+    }
+
+    setState(() => _isPurchasing = true);
+
+    try {
+      Package? selectedPackage;
+
+      switch (_selectedPlan) {
+        case 'monthly':
+          selectedPackage = _offerings!.current!.monthly;
+          break;
+        case 'yearly':
+          selectedPackage = _offerings!.current!.annual;
+          break;
+        case 'lifetime':
+          selectedPackage = _offerings!.current!.lifetime;
+          break;
+      }
+
+      if (selectedPackage == null) {
+        _showError(context, 'Selected plan not available');
+        setState(() => _isPurchasing = false);
+        return;
+      }
+
+      final success = await PurchaseService().purchasePackage(selectedPackage);
+
+      if (success && mounted) {
+        // Update premium status
+        Provider.of<PremiumProvider>(context, listen: false).setPremium(true);
+
+        // Schedule trial reminder if yearly
+        if (_selectedPlan == 'yearly') {
+          NotificationService().scheduleTrialEndingReminder(
+            AppLocalizations.of(context)!.notificationTrialTitle,
+            AppLocalizations.of(context)!.notificationTrialBody,
+          );
+        }
+
+        // Show success and close
+        _showSuccess(context);
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) Navigator.pop(context);
+        });
+      }
+    } catch (e) {
+      debugPrint('Purchase error: $e');
+      if (mounted) _showError(context, 'Purchase failed');
+    } finally {
+      if (mounted) setState(() => _isPurchasing = false);
+    }
+  }
+
+  Future<void> _handleRestore() async {
+    setState(() => _isPurchasing = true);
+
+    try {
+      final success = await PurchaseService().restorePurchases();
+
+      if (success && mounted) {
+        Provider.of<PremiumProvider>(context, listen: false).setPremium(true);
+        _showSuccess(
+          context,
+          message: AppLocalizations.of(context)!.restoreSuccess,
+        );
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) Navigator.pop(context);
+        });
+      } else if (mounted) {
+        _showError(
+          context,
+          AppLocalizations.of(context)!.restoreNoSubscription,
+        );
+      }
+    } catch (e) {
+      debugPrint('Restore error: $e');
+      if (mounted) {
+        _showError(context, AppLocalizations.of(context)!.restoreError);
+      }
+    } finally {
+      if (mounted) setState(() => _isPurchasing = false);
+    }
+  }
+
+  void _showError(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showSuccess(BuildContext context, {String? message}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message ?? 'Purchase successful! ✨'),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -197,55 +335,81 @@ class _PaywallScreenState extends State<PaywallScreen>
                         // 2. SUBSCRIPTION OPTIONS
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            children: [
-                              _buildPlanCard(
-                                id: 'yearly',
-                                title: AppLocalizations.of(context)!.planYearly,
-                                price: AppLocalizations.of(
-                                  context,
-                                )!.priceYearlyMock,
-                                subtitle: AppLocalizations.of(
-                                  context,
-                                )!.priceMonthlyBreakdownMock,
-                                badgeText: AppLocalizations.of(
-                                  context,
-                                )!.bestValue,
-                                trialText: AppLocalizations.of(
-                                  context,
-                                )!.trialBadge,
-                                goldColor: goldColor,
-                              ),
-                              const SizedBox(height: 12),
-                              _buildPlanCard(
-                                id: 'monthly',
-                                title: AppLocalizations.of(
-                                  context,
-                                )!.planMonthly,
-                                price: AppLocalizations.of(
-                                  context,
-                                )!.priceMonthlyMock,
-                                subtitle: null,
-                                badgeText: null,
-                                goldColor: goldColor,
-                              ),
-                              const SizedBox(height: 12),
-                              _buildPlanCard(
-                                id: 'lifetime',
-                                title: AppLocalizations.of(
-                                  context,
-                                )!.planLifetime,
-                                price: AppLocalizations.of(
-                                  context,
-                                )!.priceLifetimeMock,
-                                subtitle: null,
-                                badgeText: AppLocalizations.of(
-                                  context,
-                                )!.badgeOneTime,
-                                goldColor: goldColor,
-                              ),
-                            ],
-                          ),
+                          child: _isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Column(
+                                  children: [
+                                    _buildPlanCard(
+                                      id: 'yearly',
+                                      title: AppLocalizations.of(
+                                        context,
+                                      )!.planYearly,
+                                      price:
+                                          _offerings
+                                              ?.current
+                                              ?.annual
+                                              ?.storeProduct
+                                              .priceString ??
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.priceYearlyMock,
+                                      subtitle: AppLocalizations.of(
+                                        context,
+                                      )!.priceMonthlyBreakdownMock,
+                                      badgeText: AppLocalizations.of(
+                                        context,
+                                      )!.bestValue,
+                                      trialText: AppLocalizations.of(
+                                        context,
+                                      )!.trialBadge,
+                                      goldColor: goldColor,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildPlanCard(
+                                      id: 'monthly',
+                                      title: AppLocalizations.of(
+                                        context,
+                                      )!.planMonthly,
+                                      price:
+                                          _offerings
+                                              ?.current
+                                              ?.monthly
+                                              ?.storeProduct
+                                              .priceString ??
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.priceMonthlyMock,
+                                      subtitle: null,
+                                      badgeText: null,
+                                      goldColor: goldColor,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildPlanCard(
+                                      id: 'lifetime',
+                                      title: AppLocalizations.of(
+                                        context,
+                                      )!.planLifetime,
+                                      price:
+                                          _offerings
+                                              ?.current
+                                              ?.lifetime
+                                              ?.storeProduct
+                                              .priceString ??
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.priceLifetimeMock,
+                                      subtitle: null,
+                                      badgeText: AppLocalizations.of(
+                                        context,
+                                      )!.badgeOneTime,
+                                      goldColor: goldColor,
+                                    ),
+                                  ],
+                                ),
                         ),
 
                         // 3. CTA & FOOTER
@@ -274,20 +438,9 @@ class _PaywallScreenState extends State<PaywallScreen>
                                     ],
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      // Perform Purchase Logic
-                                      if (_selectedPlan == 'yearly') {
-                                        NotificationService()
-                                            .scheduleTrialEndingReminder(
-                                              AppLocalizations.of(
-                                                context,
-                                              )!.notificationTrialTitle,
-                                              AppLocalizations.of(
-                                                context,
-                                              )!.notificationTrialBody,
-                                            );
-                                      }
-                                    },
+                                    onPressed: _isPurchasing
+                                        ? null
+                                        : _handlePurchase,
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       shadowColor: Colors.transparent,
@@ -295,20 +448,32 @@ class _PaywallScreenState extends State<PaywallScreen>
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                     ),
-                                    child: Text(
-                                      _selectedPlan == 'yearly'
-                                          ? AppLocalizations.of(
-                                              context,
-                                            )!.btnStartTrial
-                                          : AppLocalizations.of(
-                                              context,
-                                            )!.btnSubscribe,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                    child: _isPurchasing
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                    Colors.black,
+                                                  ),
+                                            ),
+                                          )
+                                        : Text(
+                                            _selectedPlan == 'yearly'
+                                                ? AppLocalizations.of(
+                                                    context,
+                                                  )!.btnStartTrial
+                                                : AppLocalizations.of(
+                                                    context,
+                                                  )!.btnSubscribe,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -338,6 +503,9 @@ class _PaywallScreenState extends State<PaywallScreen>
                                     AppLocalizations.of(
                                       context,
                                     )!.restorePurchase,
+                                    onTap: _isPurchasing
+                                        ? null
+                                        : _handleRestore,
                                   ),
                                   _buildFooterDivider(),
                                   _buildFooterLink(
@@ -524,9 +692,9 @@ class _PaywallScreenState extends State<PaywallScreen>
     );
   }
 
-  Widget _buildFooterLink(String text) {
+  Widget _buildFooterLink(String text, {VoidCallback? onTap}) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Text(
         text,
         style: GoogleFonts.poppins(

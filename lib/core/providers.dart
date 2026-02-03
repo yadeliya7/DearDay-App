@@ -616,6 +616,11 @@ class PremiumProvider extends ChangeNotifier {
       _settingsBox = await Hive.openBox('settings');
       _isPremium = _settingsBox.get('isPremium', defaultValue: false);
       _isInitialized = true;
+
+      // Sync to SharedPreferences for app lock compatibility
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_premium', _isPremium);
+
       notifyListeners();
     } catch (e) {
       debugPrint('Error initializing PremiumProvider: $e');
@@ -633,7 +638,12 @@ class PremiumProvider extends ChangeNotifier {
     _isPremium = value;
 
     try {
+      // Save to Hive
       await _settingsBox.put('isPremium', value);
+
+      // Also save to SharedPreferences for app lock compatibility
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_premium', value);
     } catch (e) {
       debugPrint('Error saving premium status: $e');
     }

@@ -16,6 +16,7 @@ import 'package:poem_diary/l10n/app_localizations.dart';
 
 import 'package:poem_diary/services/story_content_service.dart';
 import 'package:poem_diary/services/notification_service.dart';
+import 'package:poem_diary/services/purchase_service.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -34,6 +35,9 @@ void main() async {
   await StoryContentService.load();
   await NotificationService().init();
   await NotificationService().requestPermissions();
+
+  // Initialize RevenueCat
+  await PurchaseService().init();
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -110,19 +114,29 @@ class _PoemDiaryAppState extends State<PoemDiaryApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      // Check if App Lock is enabled
+      // Check if App Lock is enabled AND user is premium
       final prefs = await SharedPreferences.getInstance();
       final isLockEnabled = prefs.getBool('app_lock_enabled') ?? false;
+      final isPremium = prefs.getBool('is_premium') ?? false;
+
+      // DEBUG: Print status
+      debugPrint(
+        '🔐 [MainActivity] App Resumed - Lock Enabled: $isLockEnabled, Premium: $isPremium',
+      );
 
       // Check Grace Period & Visibility via Manager
       // If we recently authenticated OR the screen is already visible, don't show it again.
       if (!AppLockManager.shouldRequireAuth() ||
           AppLockManager.isAuthScreenVisible) {
+        debugPrint(
+          '⏭️ [MainActivity] Skipping auth (grace period or already visible)',
+        );
         return;
       }
 
-      // If enabled and auth screen is not already shown, show it
-      if (isLockEnabled) {
+      // Only show auth if BOTH lock is enabled AND user is premium
+      if (isLockEnabled && isPremium) {
+        debugPrint('✅ [MainActivity] Showing auth lock screen');
         AppLockManager.isAuthScreenVisible = true;
 
         // Wait for auth result

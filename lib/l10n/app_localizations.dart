@@ -2819,6 +2819,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generating PDF...'**
   String get generatingPdf;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription restored successfully! 🎉'**
+  String get restoreSuccess;
+
+  /// No description provided for @restoreNoSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'No active subscription found'**
+  String get restoreNoSubscription;
+
+  /// No description provided for @restoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred, please try again'**
+  String get restoreError;
 }
 
 class _AppLocalizationsDelegate

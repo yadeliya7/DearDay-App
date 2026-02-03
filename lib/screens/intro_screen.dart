@@ -68,14 +68,22 @@ class _IntroScreenState extends State<IntroScreen> {
 
                   if (!mounted) return;
 
-                  // Check if app lock is enabled
+                  // Check if app lock is enabled AND user is premium
                   final prefs = await SharedPreferences.getInstance();
                   final isLockEnabled =
                       prefs.getBool('app_lock_enabled') ?? false;
+                  final isPremium = prefs.getBool('is_premium') ?? false;
+
+                  // DEBUG: Print status
+                  debugPrint(
+                    '🔐 [IntroScreen] Lock Enabled: $isLockEnabled, Premium: $isPremium',
+                  );
 
                   if (!mounted) return;
 
-                  if (isLockEnabled) {
+                  // Only show auth if BOTH lock is enabled AND user is premium
+                  if (isLockEnabled && isPremium) {
+                    debugPrint('✅ [IntroScreen] Showing auth lock screen');
                     // Show authentication screen
                     // 1. Tell Manager we are showing it (prevents main.dart from interfering)
                     AppLockManager.isAuthScreenVisible = true;

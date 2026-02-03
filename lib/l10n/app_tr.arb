@@ -779,5 +779,11 @@
     "btnGoToSettings": "Ayarlara Git",
     "@btnGoToSettings": {},
     "exportFileName": "DearDay Dışa Aktarım",
-    "generatingPdf": "PDF Oluşturuluyor..."
+    "generatingPdf": "PDF Oluşturuluyor...",
+    "restoreSuccess": "Aboneliğiniz başarıyla geri yüklendi! 🎉",
+    "@restoreSuccess": {},
+    "restoreNoSubscription": "Aktif bir abonelik bulunamadı",
+    "@restoreNoSubscription": {},
+    "restoreError": "Bir hata oluştu, lütfen tekrar deneyin",
+    "@restoreError": {}
 }

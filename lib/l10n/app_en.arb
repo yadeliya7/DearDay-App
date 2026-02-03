@@ -1076,5 +1076,11 @@
     "exportFileName": "DearDay Export",
     "@exportFileName": {},
     "generatingPdf": "Generating PDF...",
-    "@generatingPdf": {}
+    "@generatingPdf": {},
+    "restoreSuccess": "Subscription restored successfully! 🎉",
+    "@restoreSuccess": {},
+    "restoreNoSubscription": "No active subscription found",
+    "@restoreNoSubscription": {},
+    "restoreError": "An error occurred, please try again",
+    "@restoreError": {}
 }

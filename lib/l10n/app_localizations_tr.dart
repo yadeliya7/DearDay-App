@@ -1485,4 +1485,13 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get generatingPdf => 'PDF Oluşturuluyor...';
+
+  @override
+  String get restoreSuccess => 'Aboneliğiniz başarıyla geri yüklendi! 🎉';
+
+  @override
+  String get restoreNoSubscription => 'Aktif bir abonelik bulunamadı';
+
+  @override
+  String get restoreError => 'Bir hata oluştu, lütfen tekrar deneyin';
 }
