@@ -352,4 +352,23 @@ class ThemeProvider extends ChangeNotifier {
 
   // Get all available theme keys
   static List<String> get availableThemes => _themes.keys.toList();
+
+  // Premium-only themes (all except midnight)
+  static const List<String> premiumThemes = [
+    'peach',
+    'coffee',
+    'nature',
+    'berry',
+    'ocean',
+  ];
+
+  // Check if current theme is premium
+  bool get isCurrentThemePremium => premiumThemes.contains(_selectedThemeKey);
+
+  // Reset to default free theme (midnight) if current theme is premium
+  Future<void> resetToMidnightIfPremiumTheme() async {
+    if (isCurrentThemePremium) {
+      await setTheme('midnight');
+    }
+  }
 }

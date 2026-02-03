@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:poem_diary/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_lock_screen.dart';
+import 'package:poem_diary/services/app_lock_manager.dart';
 
 class IntroScreen extends StatefulWidget {
   final bool isSetupDone;
@@ -76,6 +77,9 @@ class _IntroScreenState extends State<IntroScreen> {
 
                   if (isLockEnabled) {
                     // Show authentication screen
+                    // 1. Tell Manager we are showing it (prevents main.dart from interfering)
+                    AppLockManager.isAuthScreenVisible = true;
+
                     final authenticated = await Navigator.of(context)
                         .push<bool>(
                           MaterialPageRoute(
@@ -83,10 +87,15 @@ class _IntroScreenState extends State<IntroScreen> {
                           ),
                         );
 
+                    // 2. Auth finished
+                    AppLockManager.isAuthScreenVisible = false;
+
                     if (!mounted) return;
 
                     // Only proceed if authenticated
                     if (authenticated == true) {
+                      AppLockManager.recordSuccess(); // 3. Record success time
+
                       Navigator.of(context).pushReplacement(
                         PageRouteBuilder(
                           pageBuilder: (_, __, ___) =>

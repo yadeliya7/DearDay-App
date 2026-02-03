@@ -13,6 +13,15 @@ class AuthService {
     }
   }
 
+  /// Check if the device is supported (has secure lock screen)
+  Future<bool> isDeviceSupported() async {
+    try {
+      return await _auth.isDeviceSupported();
+    } on PlatformException {
+      return false;
+    }
+  }
+
   /// Check if biometrics are available (device has biometrics enrolled)
   Future<bool> isBiometricAvailable() async {
     try {
@@ -39,6 +48,7 @@ class AuthService {
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: false, // Allow PIN/password fallback
+          useErrorDialogs: true,
         ),
       );
     } on PlatformException {

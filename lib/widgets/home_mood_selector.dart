@@ -103,6 +103,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: moodProvider.moods.where((m) => m.code.isNotEmpty).map((
               mood,

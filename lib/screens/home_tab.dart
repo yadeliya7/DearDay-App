@@ -14,6 +14,7 @@ import 'package:line_icons/line_icons.dart';
 import 'main_scaffold.dart';
 
 import '../widgets/home_mood_selector.dart';
+import '../widgets/premium_habit_button.dart';
 import '../helpers/localization_helper.dart';
 import '../helpers/story_generator.dart';
 import 'daily_detail_screen.dart';
@@ -155,9 +156,9 @@ class _HomeTabState extends State<HomeTab> {
     // 1. Check if entry exists (Mood must be selected)
     if (entry == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Lütfen önce yukarıdan ruh halinizi seçin 👆"),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.selectMoodFirst),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -630,127 +631,28 @@ class _HomeTabState extends State<HomeTab> {
               // Active Decoration
               final gradient = getGradient(key);
 
-              // Inactive Color logic (Dark Matte)
+              // Inactive Color logic (Subtle Box)
               final inactiveColor = isDark
-                  ? const Color(0xFF1E2228) // Deep Matte Grey
+                  ? Colors.white.withValues(
+                      alpha: 0.05,
+                    ) // Subtle glass box for dark mode
                   : Colors.white.withValues(
-                      alpha: 0.4,
-                    ); // Glassy White on Cream
-
-              final inactiveBorder = isDark
-                  ? Border.all(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      width: 1,
-                    )
-                  : null; // No border in light mode or faint
+                      alpha: 0.4, // Glassy White on Cream
+                    );
 
               return Padding(
-                padding: const EdgeInsets.only(
-                  right: 12,
-                ), // Spacing between items
-                child: InkWell(
+                padding: const EdgeInsets.only(right: 12),
+                child: PremiumHabitButton(
+                  label: label,
+                  icon: icon,
+                  count: displayStreak,
+                  goalMax: goalMax,
+                  isDone: isDone,
+                  isGoalReached: isGoalReached,
+                  inactiveColor: inactiveColor,
+                  gradient: gradient,
+                  isDark: isDark,
                   onTap: () => _toggleActivity(context, provider, entry, key),
-                  borderRadius: BorderRadius.circular(30),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      // Active: Gradient, Inactive: Soft solid / glass
-                      gradient: isDone
-                          ? (isGoalReached
-                                ? const LinearGradient(
-                                    colors: [
-                                      Color(0xFFFFD700),
-                                      Color(0xFFFFA000),
-                                    ], // Gold
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  )
-                                : gradient)
-                          : null,
-                      color: isDone ? null : inactiveColor,
-                      border: isDone ? null : inactiveBorder,
-                      boxShadow: isDone
-                          ? [
-                              BoxShadow(
-                                color: isGoalReached
-                                    ? Colors.amber.withValues(alpha: 0.4)
-                                    : Colors.black.withValues(
-                                        alpha: 0.3,
-                                      ), // Dark shadow
-                                blurRadius: isGoalReached ? 10 : 6,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : [],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isGoalReached ? LineIcons.trophy : icon,
-                          size: 20,
-                          color: isDone
-                              ? Colors.white
-                              : (isDark
-                                    ? Colors.white38
-                                    : const Color(
-                                        0xFF4E342E,
-                                      )), // Dark Brown for Cream
-                        ),
-                        const SizedBox(width: 8),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              label,
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: isDone
-                                    ? Colors.white
-                                    : (isDark
-                                          ? Colors.white70
-                                          : const Color(
-                                              0xFF4E342E,
-                                            )), // Dark Brown
-                              ),
-                            ),
-                            if (displayStreak > 0)
-                              Row(
-                                children: [
-                                  Icon(
-                                    isGoalReached
-                                        ? Icons.star
-                                        : Icons.local_fire_department,
-                                    size: 10,
-                                    color: isDone
-                                        ? Colors.white.withValues(alpha: 0.8)
-                                        : Colors.orangeAccent,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    "$displayStreak/$goalMax",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 10,
-                                      color: isDone
-                                          ? Colors.white.withValues(alpha: 0.8)
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               );
             },

@@ -26,6 +26,8 @@
     "@addVideo": {},
     "futureWarning": "You haven't lived the future yet!",
     "@futureWarning": {},
+    "selectMoodFirst": "Please select your mood first 👆",
+    "@selectMoodFirst": {},
     "writePoem": "Write Poem",
     "@writePoem": {},
     "search": "Search",

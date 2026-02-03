@@ -296,7 +296,6 @@ class MoodEntrySheetState extends State<MoodEntrySheet> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Building MoodEntrySheet for date: ${widget.date}');
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final loc = AppLocalizations.of(context)!;
 

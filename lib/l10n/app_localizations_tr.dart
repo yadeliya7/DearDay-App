@@ -42,10 +42,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get addPhoto => 'Fotoğraf';
 
   @override
-  String get addVideo => 'Video';
+  String get addVideo => 'Video Ekle';
 
   @override
   String get futureWarning => 'Geleceği henüz yaşamadın!';
+
+  @override
+  String get selectMoodFirst => 'Lütfen önce yukarıdan ruh halinizi seçin 👆';
 
   @override
   String get writePoem => 'Şiir Yaz';
@@ -1269,7 +1272,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Uyku kaliten modunu fazla etkilemiyor.';
 
   @override
-  String get dataCollectionTitle => 'Gathering Data... ⏳';
+  String get dataCollectionTitle => 'Veriler Toplanıyor... ⏳';
 
   @override
   String get dataCollectionDesc =>

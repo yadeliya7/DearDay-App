@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get futureWarning => 'You haven\'t lived the future yet!';
 
   @override
+  String get selectMoodFirst => 'Please select your mood first 👆';
+
+  @override
   String get writePoem => 'Write Poem';
 
   @override

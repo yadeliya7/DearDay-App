@@ -316,14 +316,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ? null // Disable switch for non-premium
                             : (val) async {
                                 if (val) {
-                                  // Check if biometric is available before enabling
+                                  // Check if device is supported (Secure Lock / Biometrics)
                                   final authService = AuthService();
-                                  final isAvailable = await authService
-                                      .isBiometricAvailable();
+                                  final isSupported = await authService
+                                      .isDeviceSupported();
 
                                   if (!mounted) return;
 
-                                  if (!isAvailable) {
+                                  if (!isSupported) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
@@ -681,11 +681,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   value: Provider.of<PremiumProvider>(context).isPremium,
                   activeTrackColor: Colors.amber,
                   activeThumbColor: Colors.white,
-                  onChanged: (val) {
-                    Provider.of<PremiumProvider>(
+                  onChanged: (val) async {
+                    final themeProvider = Provider.of<ThemeProvider>(
                       context,
                       listen: false,
-                    ).setPremium(val);
+                    );
+                    await Provider.of<PremiumProvider>(
+                      context,
+                      listen: false,
+                    ).setPremium(val, themeProvider: themeProvider);
                   },
                   secondary: const Icon(LineIcons.crown, color: Colors.amber),
                 ),

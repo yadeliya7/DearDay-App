@@ -569,29 +569,37 @@ class _JournalCardState extends State<_JournalCard> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        content: TextField(
-          controller: controller,
-          maxLines: 8,
-          style: GoogleFonts.merriweather(
-            color: isDark ? Colors.white : Colors.black87,
-            fontSize: 14,
-          ),
-          decoration: InputDecoration(
-            hintText: lang.currentLanguage == 'tr'
-                ? 'Hikayeni buraya yaz...'
-                : 'Write your story here...',
-            hintStyle: TextStyle(color: Colors.grey.withAlpha(100)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: TextField(
+            controller: controller,
+            maxLines: null, // Allow unlimited lines
+            minLines: 15, // Start with a tall area
+            keyboardType: TextInputType.multiline,
+            scrollPhysics: const BouncingScrollPhysics(),
+            style: GoogleFonts.merriweather(
+              color: isDark ? Colors.white : Colors.black87,
+              fontSize: 14,
+              height: 1.5,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Theme.of(ctx).primaryColor),
+            decoration: InputDecoration(
+              hintText: lang.currentLanguage == 'tr'
+                  ? 'Hikayeni buraya yaz...'
+                  : 'Write your story here...',
+              hintStyle: TextStyle(color: Colors.grey.withAlpha(100)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Theme.of(ctx).primaryColor),
+              ),
+              contentPadding: const EdgeInsets.all(16),
             ),
           ),
         ),

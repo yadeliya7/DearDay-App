@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'You haven\'t lived the future yet!'**
   String get futureWarning;
 
+  /// No description provided for @selectMoodFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your mood first 👆'**
+  String get selectMoodFirst;
+
   /// No description provided for @writePoem.
   ///
   /// In en, this message translates to:

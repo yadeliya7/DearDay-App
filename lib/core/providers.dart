@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
 import 'package:flutter/material.dart';
 
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
+import '../providers/theme_provider.dart';
 
 class PoemProvider extends ChangeNotifier {
   List<Poem> _poems = [];
@@ -601,17 +603,50 @@ class MoodProvider extends ChangeNotifier {
 }
 
 class PremiumProvider extends ChangeNotifier {
+  late Box _settingsBox;
   bool _isPremium = false;
+  bool _isInitialized = false;
+
+  PremiumProvider() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      _settingsBox = await Hive.openBox('settings');
+      _isPremium = _settingsBox.get('isPremium', defaultValue: false);
+      _isInitialized = true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error initializing PremiumProvider: $e');
+      _isPremium = false;
+      _isInitialized = true;
+      notifyListeners();
+    }
+  }
 
   bool get isPremium => _isPremium;
+  bool get isInitialized => _isInitialized;
 
-  void setPremium(bool value) {
+  Future<void> setPremium(bool value, {ThemeProvider? themeProvider}) async {
+    final bool wasDowngrade = _isPremium && !value;
     _isPremium = value;
+
+    try {
+      await _settingsBox.put('isPremium', value);
+    } catch (e) {
+      debugPrint('Error saving premium status: $e');
+    }
+
+    // If downgrading and theme provider is available, reset premium themes
+    if (wasDowngrade && themeProvider != null) {
+      await themeProvider.resetToMidnightIfPremiumTheme();
+    }
+
     notifyListeners();
   }
 
-  void togglePremium() {
-    _isPremium = !_isPremium;
-    notifyListeners();
+  Future<void> togglePremium({ThemeProvider? themeProvider}) async {
+    await setPremium(!_isPremium, themeProvider: themeProvider);
   }
 }
