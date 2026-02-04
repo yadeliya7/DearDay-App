@@ -20,8 +20,33 @@ class PurchaseService {
       await Purchases.configure(PurchasesConfiguration(_apiKey));
       _isInitialized = true;
       debugPrint('✅ RevenueCat initialized successfully');
+
+      // Listen for customer info updates (renewals, expirations, etc.)
+      Purchases.addCustomerInfoUpdateListener((customerInfo) {
+        final isPro =
+            customerInfo.entitlements.all[_entitlementId]?.isActive ?? false;
+        debugPrint('🔄 RevenueCat Update: Pro Status = $isPro');
+        _notifyListeners(isPro);
+      });
     } catch (e) {
       debugPrint('❌ RevenueCat initialization failed: $e');
+    }
+  }
+
+  // Simple listener callback support
+  final List<Function(bool)> _listeners = [];
+
+  void addListener(Function(bool) listener) {
+    _listeners.add(listener);
+  }
+
+  void removeListener(Function(bool) listener) {
+    _listeners.remove(listener);
+  }
+
+  void _notifyListeners(bool isPro) {
+    for (final listener in _listeners) {
+      listener(isPro);
     }
   }
 

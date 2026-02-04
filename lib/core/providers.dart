@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive/hive.dart';
 
 import 'package:flutter/material.dart';
+import 'package:poem_diary/services/purchase_service.dart';
 
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
@@ -614,6 +615,7 @@ class PremiumProvider extends ChangeNotifier {
   Future<void> _init() async {
     try {
       _settingsBox = await Hive.openBox('settings');
+      // 1. Instant Load: Get last known status
       _isPremium = _settingsBox.get('isPremium', defaultValue: false);
       _isInitialized = true;
 
@@ -622,11 +624,47 @@ class PremiumProvider extends ChangeNotifier {
       await prefs.setBool('is_premium', _isPremium);
 
       notifyListeners();
+
+      // 2. Hybrid Async Check: Fetch real status from RevenueCat
+      // This is crucial for expiration testing.
+      // We do this AFTER notifying initially to allow instant UI load.
+      _verifyRealtimeStatus();
+
+      // 3. Listen for future updates (e.g. expiration while open)
+      PurchaseService().addListener(_onPurchaseUpdate);
     } catch (e) {
       debugPrint('Error initializing PremiumProvider: $e');
       _isPremium = false;
       _isInitialized = true;
       notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    PurchaseService().removeListener(_onPurchaseUpdate);
+    super.dispose();
+  }
+
+  void _onPurchaseUpdate(bool isPro) {
+    if (_isPremium != isPro) {
+      debugPrint('🔔 PremiumProvider: System updated premium status to $isPro');
+      setPremium(isPro);
+    }
+  }
+
+  Future<void> _verifyRealtimeStatus() async {
+    // Wait a brief moment to let other services settle
+    await Future.delayed(const Duration(seconds: 2));
+    final isRealPro = await PurchaseService().checkProStatus();
+
+    if (_isPremium != isRealPro) {
+      debugPrint(
+        '⚠️ PremiumProvider: Local status ($_isPremium) differs from Real status ($isRealPro). Updating...',
+      );
+      setPremium(isRealPro);
+    } else {
+      debugPrint('✅ PremiumProvider: Local status verified with server.');
     }
   }
 
