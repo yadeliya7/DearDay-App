@@ -8,6 +8,8 @@ import 'package:poem_diary/core/providers.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'dart:ui';
 import 'dart:math';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaywallScreen extends StatefulWidget {
   const PaywallScreen({super.key});
@@ -357,9 +359,26 @@ class _PaywallScreenState extends State<PaywallScreen>
                                           AppLocalizations.of(
                                             context,
                                           )!.priceYearlyMock,
-                                      subtitle: AppLocalizations.of(
-                                        context,
-                                      )!.priceMonthlyBreakdownMock,
+                                      subtitle:
+                                          _offerings?.current?.annual != null
+                                          ? (() {
+                                              final product = _offerings!
+                                                  .current!
+                                                  .annual!
+                                                  .storeProduct;
+                                              final monthlyPrice =
+                                                  product.price / 12;
+                                              // Create a formatter that uses the currency code (e.g., 'USD', 'TRY')
+                                              final formatter =
+                                                  NumberFormat.simpleCurrency(
+                                                    name: product.currencyCode,
+                                                  );
+                                              // Format the price (this handles symbol placement)
+                                              return "${formatter.format(monthlyPrice)} ${AppLocalizations.of(context)!.perMonthSuffix}";
+                                            })()
+                                          : AppLocalizations.of(
+                                              context,
+                                            )!.priceMonthlyBreakdownMock,
                                       badgeText: AppLocalizations.of(
                                         context,
                                       )!.bestValue,
@@ -510,10 +529,36 @@ class _PaywallScreenState extends State<PaywallScreen>
                                   _buildFooterDivider(),
                                   _buildFooterLink(
                                     AppLocalizations.of(context)!.termsOfUse,
+                                    onTap: () async {
+                                      final url = Uri.parse(
+                                        'https://doc-hosting.flycricket.io/dearday/b2bf9bab-9ff3-445d-8973-9aef9fb49566/terms',
+                                      );
+                                      if (!await launchUrl(url)) {
+                                        if (context.mounted) {
+                                          _showError(
+                                            context,
+                                            'Could not launch $url',
+                                          );
+                                        }
+                                      }
+                                    },
                                   ),
                                   _buildFooterDivider(),
                                   _buildFooterLink(
                                     AppLocalizations.of(context)!.privacyPolicy,
+                                    onTap: () async {
+                                      final url = Uri.parse(
+                                        'https://doc-hosting.flycricket.io/dearday/efe4dc1a-e0f0-41af-a53f-d28e0e512237/privacy',
+                                      );
+                                      if (!await launchUrl(url)) {
+                                        if (context.mounted) {
+                                          _showError(
+                                            context,
+                                            'Could not launch $url',
+                                          );
+                                        }
+                                      }
+                                    },
                                   ),
                                 ],
                               ),

@@ -1,13 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'dart:io';
 
 class PurchaseService {
   static final PurchaseService _instance = PurchaseService._internal();
   factory PurchaseService() => _instance;
   PurchaseService._internal();
 
-  static const String _apiKey = 'test_iehMorCLbOMZoCPBvrnDlXWNdNh';
+  static String get _apiKey {
+    if (Platform.isIOS) {
+      return 'appl_ZjNXZBwKncZNnTCieFDCRHrWUNU';
+    } else if (Platform.isAndroid) {
+      return 'android_key_placeholder'; // TODO: Add Android key when available
+    }
+    return '';
+  }
+
   static const String _entitlementId = 'DearDay Pro';
 
   bool _isInitialized = false;

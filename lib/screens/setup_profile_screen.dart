@@ -9,6 +9,7 @@ import 'main_scaffold.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
 import 'package:poem_diary/services/notification_service.dart';
 import '../helpers/notification_permission_helper.dart';
+import '../core/language_provider.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   final bool isEditMode;
@@ -148,7 +149,41 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 24),
+                // Language Selector
+                Consumer<LanguageProvider>(
+                  builder: (context, languageProvider, child) {
+                    final currentLang =
+                        languageProvider.currentLocale.languageCode;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.white10 : Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildLanguageOption(
+                            context,
+                            'tr',
+                            '🇹🇷 Türkçe',
+                            currentLang == 'tr',
+                            languageProvider,
+                          ),
+                          _buildLanguageOption(
+                            context,
+                            'en',
+                            '🇬🇧 English',
+                            currentLang == 'en',
+                            languageProvider,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 32),
               ] else ...[
                 const SizedBox(height: 20),
               ],
@@ -261,6 +296,37 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    String code,
+    String label,
+    bool isSelected,
+    LanguageProvider provider,
+  ) {
+    return GestureDetector(
+      onTap: () => provider.setLocale(Locale(code)),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blueAccent : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected
+                ? Colors.white
+                : (Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white70
+                      : Colors.black54),
           ),
         ),
       ),

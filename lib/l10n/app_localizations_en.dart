@@ -1141,7 +1141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeTitle => 'Welcome! 👋';
 
   @override
-  String get welcomeSubtitle => 'Let\'s meet... How should we address you?';
+  String get welcomeSubtitle => 'How should we address you?';
 
   @override
   String get nameHint => 'Your Name';
@@ -1504,4 +1504,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restoreError => 'An error occurred, please try again';
+
+  @override
+  String get perMonthSuffix => '/ month';
 }

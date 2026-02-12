@@ -810,7 +810,7 @@
     "@editProfileTitle": {},
     "welcomeTitle": "Welcome! 👋",
     "@welcomeTitle": {},
-    "welcomeSubtitle": "Let's meet... How should we address you?",
+    "welcomeSubtitle": "How should we address you?",
     "@welcomeSubtitle": {},
     "nameHint": "Your Name",
     "@nameHint": {},
@@ -1082,5 +1082,7 @@
     "restoreNoSubscription": "No active subscription found",
     "@restoreNoSubscription": {},
     "restoreError": "An error occurred, please try again",
-    "@restoreError": {}
+    "@restoreError": {},
+    "perMonthSuffix": "/ month",
+    "@perMonthSuffix": {}
 }

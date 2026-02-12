@@ -1131,7 +1131,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get welcomeTitle => 'Hoşgeldin! 👋';
 
   @override
-  String get welcomeSubtitle => 'Tanışalım... Seni nasıl hitap etmeliyiz?';
+  String get welcomeSubtitle => 'Sana nasıl hitap etmeliyiz?';
 
   @override
   String get nameHint => 'Adınız';
@@ -1494,4 +1494,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get restoreError => 'Bir hata oluştu, lütfen tekrar deneyin';
+
+  @override
+  String get perMonthSuffix => '/ ay';
 }

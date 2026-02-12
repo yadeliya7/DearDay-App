@@ -2171,7 +2171,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s meet... How should we address you?'**
+  /// **'How should we address you?'**
   String get welcomeSubtitle;
 
   /// No description provided for @nameHint.
@@ -2837,6 +2837,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred, please try again'**
   String get restoreError;
+
+  /// No description provided for @perMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'/ month'**
+  String get perMonthSuffix;
 }
 
 class _AppLocalizationsDelegate

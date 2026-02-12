@@ -590,7 +590,7 @@
     "aboutContact": "İletişim",
     "editProfileTitle": "Profili Düzenle",
     "welcomeTitle": "Hoşgeldin! 👋",
-    "welcomeSubtitle": "Tanışalım... Seni nasıl hitap etmeliyiz?",
+    "welcomeSubtitle": "Sana nasıl hitap etmeliyiz?",
     "nameHint": "Adınız",
     "saveBtn": "Kaydet",
     "startBtn": "Başla",
@@ -785,5 +785,7 @@
     "restoreNoSubscription": "Aktif bir abonelik bulunamadı",
     "@restoreNoSubscription": {},
     "restoreError": "Bir hata oluştu, lütfen tekrar deneyin",
-    "@restoreError": {}
+    "@restoreError": {},
+    "perMonthSuffix": "/ ay",
+    "@perMonthSuffix": {}
 }
