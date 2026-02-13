@@ -183,7 +183,7 @@ class NotificationService {
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.wallClockTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -209,7 +209,7 @@ class NotificationService {
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.wallClockTime,
     );
   }
 
@@ -263,7 +263,7 @@ class NotificationService {
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.wallClockTime,
     );
 
     debugPrint('✅ Test notification scheduled successfully!');
@@ -308,7 +308,7 @@ class NotificationService {
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+            UILocalNotificationDateInterpretation.wallClockTime,
       );
 
       debugPrint('✅ 10-second test scheduled successfully!');
