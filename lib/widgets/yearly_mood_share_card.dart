@@ -28,7 +28,7 @@ class YearlyMoodShareCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 420, // Optimized width for 3 columns
+      width: 440, // Optimized width for 3 columns with better spacing
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F9FA),
@@ -136,7 +136,7 @@ class YearlyMoodShareCard extends StatelessWidget {
         crossAxisCount: 3, // 3 months per row = 4 rows
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 0.95, // Taller boxes for better visibility
+        childAspectRatio: 1.0, // Square boxes for better layout
       ),
       itemCount: 12,
       itemBuilder: (context, index) {
@@ -160,61 +160,65 @@ class YearlyMoodShareCard extends StatelessWidget {
     final rowCount = (totalCells / 7).ceil();
 
     return Container(
-      padding: const EdgeInsets.all(4), // Reduced from 5 to prevent overflow
+      padding: const EdgeInsets.all(4), // Reduced to 4 to prevent overflow
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Month name
-          Text(
-            monthName,
-            style: GoogleFonts.poppins(
-              fontSize: 8,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 2),
-          // Mini grid - Dynamic height based on row count
-          SizedBox(
-            height:
-                rowCount * 14.0 +
-                (rowCount - 1) * 1.0, // Increased cell size for taller boxes
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                mainAxisSpacing: 1.0,
-                crossAxisSpacing: 1.0,
-                childAspectRatio: 1.0,
+      child: ClipRect(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Month name
+            Text(
+              monthName,
+              style: GoogleFonts.poppins(
+                fontSize: 8,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
-              itemCount: totalCells,
-              itemBuilder: (context, index) {
-                if (index < offset) {
-                  return const SizedBox(); // Empty
-                }
-
-                final day = index - offset + 1;
-                final dateKey =
-                    '${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
-                final mood = dailyMoods[dateKey];
-
-                return Container(
-                  decoration: BoxDecoration(
-                    color: mood?.color ?? Colors.grey.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                );
-              },
             ),
-          ),
-        ],
+            const SizedBox(
+              height: 0,
+            ), // Removed spacing to prevent 1px overflow
+            // Mini grid - Dynamic height based on row count
+            SizedBox(
+              height:
+                  rowCount * 14.0 +
+                  (rowCount - 1) * 1.0, // Reduced cell size to prevent overflow
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
+                  mainAxisSpacing: 1.0,
+                  crossAxisSpacing: 1.0,
+                  childAspectRatio: 1.0,
+                ),
+                itemCount: totalCells,
+                itemBuilder: (context, index) {
+                  if (index < offset) {
+                    return const SizedBox(); // Empty
+                  }
+
+                  final day = index - offset + 1;
+                  final dateKey =
+                      '${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+                  final mood = dailyMoods[dateKey];
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: mood?.color ?? Colors.grey.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

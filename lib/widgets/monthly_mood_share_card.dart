@@ -177,14 +177,17 @@ class MonthlyMoodShareCard extends StatelessWidget {
             color: mood?.color ?? Colors.grey.withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: mood == null
-                ? Border.all(color: Colors.grey.withValues(alpha: 0.2))
+                ? Border.all(
+                    color: Colors.grey.withValues(alpha: 0.3),
+                    width: 1.5,
+                  )
                 : null,
           ),
           alignment: Alignment.center,
           child: Text(
             '$dayNum',
             style: GoogleFonts.poppins(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: mood != null ? Colors.white : Colors.grey[700],
             ),
