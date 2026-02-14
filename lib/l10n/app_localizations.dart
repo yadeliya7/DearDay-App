@@ -2123,13 +2123,13 @@ abstract class AppLocalizations {
   /// No description provided for @aboutContentTitle.
   ///
   /// In en, this message translates to:
-  /// **'Content & Poems'**
+  /// **'Features & Content'**
   String get aboutContentTitle;
 
   /// No description provided for @aboutContentDesc.
   ///
   /// In en, this message translates to:
-  /// **'Poems and quotes in the app are for motivation and cultural sharing purposes. Content can be edited upon request of rights holders.'**
+  /// **'DearDay offers mood tracking, habit monitoring, insights, and personalized stories to help you on your self-awareness journey.'**
   String get aboutContentDesc;
 
   /// No description provided for @aboutLegalTitle.

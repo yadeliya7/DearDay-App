@@ -36,668 +36,532 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
+        child: ListView(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
+          children: [
+            const SizedBox(height: 20),
 
-              // Header
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigate to SetupProfileScreen for Editing
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const SetupProfileScreen(isEditMode: true),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey.withValues(alpha: 0.1),
-                            backgroundImage:
-                                moodProvider.profileImagePath != null
-                                ? FileImage(
-                                    File(moodProvider.profileImagePath!),
-                                  )
-                                : null,
-                            child: moodProvider.profileImagePath == null
-                                ? const Icon(
-                                    LineIcons.user,
-                                    size: 50,
-                                    color: Colors.grey,
-                                  )
-                                : null,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.blueAccent,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            moodProvider.userName ==
-                                    AppLocalizations.of(context)!.guestUser
-                                ? AppLocalizations.of(context)!.guestUser
-                                : moodProvider.userName,
-                            style: GoogleFonts.poppins(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.white : Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            Icons.edit,
-                            size: 16,
-                            color: Colors.grey.withValues(alpha: 0.5),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // Premium Card
-              GestureDetector(
+            // Header
+            Center(
+              child: GestureDetector(
                 onTap: () {
+                  // Navigate to SetupProfileScreen for Editing
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PaywallScreen(),
+                      builder: (_) =>
+                          const SetupProfileScreen(isEditMode: true),
                     ),
                   );
                 },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFDAA520), Color(0xFF8E44AD)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                          backgroundImage: moodProvider.profileImagePath != null
+                              ? FileImage(File(moodProvider.profileImagePath!))
+                              : null,
+                          child: moodProvider.profileImagePath == null
+                              ? const Icon(
+                                  LineIcons.user,
+                                  size: 50,
+                                  color: Colors.grey,
+                                )
+                              : null,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.blueAccent,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFDAA520).withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          moodProvider.userName ==
+                                  AppLocalizations.of(context)!.guestUser
+                              ? AppLocalizations.of(context)!.guestUser
+                              : moodProvider.userName,
+                          style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? Colors.white : Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.grey.withValues(alpha: 0.5),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ...existing code...
+            // --- GÖRÜNÜM (APPEARANCE) ---
+            Text(
+              AppLocalizations.of(context)!.sectionAppearance,
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Theme Switch
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(
+                  context,
+                ).cardColor, // Use card color instead of transparent
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SwitchListTile(
+                secondary: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white12 : Colors.white,
+                    shape: BoxShape.circle,
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
+                  child: Icon(
+                    isDark ? Icons.dark_mode : Icons.light_mode,
+                    color: Colors.purpleAccent,
+                    size: 20,
+                  ),
+                ),
+                title: Text(
+                  AppLocalizations.of(context)!.darkMode,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
+                ),
+                value: themeProvider.isDarkMode,
+                activeTrackColor: Colors.purpleAccent,
+                activeThumbColor: Colors.white,
+                onChanged: (val) => themeProvider.setDarkMode(val),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // App Lock Switch
+            Builder(
+              builder: (context) {
+                final isPremium = Provider.of<PremiumProvider>(
+                  context,
+                ).isPremium;
+                final isLocked = !isPremium;
+
+                return GestureDetector(
+                  onTap: isLocked
+                      ? () {
+                          // Redirect to paywall when tapped and locked
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PaywallScreen(),
+                            ),
+                          );
+                        }
+                      : null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: SwitchListTile(
+                      secondary: Container(
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: isDark ? Colors.white12 : Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          LineIcons.crown,
-                          color: Colors.white,
-                          size: 30,
+                        child: Icon(
+                          LineIcons.lock,
+                          color: isLocked ? Colors.grey : Colors.deepOrange,
+                          size: 20,
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.goPremium,
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              AppLocalizations.of(context)!.premiumDesc,
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
+                      title: Text(
+                        AppLocalizations.of(context)!.appLock,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          color: isLocked
+                              ? Colors.grey
+                              : (isDark ? Colors.white : Colors.black87),
                         ),
                       ),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white70,
-                        size: 16,
+                      subtitle: Text(
+                        isLocked
+                            ? '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}'
+                            : AppLocalizations.of(context)!.appLockDesc,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      value: isPremium ? moodProvider.isLockEnabled : false,
+                      activeTrackColor: Colors.deepOrange,
+                      activeThumbColor: Colors.white,
+                      onChanged: isLocked
+                          ? null // Disable switch for non-premium
+                          : (val) async {
+                              if (val) {
+                                // Check if device is supported (Secure Lock / Biometrics)
+                                final authService = AuthService();
+                                final isSupported = await authService
+                                    .isDeviceSupported();
+
+                                if (!mounted) return;
+
+                                if (!isSupported) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.biometricNotAvailable,
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                              }
+                              moodProvider.setLockEnabled(val);
+                            },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+
+            // Theme Selection
+            Text(
+              AppLocalizations.of(context)!.themeSelectionTitle,
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor, // Use card color
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.palette,
+                        color: isDark ? Colors.white70 : Colors.black54,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.themeColorTitle,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              // --- GÖRÜNÜM (APPEARANCE) ---
-              Text(
-                AppLocalizations.of(context)!.sectionAppearance,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Theme Switch
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).cardColor, // Use card color instead of transparent
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: SwitchListTile(
-                  secondary: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white12 : Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isDark ? Icons.dark_mode : Icons.light_mode,
-                      color: Colors.purpleAccent,
-                      size: 20,
-                    ),
-                  ),
-                  title: Text(
-                    AppLocalizations.of(context)!.darkMode,
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
-                  ),
-                  value: themeProvider.isDarkMode,
-                  activeTrackColor: Colors.purpleAccent,
-                  activeThumbColor: Colors.white,
-                  onChanged: (val) => themeProvider.setDarkMode(val),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // App Lock Switch
-              Builder(
-                builder: (context) {
-                  final isPremium = Provider.of<PremiumProvider>(
-                    context,
-                  ).isPremium;
-                  final isLocked = !isPremium;
-
-                  return GestureDetector(
-                    onTap: isLocked
-                        ? () {
-                            // Redirect to paywall when tapped and locked
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PaywallScreen(),
-                              ),
-                            );
-                          }
-                        : null,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: SwitchListTile(
-                        secondary: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.white12 : Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            LineIcons.lock,
-                            color: isLocked ? Colors.grey : Colors.deepOrange,
-                            size: 20,
-                          ),
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)!.appLock,
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            color: isLocked
-                                ? Colors.grey
-                                : (isDark ? Colors.white : Colors.black87),
-                          ),
-                        ),
-                        subtitle: Text(
-                          isLocked
-                              ? '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}'
-                              : AppLocalizations.of(context)!.appLockDesc,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        value: isPremium ? moodProvider.isLockEnabled : false,
-                        activeTrackColor: Colors.deepOrange,
-                        activeThumbColor: Colors.white,
-                        onChanged: isLocked
-                            ? null // Disable switch for non-premium
-                            : (val) async {
-                                if (val) {
-                                  // Check if device is supported (Secure Lock / Biometrics)
-                                  final authService = AuthService();
-                                  final isSupported = await authService
-                                      .isDeviceSupported();
-
-                                  if (!mounted) return;
-
-                                  if (!isSupported) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.biometricNotAvailable,
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-                                }
-                                moodProvider.setLockEnabled(val);
-                              },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-
-              // Theme Selection
-              Text(
-                AppLocalizations.of(context)!.themeSelectionTitle,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor, // Use card color
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 90, // Fixed height for horizontal scroll
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: [
-                        Icon(
-                          Icons.palette,
-                          color: isDark ? Colors.white70 : Colors.black54,
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'peach',
+                          color: const Color(0xFFFF7043),
+                          label: AppLocalizations.of(context)!.themePeach,
+                          isSelected: themeProvider.selectedThemeKey == 'peach',
                         ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.themeColorTitle,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? Colors.white : Colors.black87,
-                          ),
+                        const SizedBox(width: 16),
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'coffee',
+                          color: const Color(0xFF6D4C41),
+                          label: AppLocalizations.of(context)!.themeCoffee,
+                          isSelected:
+                              themeProvider.selectedThemeKey == 'coffee',
+                        ),
+                        const SizedBox(width: 16),
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'ocean',
+                          color: const Color(0xFF0277BD),
+                          label: AppLocalizations.of(context)!.themeOcean,
+                          isSelected: themeProvider.selectedThemeKey == 'ocean',
+                        ),
+                        const SizedBox(width: 16),
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'nature',
+                          color: const Color(0xFF2E7D32),
+                          label: AppLocalizations.of(context)!.themeNature,
+                          isSelected:
+                              themeProvider.selectedThemeKey == 'nature',
+                        ),
+                        const SizedBox(width: 16),
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'berry',
+                          color: const Color(0xFFAD1457),
+                          label: AppLocalizations.of(context)!.themeBerry,
+                          isSelected: themeProvider.selectedThemeKey == 'berry',
+                        ),
+                        const SizedBox(width: 16),
+                        _buildThemeCircle(
+                          context,
+                          themeKey: 'midnight',
+                          color: const Color(0xFF424242),
+                          label: AppLocalizations.of(context)!.themeMidnight,
+                          isSelected:
+                              themeProvider.selectedThemeKey == 'midnight',
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 90, // Fixed height for horizontal scroll
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'peach',
-                            color: const Color(0xFFFF7043),
-                            label: AppLocalizations.of(context)!.themePeach,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'peach',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'coffee',
-                            color: const Color(0xFF6D4C41),
-                            label: AppLocalizations.of(context)!.themeCoffee,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'coffee',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'ocean',
-                            color: const Color(0xFF0277BD),
-                            label: AppLocalizations.of(context)!.themeOcean,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'ocean',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'nature',
-                            color: const Color(0xFF2E7D32),
-                            label: AppLocalizations.of(context)!.themeNature,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'nature',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'berry',
-                            color: const Color(0xFFAD1457),
-                            label: AppLocalizations.of(context)!.themeBerry,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'berry',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildThemeCircle(
-                            context,
-                            themeKey: 'midnight',
-                            color: const Color(0xFF424242),
-                            label: AppLocalizations.of(context)!.themeMidnight,
-                            isSelected:
-                                themeProvider.selectedThemeKey == 'midnight',
-                          ),
-                        ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Language Switch
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(
+                  context,
+                ).cardColor, // Use card color for visibility
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SwitchListTile(
+                secondary: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.black26 : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.language,
+                    color: Colors.blueAccent,
+                    size: 20,
+                  ),
+                ),
+                title: Text(
+                  '${AppLocalizations.of(context)!.settingsLanguage}: ${languageProvider.currentLanguage == 'tr' ? 'Türkçe' : 'English'}',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
+                ),
+                value: languageProvider.currentLanguage == 'en',
+                activeTrackColor: Colors.blueAccent,
+                activeThumbColor: Colors.white,
+                onChanged: (val) => languageProvider.toggleLanguage(),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // --- AYARLAR (SETTINGS) ---
+            Text(
+              AppLocalizations.of(context)!.sectionOther,
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Goal Duration Setting
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor, // Use card color
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        LineIcons.bullseye,
+                        color: isDark ? Colors.white70 : Colors.black54,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Language Switch
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).cardColor, // Use card color for visibility
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: SwitchListTile(
-                  secondary: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.black26 : Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.language,
-                      color: Colors.blueAccent,
-                      size: 20,
-                    ),
-                  ),
-                  title: Text(
-                    '${AppLocalizations.of(context)!.settingsLanguage}: ${languageProvider.currentLanguage == 'tr' ? 'Türkçe' : 'English'}',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
-                  ),
-                  value: languageProvider.currentLanguage == 'en',
-                  activeTrackColor: Colors.blueAccent,
-                  activeThumbColor: Colors.white,
-                  onChanged: (val) => languageProvider.toggleLanguage(),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // --- AYARLAR (SETTINGS) ---
-              Text(
-                AppLocalizations.of(context)!.sectionOther,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Goal Duration Setting
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor, // Use card color
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          LineIcons.bullseye,
-                          color: isDark ? Colors.white70 : Colors.black54,
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.goalDuration,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          color: isDark ? Colors.white : Colors.black87,
                         ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.goalDuration,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: isDark ? Colors.white : Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final options = [7, 14, 21, 30];
-                        // Calculate width for 4 items with spacing
-                        final itemWidth = (constraints.maxWidth - (3 * 8)) / 4;
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final options = [7, 14, 21, 30];
+                      // Calculate width for 4 items with spacing
+                      final itemWidth = (constraints.maxWidth - (3 * 8)) / 4;
 
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: options.map((days) {
-                            final isSelected =
-                                moodProvider.goalDuration == days;
-                            return InkWell(
-                              onTap: () => moodProvider.setGoalDuration(days),
-                              borderRadius: BorderRadius.circular(12),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                width: itemWidth,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: options.map((days) {
+                          final isSelected = moodProvider.goalDuration == days;
+                          return InkWell(
+                            onTap: () => moodProvider.setGoalDuration(days),
+                            borderRadius: BorderRadius.circular(12),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: itemWidth,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context).primaryColor
+                                    : (isDark
+                                          ? Colors.white10
+                                          : Colors.grey[200]),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
                                   color: isSelected
                                       ? Theme.of(context).primaryColor
-                                      : (isDark
-                                            ? Colors.white10
-                                            : Colors.grey[200]),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? Theme.of(context).primaryColor
-                                        : Colors.transparent,
-                                  ),
-                                  boxShadow: isSelected
-                                      ? [
-                                          BoxShadow(
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withValues(alpha: 0.3),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 4),
-                                          ),
-                                        ]
-                                      : [],
+                                      : Colors.transparent,
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.daysSuffix(days),
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.normal,
-                                      color: isSelected
-                                          ? Colors.white
-                                          : (isDark
-                                                ? Colors.white70
-                                                : Colors.black87),
-                                    ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: Theme.of(
+                                            context,
+                                          ).primaryColor.withValues(alpha: 0.3),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ]
+                                    : [],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.daysSuffix(days),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : (isDark
+                                              ? Colors.white70
+                                              : Colors.black87),
                                   ),
                                 ),
                               ),
-                            );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Export to PDF (Premium Feature)
-              _buildSettingTile(
-                context,
-                icon: Icons.picture_as_pdf,
-                title: AppLocalizations.of(context)!.exportToPdf,
-                subtitle: Provider.of<PremiumProvider>(context).isPremium
-                    ? AppLocalizations.of(context)!.exportToPdfDesc
-                    : '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}',
-                onTap: () => _exportToPdf(context),
-                isDark: isDark,
-                isPremiumFeature: true,
-              ),
-
-              const SizedBox(height: 10),
-
-              // Share
-              _buildSettingTile(
-                context,
-                icon: LineIcons.share,
-                title: AppLocalizations.of(context)!.shareApp,
-                onTap: () => _shareApp(context),
-                isDark: isDark,
-              ),
-
-              const SizedBox(height: 10),
-
-              // About
-              _buildSettingTile(
-                context,
-                icon: LineIcons.infoCircle,
-                title: AppLocalizations.of(context)!.about,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AboutScreen()),
-                  );
-                },
-                isDark: isDark,
-              ),
-
-              const SizedBox(height: 40),
-
-              // DEV TOOLS: Premium Toggle
-              Container(
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.amber.withValues(alpha: 0.1)
-                      : Colors.amber.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.amber.withValues(alpha: 0.3),
-                    width: 1,
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
-                ),
-                child: SwitchListTile(
-                  title: Text(
-                    "Test: Premium Status",
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? Colors.amberAccent
-                          : Colors.amber.shade800,
-                    ),
-                  ),
-                  subtitle: Text(
-                    "Toggle to see Free vs Premium UI",
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: isDark ? Colors.white70 : Colors.black54,
-                    ),
-                  ),
-                  value: Provider.of<PremiumProvider>(context).isPremium,
-                  activeTrackColor: Colors.amber,
-                  activeThumbColor: Colors.white,
-                  onChanged: (val) async {
-                    final themeProvider = Provider.of<ThemeProvider>(
-                      context,
-                      listen: false,
-                    );
-                    await Provider.of<PremiumProvider>(
-                      context,
-                      listen: false,
-                    ).setPremium(val, themeProvider: themeProvider);
-                  },
-                  secondary: const Icon(LineIcons.crown, color: Colors.amber),
-                ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 100), // Increased for floating bottom bar
-            ],
-          ),
+            const SizedBox(height: 20),
+
+            // Export to PDF (Premium Feature)
+            _buildSettingTile(
+              context,
+              icon: Icons.picture_as_pdf,
+              title: AppLocalizations.of(context)!.exportToPdf,
+              subtitle: Provider.of<PremiumProvider>(context).isPremium
+                  ? AppLocalizations.of(context)!.exportToPdfDesc
+                  : '🔒 ${AppLocalizations.of(context)!.premiumFeatureLocked}',
+              onTap: () => _exportToPdf(context),
+              isDark: isDark,
+              isPremiumFeature: true,
+            ),
+
+            const SizedBox(height: 10),
+
+            // Share
+            _buildSettingTile(
+              context,
+              icon: LineIcons.share,
+              title: AppLocalizations.of(context)!.shareApp,
+              onTap: () => _shareApp(context),
+              isDark: isDark,
+            ),
+
+            const SizedBox(height: 10),
+
+            // About
+            _buildSettingTile(
+              context,
+              icon: LineIcons.infoCircle,
+              title: AppLocalizations.of(context)!.about,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AboutScreen()),
+                );
+              },
+              isDark: isDark,
+            ),
+
+            const SizedBox(
+              height: 120,
+            ), // Extra padding for bottom navigation bar
+          ],
         ),
       ),
     );

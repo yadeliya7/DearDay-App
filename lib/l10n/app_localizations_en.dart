@@ -1115,11 +1115,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your data is stored entirely **offline** on your device. It is never sent to any server.';
 
   @override
-  String get aboutContentTitle => 'Content & Poems';
+  String get aboutContentTitle => 'Features & Content';
 
   @override
   String get aboutContentDesc =>
-      'Poems and quotes in the app are for motivation and cultural sharing purposes. Content can be edited upon request of rights holders.';
+      'DearDay offers mood tracking, habit monitoring, insights, and personalized stories to help you on your self-awareness journey.';
 
   @override
   String get aboutLegalTitle => 'Legal Warning';

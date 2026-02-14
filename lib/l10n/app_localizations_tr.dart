@@ -1105,11 +1105,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Verileriniz tamamen **çevrimdışı (offline)** olarak kendi cihazınızda saklanır. Hiçbir sunucuya gönderilmez.';
 
   @override
-  String get aboutContentTitle => 'İçerik & Şiirler';
+  String get aboutContentTitle => 'Özellikler & İçerik';
 
   @override
   String get aboutContentDesc =>
-      'Uygulamadaki şiirler ve alıntılar, motivasyon ve kültürel paylaşım amaçlıdır. Hak sahiplerinin talebi doğrultusunda içerik düzenlenebilir.';
+      'DearDay, ruh hali takibi, alışkanlık izleme, öngörüler ve kişiselleştirilmiş hikayeler sunarak öz farkındalık yolculuğunuzda size yardımcı olur.';
 
   @override
   String get aboutLegalTitle => 'Yasal Uyarı';
