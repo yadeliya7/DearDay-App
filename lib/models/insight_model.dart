@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum InsightType { positiveActivity, negativeActivity, timeBased, sleepFactor }
+enum InsightType {
+  positiveActivity,
+  negativeActivity,
+  timeBased,
+  sleepFactor,
+  magicDuo,
+  bestDayPattern,
+  moodStability,
+}
 
 class InsightModel {
   final InsightType type;

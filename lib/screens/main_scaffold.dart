@@ -14,10 +14,10 @@ class MainScaffold extends StatefulWidget {
   const MainScaffold({super.key});
 
   @override
-  State<MainScaffold> createState() => _MainScaffoldState();
+  State<MainScaffold> createState() => MainScaffoldState();
 }
 
-class _MainScaffoldState extends State<MainScaffold> {
+class MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = 0; // Default to Home
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -28,7 +28,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     const ProfileScreen(), // Index 4: Profil
   ];
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -36,13 +36,38 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   Widget _buildNavItem(IconData icon, int index) {
     bool isSelected = _selectedIndex == index;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Existing colors for Dark Mode
+    const darkSelected = Color.fromARGB(
+      255,
+      162,
+      178,
+      253,
+    ); // Vibrant coral/periwinkle
+    const darkUnselected = Color.fromARGB(
+      255,
+      202,
+      201,
+      201,
+    ); // Medium brown/grey
+
+    // New colors for Light Mode (Darker for visibility)
+    // Using a dark warm grey/brown for broader appeal in a journal app
+    const lightSelected = Color(0xFF2D2D2D); // Very Dark Grey (almost black)
+    const lightUnselected = Color(0xFF8D8D8D); // Darker Grey
+
+    // Determine effective colors
+    final Color effectiveSelected = isDark ? darkSelected : lightSelected;
+    final Color effectiveUnselected = isDark ? darkUnselected : lightUnselected;
+
     return IconButton(
       icon: Icon(
         icon,
-        color: isSelected ? Colors.white : Colors.white54,
+        color: isSelected ? effectiveSelected : effectiveUnselected,
         size: 28,
       ),
-      onPressed: () => _onItemTapped(index),
+      onPressed: () => onItemTapped(index),
     );
   }
 
@@ -60,13 +85,19 @@ class _MainScaffoldState extends State<MainScaffold> {
             child: Container(
               height: 65,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withValues(alpha: 0.85),
+                color: Theme.of(context).cardColor.withValues(
+                  alpha: Theme.of(context).brightness == Brightness.dark
+                      ? 0.5 // Dark mode: 75% opacity
+                      : 0.1, // Light mode: 55% opacity (more transparent)
+                ),
                 borderRadius: BorderRadius.circular(30),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withValues(alpha: 0.3)
+                        : const Color(0xFFD4A574).withValues(alpha: 0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 20),
                   ),
                 ],
               ),

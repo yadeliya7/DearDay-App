@@ -52,7 +52,7 @@ class _AboutScreenState extends State<AboutScreen> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.aboutTitle,
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : Colors.black87,
           ),
@@ -94,7 +94,7 @@ class _AboutScreenState extends State<AboutScreen> {
             const SizedBox(height: 16),
             Text(
               "DearDay",
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : Colors.black87,
@@ -102,7 +102,7 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
             Text(
               _version,
-              style: GoogleFonts.nunito(fontSize: 14, color: Colors.grey),
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 24),
             Divider(color: Colors.grey.withOpacity(0.2)),
@@ -118,7 +118,6 @@ class _AboutScreenState extends State<AboutScreen> {
               context,
               AppLocalizations.of(context)!.aboutPrivacyTitle,
               AppLocalizations.of(context)!.aboutPrivacyDesc,
-              isBold: true,
             ),
             _buildSection(
               context,
@@ -136,7 +135,7 @@ class _AboutScreenState extends State<AboutScreen> {
             // Footer
             Text(
               AppLocalizations.of(context)!.aboutMadeWith,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 14,
                 color: Colors.grey,
                 fontWeight: FontWeight.w600,
@@ -167,7 +166,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context)!.aboutContact,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
                       ),
@@ -197,7 +196,7 @@ class _AboutScreenState extends State<AboutScreen> {
         children: [
           Text(
             title,
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColor,
@@ -215,9 +214,9 @@ class _AboutScreenState extends State<AboutScreen> {
               '**',
               '',
             ), // Removing markdown markers for cleaner plain text
-            style: GoogleFonts.nunito(
-              fontSize: 15,
-              height: 1.5,
+            style: GoogleFonts.poppins(
+              fontSize: 14, // Slightly adjusted for Poppins readability
+              height: 1.6,
               color: isDark ? Colors.white70 : Colors.black87,
               fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
             ),

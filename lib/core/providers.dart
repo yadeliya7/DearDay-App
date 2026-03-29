@@ -1,27 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
 import 'package:flutter/material.dart';
+import 'package:poem_diary/services/purchase_service.dart';
 
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
-
-class ThemeProvider extends ChangeNotifier {
-  bool _isDarkMode = true;
-
-  bool get isDarkMode => _isDarkMode;
-
-  void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
-    notifyListeners();
-  }
-
-  void setDarkMode(bool isDark) {
-    _isDarkMode = isDark;
-    notifyListeners();
-  }
-}
+import '../providers/theme_provider.dart';
 
 class PoemProvider extends ChangeNotifier {
   List<Poem> _poems = [];
@@ -84,7 +71,7 @@ class PoemProvider extends ChangeNotifier {
         author: 'Sistem',
         mood: 'happy',
         createdAt: date,
-        backgroundImage: 'assets/images/bg_1.jpg',
+        backgroundImage: '', // Removed invalid asset fallback
       );
     }
 
@@ -321,6 +308,7 @@ class MoodProvider extends ChangeNotifier {
   String _userName = "Misafir Kullanıcı";
   String _userTitle = "Şiir Tutkunu";
   String? _profileImagePath;
+  bool _isLockEnabled = false; // App lock state
 
   MoodProvider() {
     _loadJournal();
@@ -331,12 +319,20 @@ class MoodProvider extends ChangeNotifier {
   String get userName => _userName;
   String get userTitle => _userTitle;
   String? get profileImagePath => _profileImagePath;
+  bool get isLockEnabled => _isLockEnabled;
 
   Future<void> setGoalDuration(int days) async {
     _goalDuration = days;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goal_duration', days);
+  }
+
+  Future<void> setLockEnabled(bool enabled) async {
+    _isLockEnabled = enabled;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('app_lock_enabled', enabled);
   }
 
   Future<void> updateUserProfile(
@@ -364,6 +360,7 @@ class MoodProvider extends ChangeNotifier {
     _userName = prefs.getString('user_name') ?? "Misafir Kullanıcı";
     _userTitle = prefs.getString('user_title') ?? "Şiir Tutkunu";
     _profileImagePath = prefs.getString('user_image');
+    _isLockEnabled = prefs.getBool('app_lock_enabled') ?? false;
 
     // Legacy migration: Check for old 'mood_history'
     if (prefs.containsKey('mood_history')) {
@@ -607,17 +604,97 @@ class MoodProvider extends ChangeNotifier {
 }
 
 class PremiumProvider extends ChangeNotifier {
+  late Box _settingsBox;
   bool _isPremium = false;
+  bool _isInitialized = false;
+
+  PremiumProvider() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      _settingsBox = await Hive.openBox('settings');
+      // 1. Instant Load: Get last known status
+      _isPremium = _settingsBox.get('isPremium', defaultValue: false);
+      _isInitialized = true;
+
+      // Sync to SharedPreferences for app lock compatibility
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_premium', _isPremium);
+
+      notifyListeners();
+
+      // 2. Hybrid Async Check: Fetch real status from RevenueCat
+      // This is crucial for expiration testing.
+      // We do this AFTER notifying initially to allow instant UI load.
+      _verifyRealtimeStatus();
+
+      // 3. Listen for future updates (e.g. expiration while open)
+      PurchaseService().addListener(_onPurchaseUpdate);
+    } catch (e) {
+      debugPrint('Error initializing PremiumProvider: $e');
+      _isPremium = false;
+      _isInitialized = true;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    PurchaseService().removeListener(_onPurchaseUpdate);
+    super.dispose();
+  }
+
+  void _onPurchaseUpdate(bool isPro) {
+    if (_isPremium != isPro) {
+      debugPrint('🔔 PremiumProvider: System updated premium status to $isPro');
+      setPremium(isPro);
+    }
+  }
+
+  Future<void> _verifyRealtimeStatus() async {
+    // Wait a brief moment to let other services settle
+    await Future.delayed(const Duration(seconds: 2));
+    final isRealPro = await PurchaseService().checkProStatus();
+
+    if (_isPremium != isRealPro) {
+      debugPrint(
+        '⚠️ PremiumProvider: Local status ($_isPremium) differs from Real status ($isRealPro). Updating...',
+      );
+      setPremium(isRealPro);
+    } else {
+      debugPrint('✅ PremiumProvider: Local status verified with server.');
+    }
+  }
 
   bool get isPremium => _isPremium;
+  bool get isInitialized => _isInitialized;
 
-  void setPremium(bool value) {
+  Future<void> setPremium(bool value, {ThemeProvider? themeProvider}) async {
+    final bool wasDowngrade = _isPremium && !value;
     _isPremium = value;
+
+    try {
+      // Save to Hive
+      await _settingsBox.put('isPremium', value);
+
+      // Also save to SharedPreferences for app lock compatibility
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_premium', value);
+    } catch (e) {
+      debugPrint('Error saving premium status: $e');
+    }
+
+    // If downgrading and theme provider is available, reset premium themes
+    if (wasDowngrade && themeProvider != null) {
+      await themeProvider.resetToMidnightIfPremiumTheme();
+    }
+
     notifyListeners();
   }
 
-  void togglePremium() {
-    _isPremium = !_isPremium;
-    notifyListeners();
+  Future<void> togglePremium({ThemeProvider? themeProvider}) async {
+    await setPremium(!_isPremium, themeProvider: themeProvider);
   }
 }

@@ -18,8 +18,11 @@ import 'package:path_provider/path_provider.dart';
 import '../models/poem_model.dart';
 import '../models/daily_entry_model.dart';
 import '../widgets/mood_entry_dialog.dart';
+import 'package:poem_diary/screens/paywall_screen.dart';
 import '../widgets/monthly_mood_share_card.dart';
+import '../widgets/yearly_mood_share_card.dart';
 import 'package:line_icons/line_icons.dart';
+import 'daily_detail_screen.dart';
 
 enum CalendarViewMode { month, year }
 
@@ -41,17 +44,19 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
   Widget build(BuildContext context) {
     // Determine theme brightness for text colors
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDarkMode ? Colors.black : Colors.white;
+    final bgColor = Theme.of(
+      context,
+    ).scaffoldBackgroundColor; // Use theme background
     final textColor = isDarkMode ? Colors.white : Colors.black;
     final offColor = isDarkMode ? Colors.white54 : Colors.black54;
 
     return Scaffold(
-      backgroundColor: bgColor, // Explicit background color
+      backgroundColor: bgColor, // Now uses theme-specific background
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.calendarTitle,
-          style: GoogleFonts.nunito(
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
             fontSize: 22,
             color: textColor,
           ),
@@ -63,12 +68,38 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         actions: [
           IconButton(
             icon: Icon(_isSharing ? Icons.hourglass_empty : Icons.ios_share),
-            onPressed: () => _isSharing ? null : _shareMonth(),
-            tooltip: 'Ayı Paylaş',
+            onPressed: () {
+              if (_isSharing) return;
+              if (_currentView == CalendarViewMode.year) {
+                // Check premium for year share
+                final isPremium = Provider.of<PremiumProvider>(
+                  context,
+                  listen: false,
+                ).isPremium;
+                if (isPremium) {
+                  _shareYear();
+                } else {
+                  // Already handled by locked UI, but add snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.yearPixelsTitle,
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                _shareMonth();
+              }
+            },
+            tooltip: _currentView == CalendarViewMode.year
+                ? 'Yılı Paylaş'
+                : 'Ayı Paylaş',
           ),
         ],
       ),
       body: SafeArea(
+        bottom: false, // Allow content to flow behind floating nav bar
         child: Consumer<MoodProvider>(
           builder: (context, moodProvider, child) {
             return SingleChildScrollView(
@@ -85,10 +116,12 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                       width: double.infinity,
                       child: CupertinoSlidingSegmentedControl<CalendarViewMode>(
                         backgroundColor: isDarkMode
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade300,
+                            ? Theme.of(context).cardColor
+                            : Theme.of(
+                                context,
+                              ).cardColor.withValues(alpha: 0.5),
                         thumbColor: isDarkMode
-                            ? const Color(0xFF6C63FF)
+                            ? const Color(0xFFE0C097) // AppTheme.darkAccent
                             : Colors.white,
                         groupValue: _currentView,
                         onValueChanged: (CalendarViewMode? value) {
@@ -106,8 +139,8 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                             ),
                             child: Text(
                               AppLocalizations.of(context)!.viewMonth,
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
                                 color: _currentView == CalendarViewMode.month
                                     ? (isDarkMode ? Colors.white : Colors.black)
                                     : (isDarkMode
@@ -123,8 +156,8 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                             ),
                             child: Text(
                               AppLocalizations.of(context)!.viewYear,
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.bold,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
                                 color: _currentView == CalendarViewMode.year
                                     ? (isDarkMode ? Colors.white : Colors.black)
                                     : (isDarkMode
@@ -155,15 +188,13 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                       ),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isDarkMode
-                            ? const Color(0xFF1C1C1E)
-                            : Colors.grey[100],
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: isDarkMode
                             ? [
                                 BoxShadow(
-                                  color: Colors.black.withValues(
-                                    alpha: 0.2,
+                                  color: Colors.black.withAlpha(
+                                    51,
                                   ), // Fixed alpha type
                                   blurRadius: 20,
                                   offset: const Offset(0, 10),
@@ -171,8 +202,8 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                               ]
                             : [
                                 BoxShadow(
-                                  color: Colors.black.withValues(
-                                    alpha: 0.08,
+                                  color: Colors.black.withAlpha(
+                                    (255 * 0.08).round(),
                                   ), // Fixed alpha type
                                   blurRadius: 15,
                                   offset: const Offset(0, 8),
@@ -199,7 +230,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                               SnackBar(
                                 content: Text(
                                   AppLocalizations.of(context)!.futureWarning,
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.white,
                                   ),
                                 ),
@@ -215,19 +246,14 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                             _focusedDay = focusedDay;
                           });
 
-                          // Open Entry Dialog directly if no entry exists, or Details if exists
-                          final hasEntry =
-                              moodProvider.getEntryForDate(selectedDay) != null;
-
-                          if (hasEntry) {
-                            _showDayDetails(context, selectedDay, moodProvider);
-                          } else {
-                            showMoodEntryDialog(
-                              context,
-                              date: selectedDay,
-                              provider: moodProvider,
-                            );
-                          }
+                          // Navigate to DailyDetailScreen (replaces old modal)
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DailyDetailScreen(initialDate: selectedDay),
+                            ),
+                          );
                         },
                         onPageChanged: (focusedDay) {
                           _focusedDay = focusedDay;
@@ -235,23 +261,25 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
 
                         // STYLING UPDATES
                         daysOfWeekStyle: DaysOfWeekStyle(
-                          weekdayStyle: GoogleFonts.nunito(color: offColor),
-                          weekendStyle: GoogleFonts.nunito(
+                          weekdayStyle: GoogleFonts.poppins(color: offColor),
+                          weekendStyle: GoogleFonts.poppins(
                             color: Colors.redAccent,
                           ),
                         ),
 
                         calendarStyle: CalendarStyle(
-                          defaultTextStyle: GoogleFonts.nunito(
+                          defaultTextStyle: GoogleFonts.poppins(
                             color: textColor,
                           ),
-                          weekendTextStyle: GoogleFonts.nunito(
+                          weekendTextStyle: GoogleFonts.poppins(
                             color: Colors.redAccent,
                           ),
-                          outsideTextStyle: GoogleFonts.nunito(color: offColor),
-                          todayTextStyle: GoogleFonts.nunito(
+                          outsideTextStyle: GoogleFonts.poppins(
+                            color: offColor,
+                          ),
+                          todayTextStyle: GoogleFonts.poppins(
                             color: isDarkMode ? Colors.black : Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                           todayDecoration: BoxDecoration(
                             color: isDarkMode
@@ -268,9 +296,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                         headerStyle: HeaderStyle(
                           formatButtonVisible: false,
                           titleCentered: true,
-                          titleTextStyle: GoogleFonts.nunito(
+                          titleTextStyle: GoogleFonts.poppins(
                             fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.black87,
                           ),
                           leftChevronIcon: Container(
@@ -370,7 +398,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                   const SizedBox(width: 8),
                                   Text(
                                     _getMoodName(context, mood.code),
-                                    style: GoogleFonts.nunito(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: isDarkMode
@@ -394,6 +422,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                   // Daily Check-in Button (if not focused on past)
                   // Actually, HomeScreen handles the check-in mostly, but nice to have here too maybe?
                   // Leaving it clean for now as requested.
+                  const SizedBox(
+                    height: 100,
+                  ), // Bottom padding for floating nav bar
                 ],
               ),
             );
@@ -541,16 +572,16 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         children: [
           Text(
             label,
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               fontSize: 14,
               color: isDark ? Colors.grey : Colors.black54,
             ),
           ),
           Text(
             moodName,
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               fontSize: 15,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: _getMoodColor(dominantMood.code),
             ),
           ),
@@ -619,6 +650,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
           localizedLabels: localizedLabels,
           locale: lang.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
           footerText: "${AppLocalizations.of(context)!.createdWith} DearDay",
+          moodStatusLabel: AppLocalizations.of(context)!.moodStatusLabel,
         ),
         delay: const Duration(milliseconds: 100),
         context: context,
@@ -635,13 +667,106 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
       if (!mounted) return;
       await Share.shareXFiles([
         XFile(imagePath),
-      ], text: 'Bu ayki duygu takvimim! 📅✨ #PoemDiary');
+      ], text: AppLocalizations.of(context)!.shareMonthlyMood);
     } catch (e) {
       debugPrint('Share Error: $e');
       if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Paylaşım hatası: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _isSharing = false);
+    }
+  }
+
+  Future<void> _shareYear() async {
+    setState(() => _isSharing = true);
+    final provider = Provider.of<MoodProvider>(context, listen: false);
+    final lang = Provider.of<LanguageProvider>(context, listen: false);
+
+    try {
+      // 1. Gather ALL Data for the Yearly Card (MM-DD format)
+      final Map<String, MoodCategory> dailyMoods = {};
+
+      for (int month = 1; month <= 12; month++) {
+        final daysInMonth = DateUtils.getDaysInMonth(_focusedDay.year, month);
+
+        for (int day = 1; day <= daysInMonth; day++) {
+          final date = DateTime(_focusedDay.year, month, day);
+          final entry = provider.getEntryForDate(date);
+
+          if (entry != null) {
+            final mood = provider.moods.firstWhere(
+              (m) => m.code == entry.moodCode,
+              orElse: () => MoodCategory(
+                id: '',
+                code: '',
+                name: '',
+                emoji: '',
+                description: '',
+                backgroundGradient: '',
+                color: Colors.grey,
+              ),
+            );
+            if (mood.code.isNotEmpty) {
+              final dateKey =
+                  '${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+              dailyMoods[dateKey] = mood;
+            }
+          }
+        }
+      }
+
+      // 2. Build Legend Definition
+      final Map<String, MoodCategory> definitions = {
+        for (var m in provider.moods.where((x) => x.code.isNotEmpty)) m.code: m,
+      };
+
+      // 3. Build Localized Labels
+      final Map<String, String> localizedLabels = {
+        for (var m in provider.moods.where((x) => x.code.isNotEmpty))
+          m.code: _getMoodName(context, m.code),
+      };
+
+      // 4. Generate Image
+      final imageBytes = await _screenshotController.captureFromWidget(
+        YearlyMoodShareCard(
+          year: _focusedDay.year,
+          dailyMoods: dailyMoods,
+          moodDefinitions: definitions,
+          localizedLabels: localizedLabels,
+          locale: lang.currentLanguage == 'tr' ? 'tr_TR' : 'en_US',
+          footerText: "${AppLocalizations.of(context)!.createdWith} DearDay",
+          moodStatusLabel: AppLocalizations.of(context)!.moodStatusLabel,
+        ),
+        delay: const Duration(milliseconds: 100),
+        context: context,
+      );
+
+      // 5. Save to Temp
+      final directory = await getTemporaryDirectory();
+      final imagePath = '${directory.path}/mood_year_${_focusedDay.year}.png';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(imageBytes);
+
+      // 6. Share
+      if (!mounted) return;
+      await Share.shareXFiles([
+        XFile(imagePath),
+      ], text: AppLocalizations.of(context)!.shareYearlyMood);
+    } catch (e) {
+      debugPrint('Share Error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              lang.currentLanguage == 'tr'
+                  ? 'Paylaşım hatası: $e'
+                  : 'Share error: $e',
+            ),
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isSharing = false);
@@ -703,9 +828,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.dayDetail,
-                        style: GoogleFonts.nunito(
+                        style: GoogleFonts.poppins(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: isDark ? Colors.white : Colors.black87,
                         ),
                       ),
@@ -770,9 +895,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                               children: [
                                 Text(
                                   _getMoodName(context, mood.code),
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     color: isDark
                                         ? Colors.white
                                         : Colors.black87,
@@ -780,7 +905,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                 ),
                                 Text(
                                   "${date.day} ${_getMonthName(date.month)} ${date.year}",
-                                  style: GoogleFonts.nunito(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     color: Colors.grey,
                                   ),
@@ -811,7 +936,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                             note != null && note.isNotEmpty
                                 ? note
                                 : AppLocalizations.of(context)!.noNote,
-                            style: GoogleFonts.nunito(
+                            style: GoogleFonts.poppins(
                               fontSize: 16,
                               height: 1.5,
                               fontStyle: note != null && note.isNotEmpty
@@ -850,16 +975,20 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                                     padding: const EdgeInsets.only(right: 8),
                                     child: GestureDetector(
                                       onTap: () {
-                                        if (!isImage) return;
-                                        showDialog(
-                                          context: context,
-                                          builder: (ctx) => Dialog(
-                                            backgroundColor: Colors.transparent,
-                                            child: InteractiveViewer(
-                                              child: Image.file(File(path)),
+                                        // Only show dialog for images, skip videos
+                                        if (isImage) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => Dialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: InteractiveViewer(
+                                                child: Image.file(File(path)),
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
+                                        // TODO: Add video player for video files
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
@@ -929,9 +1058,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         ),
         child: Text(
           '${day.day}',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: cellTextColor, // Dynamic based on luminance
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );
@@ -948,9 +1077,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         ),
         child: Text(
           '${day.day}',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: todayTextColor,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );
@@ -966,9 +1095,9 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
         ),
         child: Text(
           '${day.day}',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );
@@ -996,10 +1125,10 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 color: color,
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -1328,24 +1457,65 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        AppLocalizations.of(context)!.yearPixelsTitle,
-                        style: GoogleFonts.nunito(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: isDarkMode ? Colors.white : Colors.black,
-                        ),
+
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.yearPixelsTitle,
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.amber.shade600,
+                                  Colors.amber.shade800,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.workspace_premium,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'PREMIUM',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
                           // Trigger Premium Purchase Flow
-                          // For now, toggle premium for testing if debugging, or show distinct dialog
-                          // Assuming we have a way to open premium screen or just toggle for test
-                          Provider.of<PremiumProvider>(
+                          Navigator.push(
                             context,
-                            listen: false,
-                          ).togglePremium();
+                            MaterialPageRoute(
+                              builder: (context) => const PaywallScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.amber,
@@ -1377,18 +1547,20 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
 
     return Container(
       width: double.infinity,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDarkMode ? const Color(0xFF1C1C1E) : Colors.grey[100],
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDarkMode ? 0.3 : 0.1),
+            color: isDarkMode
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.black.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(12),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -1431,7 +1603,7 @@ class _MoodCalendarScreenState extends State<MoodCalendarScreen> {
             // Header
             Text(
               monthName,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? Colors.white70 : Colors.black87,

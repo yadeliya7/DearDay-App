@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get futureWarning => 'You haven\'t lived the future yet!';
 
   @override
+  String get selectMoodFirst => 'Please select your mood first 👆';
+
+  @override
   String get writePoem => 'Write Poem';
 
   @override
@@ -207,7 +210,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String dayNote(Object note) {
+  String dayNote(String note) {
     return 'Note of the day: $note';
   }
 
@@ -427,7 +430,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleep_bad => 'However, I didn\'t sleep very well.';
 
   @override
-  String weather_context(Object weather) {
+  String weather_context(String weather) {
     return 'The weather was $weather.';
   }
 
@@ -520,6 +523,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get msgEntrySaved => 'Diary entry saved';
 
   @override
+  String get msgEntryUpdated => 'Entry updated successfully! ✨';
+
+  @override
   String get shareText => 'Share Text';
 
   @override
@@ -566,6 +572,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createdWith => 'Created with';
+
+  @override
+  String get shareMonthlyMood => 'My monthly mood calendar! 📅✨ #DearDay';
+
+  @override
+  String get shareYearlyMood => 'My yearly mood calendar! 📅✨ #DearDay';
+
+  @override
+  String get moodStatusLabel => 'MOOD STATUS';
 
   @override
   String get dailyGoals => 'Daily Goals';
@@ -661,6 +676,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btnAddPhoto => 'Add Photo';
+
+  @override
+  String get btnAddVideo => 'Add Video';
+
+  @override
+  String get celebrationKeepGoing => 'Keep Going! 🚀';
+
+  @override
+  String get celebrationCongrats => 'Congratulations! ';
+
+  @override
+  String get celebrationOver30Part1 => 'Amazing! ';
+
+  @override
+  String get celebrationOver30Part2 => ' habit reached day ';
+
+  @override
+  String get celebrationOver30Part3 =>
+      '.\nWe\'ll celebrate your victory every 15 days!';
+
+  @override
+  String celebrationGoalUpgraded(int nextLevel) {
+    return '🚀 Your goal has been automatically upgraded to $nextLevel days!';
+  }
+
+  @override
+  String get celebrationNewGoalButton => 'Start New Goal';
+
+  @override
+  String get celebrationGreatButton => 'Great!';
+
+  @override
+  String get cannotGoToFuture => 'You can\'t go to the future yet!';
+
+  @override
+  String get videoFileTitle => 'Video File';
+
+  @override
+  String get videoPlaybackComing => 'Video playback coming soon';
+
+  @override
+  String get unableToLoadImage => 'Unable to load image';
+
+  @override
+  String get fileNotFound => 'File not found';
 
   @override
   String get goalDuration => 'Goal Duration';
@@ -777,15 +837,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analysisMoodTrend => 'Mood Trend (Last 7 Days)';
 
   @override
-  String get analysisSleepQuality => 'Sleep Quality';
+  String get analysisSleepQuality => 'Sleep Status';
 
   @override
   String get analysisTopActivities => 'Top Activities';
 
   @override
-  String mostFrequentActivities(int year) {
-    return 'Top Activities ($year)';
-  }
+  String get mostFrequentActivities => 'Top Activities';
 
   @override
   String get analysisAllActivities => 'All Activities';
@@ -836,6 +894,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String streakGoalCompleted(int days) {
     return '\nYou completed $days days streak!';
   }
+
+  @override
+  String get trialBadge => '7 Days Free';
 
   @override
   String get sectionSocial => 'Social';
@@ -1054,11 +1115,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your data is stored entirely **offline** on your device. It is never sent to any server.';
 
   @override
-  String get aboutContentTitle => 'Content & Poems';
+  String get aboutContentTitle => 'Features & Content';
 
   @override
   String get aboutContentDesc =>
-      'Poems and quotes in the app are for motivation and cultural sharing purposes. Content can be edited upon request of rights holders.';
+      'DearDay offers mood tracking, habit monitoring, insights, and personalized stories to help you on your self-awareness journey.';
 
   @override
   String get aboutLegalTitle => 'Legal Warning';
@@ -1080,7 +1141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeTitle => 'Welcome! 👋';
 
   @override
-  String get welcomeSubtitle => 'Let\'s meet... How should we address you?';
+  String get welcomeSubtitle => 'How should we address you?';
 
   @override
   String get nameHint => 'Your Name';
@@ -1124,7 +1185,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightWeekdayTitle => 'Weekday Effect';
 
   @override
-  String get insightSleepTitle => 'Sleep Factor';
+  String get insightSleepTitle => 'Sleep Quality';
 
   @override
   String insightWeekendDesc(String percent) {
@@ -1177,4 +1238,273 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moodOfTheYear => 'Mood of the Year: ';
+
+  @override
+  String get insightTeaserSuperPowerTitle => 'Super Power? 🔒';
+
+  @override
+  String get insightTeaserSuperPowerDesc =>
+      'Discover which activity makes you 40% happier.';
+
+  @override
+  String get insightTeaserEnergyDrainersTitle => 'Energy Drainers 🔒';
+
+  @override
+  String get insightTeaserEnergyDrainersDesc =>
+      'Find hidden reasons draining your mood.';
+
+  @override
+  String get insightTeaserSleepAnalysisTitle => 'Sleep Status 🔒';
+
+  @override
+  String get insightTeaserSleepAnalysisDesc =>
+      'How does your sleep quality affect you?';
+
+  @override
+  String get insightTeaserGoPremiumTitle => 'Go Premium for more';
+
+  @override
+  String get insightTeaserGoPremiumDesc =>
+      'Unlock unlimited analysis and content.';
+
+  @override
+  String get insightBadSleepTitle => 'Poor Sleep Quality';
+
+  @override
+  String insightBadSleepDesc(String percent) {
+    return 'Poor sleep lowers your mood by %$percent.';
+  }
+
+  @override
+  String get insightAverageSleepTitle => 'Average Sleep';
+
+  @override
+  String get insightAverageSleepDesc =>
+      'Your sleep quality has a neutral impact.';
+
+  @override
+  String get dataCollectionTitle => 'Gathering Data... ⏳';
+
+  @override
+  String get dataCollectionDesc =>
+      'You need to enter data for at least 3-5 days for analysis. Keep journaling!';
+
+  @override
+  String get themeSelectionTitle => 'THEME SELECTION';
+
+  @override
+  String get themeColorTitle => 'Color Theme';
+
+  @override
+  String get themePeach => 'Peach';
+
+  @override
+  String get themeCoffee => 'Coffee';
+
+  @override
+  String get themeOcean => 'Ocean';
+
+  @override
+  String get themeNature => 'Nature';
+
+  @override
+  String get themeBerry => 'Berry';
+
+  @override
+  String get themeMidnight => 'Midnight';
+
+  @override
+  String get appLock => 'App Lock';
+
+  @override
+  String get appLockDesc => 'Lock with fingerprint or FaceID';
+
+  @override
+  String get authenticationRequired => 'Authentication required to continue';
+
+  @override
+  String get authenticationFailed => 'Authentication failed';
+
+  @override
+  String get biometricNotAvailable =>
+      'Biometric authentication is not available on your device';
+
+  @override
+  String get journalEmptyMonth =>
+      'No story has been written for this month yet.';
+
+  @override
+  String get insightMagicDuoTitle => 'Magic Duo';
+
+  @override
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  ) {
+    return '$activity1 & $activity2 together boost your mood by $percent%!';
+  }
+
+  @override
+  String get insightBestDayTitle => 'Week Champion';
+
+  @override
+  String insightBestDayDesc(String day) {
+    return '$day is your day! ⭐';
+  }
+
+  @override
+  String get insightStabilityRockTitle => 'Emotional Rock';
+
+  @override
+  String get insightStabilityRockDesc => 'Balanced and consistent mood';
+
+  @override
+  String get insightStabilityWaveTitle => 'Emotional Rollercoaster';
+
+  @override
+  String get insightStabilityWaveDesc => 'Fluctuating mood pattern';
+
+  @override
+  String get paywallTitle => 'DearDay Premium';
+
+  @override
+  String get paywallSubtitle =>
+      'Unlock your potential, reach your best version.';
+
+  @override
+  String get featureUnlimitedStories => 'Story Variations 📝';
+
+  @override
+  String get featureDetailedAnalysis => 'Relational & Detailed Analysis 📊';
+
+  @override
+  String get featureYearInPixels => 'Year in Pixels 📅';
+
+  @override
+  String get featurePdfExport => 'PDF Journal Export 📕';
+
+  @override
+  String get planWeekly => 'Weekly Plan';
+
+  @override
+  String get planMonthly => 'Monthly Plan';
+
+  @override
+  String get planYearly => 'Yearly Plan';
+
+  @override
+  String get planLifetime => 'Lifetime';
+
+  @override
+  String get priceWeeklyMock => '₺29.99 / week';
+
+  @override
+  String get priceMonthlyMock => '₺49.99 / month';
+
+  @override
+  String get priceYearlyMock => '₺299.99 / year';
+
+  @override
+  String get priceMonthlyBreakdownMock => 'Just ₺24.99 / month';
+
+  @override
+  String get priceLifetimeMock => '₺999.99';
+
+  @override
+  String get priceOneTime => 'One-time payment';
+
+  @override
+  String get bestValue => 'BEST VALUE';
+
+  @override
+  String get badgeOneTime => 'ONE TIME';
+
+  @override
+  String get btnStartTrial => 'Start Free Trial';
+
+  @override
+  String get btnBecomePremium => 'Go Premium';
+
+  @override
+  String get restorePurchase => 'Restore Purchase';
+
+  @override
+  String get trialToday => 'Today';
+
+  @override
+  String get trialTodayDesc => 'Unlock Premium';
+
+  @override
+  String get trialDay5 => 'Day 5';
+
+  @override
+  String get trialDay5Desc => 'Reminder Sent';
+
+  @override
+  String get trialDay7 => 'Day 7';
+
+  @override
+  String get trialDay7Desc => 'Starts';
+
+  @override
+  String get trialGuarantee =>
+      'Cancel anytime via Play Store settings. No commitment.';
+
+  @override
+  String get btnSubscribe => 'Subscribe';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get dailyReminder => 'Daily Reminder';
+
+  @override
+  String get dailyReminderDesc => 'Get reminded every day';
+
+  @override
+  String get notificationDailyTitle => 'How was your day? 🌙';
+
+  @override
+  String get notificationDailyBody =>
+      'Would you like to leave a note for yourself?';
+
+  @override
+  String get exactAlarmPermissionTitle => '⏰ Notification Permission Required';
+
+  @override
+  String get exactAlarmPermissionMessage =>
+      'For daily reminders to work precisely, we need the \"Alarms & reminders\" permission.\n\nOn the next screen:\n1. Find \"DearDay\" app\n2. Turn ON \"Alarms & reminders\" permission\n3. Go back';
+
+  @override
+  String get notificationTrialTitle => '2 days left in your trial! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Reminder: Your subscription starts in 48 hours.';
+
+  @override
+  String get btnGoToSettings => 'Go to Settings';
+
+  @override
+  String get exportFileName => 'DearDay Export';
+
+  @override
+  String get generatingPdf => 'Generating PDF...';
+
+  @override
+  String get restoreSuccess => 'Subscription restored successfully! 🎉';
+
+  @override
+  String get restoreNoSubscription => 'No active subscription found';
+
+  @override
+  String get restoreError => 'An error occurred, please try again';
+
+  @override
+  String get perMonthSuffix => '/ month';
 }

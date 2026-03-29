@@ -6,7 +6,7 @@ import '../core/providers.dart';
 import '../models/daily_entry_model.dart';
 import '../models/poem_model.dart';
 
-import 'mood_entry_dialog.dart';
+import '../screens/daily_detail_screen.dart';
 
 class HomeMoodSelector extends StatefulWidget {
   final DailyEntry? todayEntry;
@@ -94,7 +94,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
       children: [
         Text(
           AppLocalizations.of(context)!.checkInPrompt,
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: isDark ? Colors.white : Colors.black87,
@@ -103,6 +103,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: moodProvider.moods.where((m) => m.code.isNotEmpty).map((
               mood,
@@ -110,21 +111,15 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
               final isSelected = _selectedMoodCode == mood.code;
               return GestureDetector(
                 onTap: () {
-                  // 1. Immediate Visual Update
-                  setState(() {
-                    _activeMoodColor = mood.color;
-                    _selectedMoodCode = mood.code;
-                  });
-
-                  // 2. Open Dialog
-                  showMoodEntryDialog(
+                  // Navigate to DailyDetailScreen with selected mood
+                  Navigator.push(
                     context,
-                    date: DateTime.now(),
-                    provider: moodProvider,
-                    currentMood: mood.code,
-                    currentNote: widget.todayEntry?.note,
-                    currentMedia: widget.todayEntry?.mediaPaths ?? [],
-                    currentActivities: widget.todayEntry?.activities ?? {},
+                    MaterialPageRoute(
+                      builder: (context) => DailyDetailScreen(
+                        initialDate: DateTime.now(),
+                        initialMoodCode: mood.code,
+                      ),
+                    ),
                   );
                 },
                 child: Padding(
@@ -135,7 +130,7 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
                         scale: isSelected ? 1.1 : 1.0,
                         duration: const Duration(milliseconds: 200),
                         child: Container(
-                          padding: const EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? Colors.blueAccent.withValues(alpha: 0.1)
@@ -165,11 +160,11 @@ class _HomeMoodSelectorState extends State<HomeMoodSelector> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         _getMoodName(context, mood.code),
-                        style: GoogleFonts.nunito(
-                          fontSize: 10,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.normal,

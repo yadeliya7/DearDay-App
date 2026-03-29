@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/providers.dart';
 import 'main_scaffold.dart';
 import 'package:poem_diary/l10n/app_localizations.dart';
+import 'package:poem_diary/services/notification_service.dart';
+import '../helpers/notification_permission_helper.dart';
+import '../core/language_provider.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   final bool isEditMode;
@@ -20,6 +23,8 @@ class SetupProfileScreen extends StatefulWidget {
 class _SetupProfileScreenState extends State<SetupProfileScreen> {
   late TextEditingController _nameController;
   String? _selectedImagePath;
+  bool _isReminderEnabled = false;
+  TimeOfDay _reminderTime = const TimeOfDay(hour: 21, minute: 0);
 
   @override
   void initState() {
@@ -32,6 +37,17 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     if (widget.isEditMode) {
       _selectedImagePath = provider.profileImagePath;
     }
+    _loadNotificationSettings();
+  }
+
+  Future<void> _loadNotificationSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isReminderEnabled = prefs.getBool('daily_reminder_enabled') ?? false;
+      final hour = prefs.getInt('daily_reminder_hour') ?? 21;
+      final minute = prefs.getInt('daily_reminder_minute') ?? 0;
+      _reminderTime = TimeOfDay(hour: hour, minute: minute);
+    });
   }
 
   @override
@@ -62,7 +78,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     final provider = Provider.of<MoodProvider>(context, listen: false);
     await provider.updateUserProfile(
       name,
-      "", // Title removed
+      provider.userTitle,
       _selectedImagePath,
     );
 
@@ -97,7 +113,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
           ? AppBar(
               title: Text(
                 AppLocalizations.of(context)!.editProfileTitle,
-                style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -121,7 +137,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 Text(
                   AppLocalizations.of(context)!.welcomeTitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : Colors.black87,
@@ -131,9 +147,43 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 Text(
                   AppLocalizations.of(context)!.welcomeSubtitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.nunito(fontSize: 16, color: Colors.grey),
+                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 24),
+                // Language Selector
+                Consumer<LanguageProvider>(
+                  builder: (context, languageProvider, child) {
+                    final currentLang =
+                        languageProvider.currentLocale.languageCode;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.white10 : Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildLanguageOption(
+                            context,
+                            'tr',
+                            '🇹🇷 Türkçe',
+                            currentLang == 'tr',
+                            languageProvider,
+                          ),
+                          _buildLanguageOption(
+                            context,
+                            'en',
+                            '🇬🇧 English',
+                            currentLang == 'en',
+                            languageProvider,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 32),
               ] else ...[
                 const SizedBox(height: 20),
               ],
@@ -192,7 +242,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               TextField(
                 controller: _nameController,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -209,6 +259,13 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                 width: 120,
                 color: isDark ? Colors.white24 : Colors.black12,
               ),
+
+              const SizedBox(height: 32),
+
+              // Daily Reminder Section
+              _buildDailyReminderSection(context, isDark),
+
+              const SizedBox(height: 32),
 
               const SizedBox(height: 60),
 
@@ -230,7 +287,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                     widget.isEditMode
                         ? AppLocalizations.of(context)!.saveBtn
                         : AppLocalizations.of(context)!.startBtn,
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -242,6 +299,138 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    String code,
+    String label,
+    bool isSelected,
+    LanguageProvider provider,
+  ) {
+    return GestureDetector(
+      onTap: () => provider.setLocale(Locale(code)),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blueAccent : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected
+                ? Colors.white
+                : (Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white70
+                      : Colors.black54),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDailyReminderSection(BuildContext context, bool isDark) {
+    return Column(
+      children: [
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            AppLocalizations.of(context)!.dailyReminder,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+          ),
+          subtitle: Text(
+            AppLocalizations.of(context)!.dailyReminderDesc,
+            style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
+          ),
+          value: _isReminderEnabled,
+          onChanged: (val) async {
+            setState(() => _isReminderEnabled = val);
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('daily_reminder_enabled', val);
+
+            if (val) {
+              await NotificationService().requestPermissions();
+
+              // Show permission dialogs for Android
+              if (mounted && Platform.isAndroid) {
+                await NotificationPermissionHelper.showExactAlarmPermissionDialog(
+                  context,
+                );
+              }
+
+              if (mounted) {
+                await NotificationService().scheduleDailyReminder(
+                  _reminderTime,
+                  AppLocalizations.of(context)!.notificationDailyTitle,
+                  AppLocalizations.of(context)!.notificationDailyBody,
+                );
+              }
+            } else {
+              await NotificationService().cancelDailyReminder();
+            }
+          },
+          activeThumbColor: Colors.blueAccent,
+        ),
+        if (_isReminderEnabled)
+          GestureDetector(
+            onTap: () async {
+              final pickedTime = await showTimePicker(
+                context: context,
+                initialTime: _reminderTime,
+              );
+              if (pickedTime != null) {
+                setState(() => _reminderTime = pickedTime);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setInt('daily_reminder_hour', pickedTime.hour);
+                await prefs.setInt('daily_reminder_minute', pickedTime.minute);
+
+                if (mounted) {
+                  await NotificationService().scheduleDailyReminder(
+                    _reminderTime,
+                    AppLocalizations.of(context)!.notificationDailyTitle,
+                    AppLocalizations.of(context)!.notificationDailyBody,
+                  );
+                }
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white10 : Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isDark ? Colors.white24 : Colors.grey[300]!,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _reminderTime.format(context),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.access_time_rounded,
+                    color: Colors.blueAccent,
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

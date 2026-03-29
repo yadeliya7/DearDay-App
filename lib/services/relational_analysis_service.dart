@@ -30,7 +30,25 @@ class RelationalAnalysisService {
       insights.add(sleepInsight);
     }
 
-    // Sort: Positive -> Negative -> Time -> Sleep
+    // 4. Magic Duo Analysis
+    final magicDuoInsight = _analyzeMagicDuo(context, data);
+    if (magicDuoInsight != null) {
+      insights.add(magicDuoInsight);
+    }
+
+    // 5. Best Day Pattern Analysis
+    final bestDayInsight = _analyzeBestDayPattern(context, data);
+    if (bestDayInsight != null) {
+      insights.add(bestDayInsight);
+    }
+
+    // 6. Mood Stability Analysis
+    final stabilityInsight = _analyzeMoodStability(context, data);
+    if (stabilityInsight != null) {
+      insights.add(stabilityInsight);
+    }
+
+    // Sort: Positive -> Negative -> Time -> Sleep -> MagicDuo -> BestDay -> Stability
     // We can just rely on the insertion order unless we want explicit sorting logic.
     // Order requested: Super Power (Pos), Kryptonite (Neg), Sleep/Time
 
@@ -204,33 +222,80 @@ class RelationalAnalysisService {
     return null;
   }
 
-  /// 3. Sleep Factor Analysis
+  /// 3. Sleep Factor Analysis (Comprehensive)
   InsightModel? _analyzeSleep(BuildContext context, List<DailyEntry> data) {
-    // Find correlation between "Sleep: Good" and Mood
+    if (data.isEmpty) return null;
+
     List<double> goodSleepMoods = [];
+    List<double> mediumSleepMoods = [];
+    List<double> badSleepMoods = [];
     List<double> allMoods = [];
 
+    // 1. Data Collection
     for (var e in data) {
       final val = _getMoodValue(e.moodCode);
       allMoods.add(val);
 
-      // Assuming sleep is stored in 'activities' or separate field depending on implementation.
-      // Based on previous files, 'sleep_good' key in activities map.
-      if (e.activities['sleep_good'] == true) {
+      final sleepQuality = e.activities['sleep'];
+      if (sleepQuality == 'good') {
         goodSleepMoods.add(val);
+      } else if (sleepQuality == 'medium' || sleepQuality == 'average') {
+        mediumSleepMoods.add(val);
+      } else if (sleepQuality == 'bad' || sleepQuality == 'poor') {
+        badSleepMoods.add(val);
       }
     }
 
-    if (goodSleepMoods.length < 3 || allMoods.isEmpty) return null;
-
+    if (allMoods.isEmpty) return null;
     final globalAvg = allMoods.reduce((a, b) => a + b) / allMoods.length;
-    final goodSleepAvg =
-        goodSleepMoods.reduce((a, b) => a + b) / goodSleepMoods.length;
 
-    final diff = goodSleepAvg - globalAvg;
+    // 2. Calculate Impacts
+    // Helper to get average or null if insufficient data
+    double? getAvg(List<double> list) {
+      if (list.length < 3) return null; // Minimum 3 entries required
+      return list.reduce((a, b) => a + b) / list.length;
+    }
 
-    if (diff > 0.5) {
-      final percent = (diff * 10).toStringAsFixed(0);
+    final goodAvg = getAvg(goodSleepMoods);
+    final mediumAvg = getAvg(mediumSleepMoods);
+    final badAvg = getAvg(badSleepMoods);
+
+    double bestImpactVal = 0.0;
+    String? direction = 'neutral'; // 'positive', 'negative', 'neutral'
+
+    // Compare Good Sleep
+    if (goodAvg != null) {
+      final impact = goodAvg - globalAvg;
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'good';
+      }
+    }
+
+    // Compare Bad Sleep
+    if (badAvg != null) {
+      final impact = badAvg - globalAvg;
+      // We care about NEGATIVE impact for bad sleep usually, but magnitude matters
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'bad';
+      }
+    }
+
+    // Compare Medium Sleep (optional, usually less interesting)
+    if (mediumAvg != null) {
+      final impact = mediumAvg - globalAvg;
+      if (impact.abs() > bestImpactVal.abs()) {
+        bestImpactVal = impact;
+        direction = 'medium';
+      }
+    }
+
+    // 3. Construct Insight based on strongest factor
+    final percent = (bestImpactVal.abs() * 10).toStringAsFixed(0);
+
+    if (direction == 'good' && bestImpactVal > 0.3) {
+      // Good sleep helps (Positive)
       return InsightModel(
         type: InsightType.sleepFactor,
         title: AppLocalizations.of(context)!.insightSleepTitle,
@@ -239,9 +304,242 @@ class RelationalAnalysisService {
         gradientColors: [Colors.indigo, Colors.blueGrey],
         isLocked: true,
       );
+    } else if (direction == 'bad' && bestImpactVal < -0.3) {
+      // Bad sleep hurts (Negative)
+      return InsightModel(
+        type: InsightType.sleepFactor,
+        title: AppLocalizations.of(context)!.insightBadSleepTitle,
+        description: AppLocalizations.of(context)!.insightBadSleepDesc(percent),
+        icon: LineIcons.bed, // Or dizzy face
+        gradientColors: [Colors.blueGrey.shade700, Colors.black54],
+        isLocked: true,
+      );
+    } else if (direction == 'medium') {
+      // Medium sleep impact (Neutral/Interesting?)
+      // Often we might skip this unless it's strongly positive/negative surprisingly
+      return InsightModel(
+        type: InsightType.sleepFactor,
+        title: AppLocalizations.of(context)!.insightAverageSleepTitle,
+        description: AppLocalizations.of(context)!.insightAverageSleepDesc,
+        icon: LineIcons.cloudWithMoon,
+        gradientColors: [Colors.teal.shade300, Colors.teal.shade700],
+        isLocked: true,
+      );
     }
 
-    return null;
+    return null; // No significant insight found
+  }
+
+  /// 4. Magic Duo Analysis (Activity Pair Synergy)
+  InsightModel? _analyzeMagicDuo(BuildContext context, List<DailyEntry> data) {
+    if (data.length < 5) return null; // Need enough data
+
+    // Build activity pair map
+    final Map<String, List<double>> pairMoods = {};
+
+    for (var entry in data) {
+      final moodVal = _getMoodValue(entry.moodCode);
+
+      // Extract all active activities for this entry
+      final List<String> activeActivities = [];
+      entry.activities.forEach((key, value) {
+        if (key == 'header_date') return;
+
+        if (value == true) {
+          activeActivities.add(key);
+        } else if (value is List) {
+          for (var item in value) {
+            activeActivities.add(item.toString());
+          }
+        }
+      });
+
+      // Generate pairs
+      for (int i = 0; i < activeActivities.length; i++) {
+        for (int j = i + 1; j < activeActivities.length; j++) {
+          // Sort to ensure consistent key (A+B = B+A)
+          final pair = [activeActivities[i], activeActivities[j]]..sort();
+          final pairKey = '${pair[0]}|${pair[1]}';
+
+          if (!pairMoods.containsKey(pairKey)) pairMoods[pairKey] = [];
+          pairMoods[pairKey]!.add(moodVal);
+        }
+      }
+    }
+
+    // Calculate global average
+    double globalSum = 0;
+    for (var e in data) {
+      globalSum += _getMoodValue(e.moodCode);
+    }
+    final globalAvg = globalSum / data.length;
+
+    // Find best pair
+    String? bestPair;
+    double bestImpact = 0;
+
+    pairMoods.forEach((pair, scores) {
+      if (scores.length < 3) return; // Minimum occurrences
+
+      final avg = scores.reduce((a, b) => a + b) / scores.length;
+      final impact = avg - globalAvg;
+
+      if (impact > 0.5 && impact > bestImpact) {
+        bestImpact = impact;
+        bestPair = pair;
+      }
+    });
+
+    if (bestPair == null) return null;
+
+    // Parse and localize activity names
+    final activities = bestPair!.split('|');
+    final name1 = LocalizationHelper.getActivityName(context, activities[0]);
+    final name2 = LocalizationHelper.getActivityName(context, activities[1]);
+    final percent = (bestImpact * 10).toStringAsFixed(0);
+
+    return InsightModel(
+      type: InsightType.magicDuo,
+      title: AppLocalizations.of(context)!.insightMagicDuoTitle,
+      description: AppLocalizations.of(
+        context,
+      )!.insightMagicDuoDesc(name1, name2, percent),
+      icon: LineIcons.users,
+      gradientColors: [Colors.pink, Colors.purple],
+      isLocked: true,
+    );
+  }
+
+  /// 5. Best Day Pattern Analysis
+  InsightModel? _analyzeBestDayPattern(
+    BuildContext context,
+    List<DailyEntry> data,
+  ) {
+    if (data.length < 14) return null; // Need at least 2 weeks
+
+    Map<int, List<double>> weekdayMoods = {};
+
+    for (var entry in data) {
+      final weekday = entry.date.weekday; // 1=Mon, 7=Sun
+      if (!weekdayMoods.containsKey(weekday)) weekdayMoods[weekday] = [];
+      weekdayMoods[weekday]!.add(_getMoodValue(entry.moodCode));
+    }
+
+    // Calculate averages per day
+    Map<int, double> weekdayAverages = {};
+    weekdayMoods.forEach((day, moods) {
+      if (moods.length >= 2) {
+        // Need at least 2 occurrences
+        weekdayAverages[day] = moods.reduce((a, b) => a + b) / moods.length;
+      }
+    });
+
+    if (weekdayAverages.isEmpty) return null;
+
+    // Calculate global average
+    double globalSum = 0;
+    for (var e in data) {
+      globalSum += _getMoodValue(e.moodCode);
+    }
+    final globalAvg = globalSum / data.length;
+
+    // Find best day
+    int bestDay = 1;
+    double bestAvg = 0;
+
+    weekdayAverages.forEach((day, avg) {
+      if (avg > bestAvg && avg > globalAvg) {
+        bestAvg = avg;
+        bestDay = day;
+      }
+    });
+
+    if (bestAvg <= globalAvg) return null;
+
+    // Get localized day name
+    final dayNames = LocalizationHelper.getWeekdayNames(context);
+    final dayName = dayNames[bestDay - 1]; // weekday is 1-indexed
+
+    return InsightModel(
+      type: InsightType.bestDayPattern,
+      title: AppLocalizations.of(context)!.insightBestDayTitle,
+      description: AppLocalizations.of(context)!.insightBestDayDesc(dayName),
+      icon: LineIcons.calendar,
+      gradientColors: [Colors.orange, Colors.deepOrange],
+      isLocked: true,
+    );
+  }
+
+  /// 6. Mood Stability Analysis
+  InsightModel? _analyzeMoodStability(
+    BuildContext context,
+    List<DailyEntry> data,
+  ) {
+    if (data.isEmpty) return null;
+
+    // Take last 30 entries or all if fewer
+    final relevantData = data.length > 30
+        ? data.sublist(data.length - 30)
+        : data;
+
+    if (relevantData.length < 5) return null; // Need minimum data
+
+    // Calculate mean
+    double sum = 0;
+    for (var entry in relevantData) {
+      sum += _getMoodValue(entry.moodCode);
+    }
+    final mean = sum / relevantData.length;
+
+    // Calculate standard deviation
+    double squaredDiffSum = 0;
+    for (var entry in relevantData) {
+      final diff = _getMoodValue(entry.moodCode) - mean;
+      squaredDiffSum += diff * diff;
+    }
+    final variance = squaredDiffSum / relevantData.length;
+
+    // Calculate sqrt of variance using Newton's method
+    double finalStdDev = 0;
+    if (variance > 0) {
+      double guess = variance / 2;
+      for (int i = 0; i < 10; i++) {
+        guess = (guess + variance / guess) / 2;
+      }
+      finalStdDev = guess;
+    }
+
+    // Categorize
+    String title;
+    String description;
+    List<Color> colors;
+    IconData icon;
+
+    if (finalStdDev < 0.8) {
+      // Low volatility - Stable
+      title = AppLocalizations.of(context)!.insightStabilityRockTitle;
+      description = AppLocalizations.of(context)!.insightStabilityRockDesc;
+      colors = [Colors.blue, Colors.cyan];
+      icon = LineIcons.mountain;
+    } else if (finalStdDev > 1.5) {
+      // High volatility - Unstable
+      title = AppLocalizations.of(context)!.insightStabilityWaveTitle;
+      description = AppLocalizations.of(context)!.insightStabilityWaveDesc;
+      colors = [Colors.amber, Colors.orange];
+      icon = LineIcons.alternateWavyMoneyBill;
+    } else {
+      // Medium - don't show insight
+      return null;
+    }
+
+    return InsightModel(
+      type: InsightType.moodStability,
+      title: title,
+      description: description,
+      icon: icon,
+      gradientColors: colors,
+      isLocked: true,
+    );
   }
 
   double _getMoodValue(String moodCode) {

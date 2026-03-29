@@ -42,10 +42,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get addPhoto => 'Fotoğraf';
 
   @override
-  String get addVideo => 'Video';
+  String get addVideo => 'Video Ekle';
 
   @override
   String get futureWarning => 'Geleceği henüz yaşamadın!';
+
+  @override
+  String get selectMoodFirst => 'Lütfen önce yukarıdan ruh halinizi seçin 👆';
 
   @override
   String get writePoem => 'Şiir Yaz';
@@ -208,7 +211,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String dayNote(Object note) {
+  String dayNote(String note) {
     return 'Günün Notu: $note';
   }
 
@@ -417,7 +420,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleep_bad => 'Ancak uykumu pek alamamıştım.';
 
   @override
-  String weather_context(Object weather) {
+  String weather_context(String weather) {
     return 'Hava da $weather.';
   }
 
@@ -510,6 +513,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get msgEntrySaved => 'Günlük kaydedildi';
 
   @override
+  String get msgEntryUpdated => 'Kayıt başarıyla güncellendi! ✨';
+
+  @override
   String get shareText => 'Metni Paylaş';
 
   @override
@@ -556,6 +562,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get createdWith => 'ile oluşturuldu';
+
+  @override
+  String get shareMonthlyMood => 'Bu ayki duygu takvimim! 📅✨ #DearDay';
+
+  @override
+  String get shareYearlyMood => 'Bu yılki duygu takvimim! 📅✨ #DearDay';
+
+  @override
+  String get moodStatusLabel => 'DUYGU DURUMU';
 
   @override
   String get dailyGoals => 'Günlük Hedefler';
@@ -641,7 +656,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumDesc => 'Sınırsız erişim ve reklamsız deneyim.';
 
   @override
-  String get sectionAppearance => 'APPEARANCE';
+  String get sectionAppearance => 'GÖRÜNÜM';
 
   @override
   String get sectionOther => 'DİĞER';
@@ -651,6 +666,51 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get btnAddPhoto => 'Fotoğraf Ekle';
+
+  @override
+  String get btnAddVideo => 'Video Ekle';
+
+  @override
+  String get celebrationKeepGoing => 'Durmak Yok! 🚀';
+
+  @override
+  String get celebrationCongrats => 'Tebrikler! ';
+
+  @override
+  String get celebrationOver30Part1 => 'İnanılmaz! ';
+
+  @override
+  String get celebrationOver30Part2 => ' alışkanlığında ';
+
+  @override
+  String get celebrationOver30Part3 =>
+      ' ulaştın.\nHer 15 günde bir yeni zaferini kutlayacağız!';
+
+  @override
+  String celebrationGoalUpgraded(int nextLevel) {
+    return '🚀 Hedefin otomatik olarak $nextLevel güne yükseltildi!';
+  }
+
+  @override
+  String get celebrationNewGoalButton => 'Yeni Hedefe Başla';
+
+  @override
+  String get celebrationGreatButton => 'Harika!';
+
+  @override
+  String get cannotGoToFuture => 'Geleceğe henüz gidemezsin!';
+
+  @override
+  String get videoFileTitle => 'Video Dosyası';
+
+  @override
+  String get videoPlaybackComing => 'Video oynatma yakında gelecek';
+
+  @override
+  String get unableToLoadImage => 'Resim yüklenemedi';
+
+  @override
+  String get fileNotFound => 'Dosya bulunamadı';
 
   @override
   String get goalDuration => 'Hedef Takip Süresi';
@@ -767,15 +827,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisMoodTrend => 'Duygu Değişimi (Son 7 Gün)';
 
   @override
-  String get analysisSleepQuality => 'Uyku Kalitesi';
+  String get analysisSleepQuality => 'Uyku Durumu';
 
   @override
   String get analysisTopActivities => 'En Sık Yapılanlar';
 
   @override
-  String mostFrequentActivities(int year) {
-    return 'En Sık Yapılanlar ($year)';
-  }
+  String get mostFrequentActivities => 'En Sık Yapılanlar';
 
   @override
   String get analysisAllActivities => 'Tüm Aktiviteler';
@@ -826,6 +884,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String streakGoalCompleted(int days) {
     return '\n$days günlük seriyi tamamladın!';
   }
+
+  @override
+  String get trialBadge => '7 Gün Ücretsiz';
 
   @override
   String get sectionSocial => 'Sosyal';
@@ -1044,11 +1105,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Verileriniz tamamen **çevrimdışı (offline)** olarak kendi cihazınızda saklanır. Hiçbir sunucuya gönderilmez.';
 
   @override
-  String get aboutContentTitle => 'İçerik & Şiirler';
+  String get aboutContentTitle => 'Özellikler & İçerik';
 
   @override
   String get aboutContentDesc =>
-      'Uygulamadaki şiirler ve alıntılar, motivasyon ve kültürel paylaşım amaçlıdır. Hak sahiplerinin talebi doğrultusunda içerik düzenlenebilir.';
+      'DearDay, ruh hali takibi, alışkanlık izleme, öngörüler ve kişiselleştirilmiş hikayeler sunarak öz farkındalık yolculuğunuzda size yardımcı olur.';
 
   @override
   String get aboutLegalTitle => 'Yasal Uyarı';
@@ -1070,7 +1131,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get welcomeTitle => 'Hoşgeldin! 👋';
 
   @override
-  String get welcomeSubtitle => 'Tanışalım... Seni nasıl hitap etmeliyiz?';
+  String get welcomeSubtitle => 'Sana nasıl hitap etmeliyiz?';
 
   @override
   String get nameHint => 'Adınız';
@@ -1114,7 +1175,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get insightWeekdayTitle => 'Hafta İçi Etkisi';
 
   @override
-  String get insightSleepTitle => 'Uyku Faktörü';
+  String get insightSleepTitle => 'Uyku Kalitesi';
 
   @override
   String insightWeekendDesc(String percent) {
@@ -1167,4 +1228,273 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get moodOfTheYear => 'Yılın Modu: ';
+
+  @override
+  String get insightTeaserSuperPowerTitle => 'Süper Gücün Ne? 🔒';
+
+  @override
+  String get insightTeaserSuperPowerDesc =>
+      'Hangi aktivite seni %40 daha mutlu ediyor keşfet.';
+
+  @override
+  String get insightTeaserEnergyDrainersTitle => 'Enerji Emiciler 🔒';
+
+  @override
+  String get insightTeaserEnergyDrainersDesc =>
+      'Modunu düşüren gizli sebepleri bul.';
+
+  @override
+  String get insightTeaserSleepAnalysisTitle => 'Uyku Durumu 🔒';
+
+  @override
+  String get insightTeaserSleepAnalysisDesc =>
+      'Uyku kaliten seni nasıl etkiliyor?';
+
+  @override
+  String get insightTeaserGoPremiumTitle => 'Daha fazlası için Premium ol';
+
+  @override
+  String get insightTeaserGoPremiumDesc => 'Sınırsız analiz ve içerik erişimi.';
+
+  @override
+  String get insightBadSleepTitle => 'Düşük Uyku Kalitesi';
+
+  @override
+  String insightBadSleepDesc(String percent) {
+    return 'Kötü uyku modunu %$percent düşürüyor.';
+  }
+
+  @override
+  String get insightAverageSleepTitle => 'Ortalama Uyku';
+
+  @override
+  String get insightAverageSleepDesc =>
+      'Uyku kaliten modunu fazla etkilemiyor.';
+
+  @override
+  String get dataCollectionTitle => 'Veriler Toplanıyor... ⏳';
+
+  @override
+  String get dataCollectionDesc =>
+      'Analiz için en az 3-5 gün veri girmelisin. Günlük tutmaya devam et!';
+
+  @override
+  String get themeSelectionTitle => 'TEMA SEÇİMİ';
+
+  @override
+  String get themeColorTitle => 'Renk Teması';
+
+  @override
+  String get themePeach => 'Şeftali';
+
+  @override
+  String get themeCoffee => 'Kahve';
+
+  @override
+  String get themeOcean => 'Okyanus';
+
+  @override
+  String get themeNature => 'Doğa';
+
+  @override
+  String get themeBerry => 'Böğürtlen';
+
+  @override
+  String get themeMidnight => 'Gece';
+
+  @override
+  String get appLock => 'Uygulama Kilidi';
+
+  @override
+  String get appLockDesc => 'Parmak izi veya FaceID ile kilitle';
+
+  @override
+  String get authenticationRequired =>
+      'Devam etmek için kimlik doğrulama gerekli';
+
+  @override
+  String get authenticationFailed => 'Kimlik doğrulama başarısız';
+
+  @override
+  String get biometricNotAvailable =>
+      'Cihazınızda biyometrik kimlik doğrulama kullanılamıyor';
+
+  @override
+  String get journalEmptyMonth => 'Bu ay henüz bir hikaye yazılmadı.';
+
+  @override
+  String get insightMagicDuoTitle => 'Sihirli İkili';
+
+  @override
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  ) {
+    return '$activity1 & $activity2 beraberken modun %$percent artıyor!';
+  }
+
+  @override
+  String get insightBestDayTitle => 'Haftanın Şampiyonu';
+
+  @override
+  String insightBestDayDesc(String day) {
+    return '$day senin günün! ⭐';
+  }
+
+  @override
+  String get insightStabilityRockTitle => 'Duygusal Kaya';
+
+  @override
+  String get insightStabilityRockDesc => 'Dengeli ve tutarlı bir mod';
+
+  @override
+  String get insightStabilityWaveTitle => 'Duygusal Lunapark';
+
+  @override
+  String get insightStabilityWaveDesc => 'Dalgalı bir ruh hali';
+
+  @override
+  String get paywallTitle => 'DearDay Premium';
+
+  @override
+  String get paywallSubtitle =>
+      'Potansiyelini keşfet, en iyi versiyonuna ulaş.';
+
+  @override
+  String get featureUnlimitedStories => 'Hikaye Varyasyonları 📝';
+
+  @override
+  String get featureDetailedAnalysis => 'İlişkisel & Detaylı Analizler 📊';
+
+  @override
+  String get featureYearInPixels =>
+      'Yıllık Piksel Haritası (Year in Pixels) 📅';
+
+  @override
+  String get featurePdfExport => 'PDF Günlük Çıktısı 📕';
+
+  @override
+  String get planWeekly => 'Haftalık Plan';
+
+  @override
+  String get planMonthly => 'Aylık Plan';
+
+  @override
+  String get planYearly => 'Yıllık Plan';
+
+  @override
+  String get planLifetime => 'Ömür Boyu';
+
+  @override
+  String get priceWeeklyMock => '₺29.99 / hafta';
+
+  @override
+  String get priceMonthlyMock => '₺49.99 / ay';
+
+  @override
+  String get priceYearlyMock => '₺299.99 / yıl';
+
+  @override
+  String get priceMonthlyBreakdownMock => 'Sadece ₺24.99 / ay';
+
+  @override
+  String get priceLifetimeMock => '₺999.99';
+
+  @override
+  String get priceOneTime => 'Tek seferlik ödeme';
+
+  @override
+  String get bestValue => 'EN POPÜLER';
+
+  @override
+  String get badgeOneTime => 'TEK SEFERLİK';
+
+  @override
+  String get btnStartTrial => 'Ücretsiz Denemeyi Başlat';
+
+  @override
+  String get btnBecomePremium => 'Premium Ol';
+
+  @override
+  String get restorePurchase => 'Satın Alımı Geri Yükle';
+
+  @override
+  String get trialToday => 'Bugün';
+
+  @override
+  String get trialTodayDesc => 'Premium\'u Aç';
+
+  @override
+  String get trialDay5 => '5. Gün';
+
+  @override
+  String get trialDay5Desc => 'Hatırlatma';
+
+  @override
+  String get trialDay7 => '7. Gün';
+
+  @override
+  String get trialDay7Desc => 'Abonelik Başlar';
+
+  @override
+  String get trialGuarantee =>
+      'İstediğin zaman Play Store ayarlarından iptal edebilirsin. Taahhüt yok.';
+
+  @override
+  String get btnSubscribe => 'Abone Ol';
+
+  @override
+  String get termsOfUse => 'Kullanım Koşulları';
+
+  @override
+  String get privacyPolicy => 'Gizlilik Politikası';
+
+  @override
+  String get dailyReminder => 'Günlük Hatırlatıcı';
+
+  @override
+  String get dailyReminderDesc => 'Her gün hatırlatma al';
+
+  @override
+  String get notificationDailyTitle => 'Günün nasıl geçti? 🌙';
+
+  @override
+  String get notificationDailyBody => 'Kendine bir not bırakmak ister misin?';
+
+  @override
+  String get exactAlarmPermissionTitle => '⏰ Bildirim İzni Gerekli';
+
+  @override
+  String get exactAlarmPermissionMessage =>
+      'Günlük hatırlatıcıların tam zamanında çalışması için \"Alarmlar ve Hatırlatıcılar\" iznine ihtiyaç var.\n\nSonraki ekranda:\n1. \"DearDay\" uygulamasını bul\n2. \"Alarms & reminders\" iznini AÇ\n3. Geri dön';
+
+  @override
+  String get notificationTrialTitle =>
+      'Deneme sürenin bitmesine 2 gün kaldı! 🔔';
+
+  @override
+  String get notificationTrialBody =>
+      'Hatırlatma: Aboneliğin 48 saat içinde başlayacak.';
+
+  @override
+  String get btnGoToSettings => 'Ayarlara Git';
+
+  @override
+  String get exportFileName => 'DearDay Dışa Aktarım';
+
+  @override
+  String get generatingPdf => 'PDF Oluşturuluyor...';
+
+  @override
+  String get restoreSuccess => 'Aboneliğiniz başarıyla geri yüklendi! 🎉';
+
+  @override
+  String get restoreNoSubscription => 'Aktif bir abonelik bulunamadı';
+
+  @override
+  String get restoreError => 'Bir hata oluştu, lütfen tekrar deneyin';
+
+  @override
+  String get perMonthSuffix => '/ ay';
 }

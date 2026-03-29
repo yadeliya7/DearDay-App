@@ -1,17 +1,17 @@
 import 'dart:io';
-import 'package:poem_diary/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
-import '../models/poem_model.dart';
-import '../models/daily_entry_model.dart';
-import '../helpers/story_generator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
+
 import '../core/providers.dart';
 import '../core/language_provider.dart';
-
-import 'package:intl/intl.dart';
+import '../models/daily_entry_model.dart';
+import '../models/poem_model.dart';
+import '../helpers/story_generator.dart';
 
 Future<void> showMoodEntryDialog(
   BuildContext context, {
@@ -49,6 +49,7 @@ class MoodEntrySheet extends StatefulWidget {
   final List<String> initialMedia;
   final Map<String, dynamic> initialActivities;
   final String? initialSavedStory;
+  final bool isEmbedded; // New flag to hide internal header
 
   const MoodEntrySheet({
     super.key,
@@ -59,13 +60,14 @@ class MoodEntrySheet extends StatefulWidget {
     required this.initialMedia,
     required this.initialActivities,
     this.initialSavedStory,
+    this.isEmbedded = false, // Default to false for backward compatibility
   });
 
   @override
-  State<MoodEntrySheet> createState() => _MoodEntrySheetState();
+  State<MoodEntrySheet> createState() => MoodEntrySheetState();
 }
 
-class _MoodEntrySheetState extends State<MoodEntrySheet> {
+class MoodEntrySheetState extends State<MoodEntrySheet> {
   late ValueNotifier<MoodCategory?> moodNotifier;
   late TextEditingController noteController;
   late List<String> selectedMedia;
@@ -180,7 +182,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
     });
   }
 
-  Future<void> _pickMedia() async {
+  Future<void> _pickImage() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -195,6 +197,25 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
       }
       setState(() {
         selectedMedia.add(image.path);
+      });
+    }
+  }
+
+  Future<void> _pickVideo() async {
+    final picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
+
+    if (!mounted) return;
+    final loc = AppLocalizations.of(context)!;
+    if (video != null) {
+      if (selectedMedia.length >= 5) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(loc.maxMediaWarning)));
+        return;
+      }
+      setState(() {
+        selectedMedia.add(video.path);
       });
     }
   }
@@ -231,9 +252,85 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
     }
   }
 
+  // Expose saveEntry as public method for parent widget
+  void saveEntry() {
+    final loc = AppLocalizations.of(context)!;
+
+    // Close keyboard first
+    FocusScope.of(context).unfocus();
+
+    if (moodNotifier.value == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.selectMoodWarning)));
+      return;
+    }
+
+    widget.provider.saveDailyEntry(
+      widget.date,
+      moodNotifier.value!.code,
+      noteController.text,
+      selectedMedia,
+      activities,
+      null, // customStory
+      _generatedStoryText.isNotEmpty ? _generatedStoryText : null, // savedStory
+    );
+
+    if (widget.isEmbedded) {
+      // STAY ON SCREEN for seamless editing
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.msgEntryUpdated), // Or use loc.saveSuccess + icon
+          backgroundColor: Theme.of(context).primaryColor,
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context)!;
+
+    // Use Container for embedded mode, DraggableScrollableSheet for modal
+    if (widget.isEmbedded) {
+      return Container(
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  16,
+                  20,
+                  16,
+                  80,
+                ), // Extra bottom padding for FAB
+                children: [
+                  // Mood Section
+                  _buildSectionTitle(context, loc.moodTitle),
+                  _buildMoodSelector(context, isDark),
+                  const Divider(height: 32),
+                  // ... Content continues ...
+                  // Content (Sleep, Health, etc)
+                  _buildContent(context, isDark, loc),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
@@ -256,659 +353,10 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                   controller: scrollController,
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
                   children: [
-                    // Mood Section
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.moodTitle,
-                    ),
+                    _buildSectionTitle(context, loc.moodTitle),
                     _buildMoodSelector(context, isDark),
-
                     const Divider(height: 32),
-
-                    // Sleep (Single Select)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionSleep,
-                    ),
-                    Wrap(
-                      spacing: 12,
-                      children: [
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.sleepGood,
-                          LineIcons.sun,
-                          'sleep',
-                          'good',
-                          activeColor: Colors.orangeAccent,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.sleepMedium,
-                          LineIcons.cloudWithMoon,
-                          'sleep',
-                          'medium',
-                          activeColor: Colors.blueGrey,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.sleepBad,
-                          LineIcons.moon,
-                          'sleep',
-                          'bad',
-                          activeColor: Colors.indigo,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Health (Multi)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionHealth,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthSport,
-                          LineIcons.running,
-                          'health',
-                          'sport',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthHealthyFood,
-                          LineIcons.carrot,
-                          'health',
-                          'healthy_food',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthFastFood,
-                          LineIcons.hamburger,
-                          'health',
-                          'fast_food',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthWater,
-                          LineIcons.tint,
-                          'health',
-                          'water',
-                        ),
-                        // New Items
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthWalking,
-                          LineIcons.walking,
-                          'health',
-                          'walking',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthVitamins,
-                          LineIcons.pills,
-                          'health',
-                          'vitamins',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthSleep,
-                          LineIcons.bed,
-                          'health',
-                          'sleep_health',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.healthDoctor,
-                          LineIcons.stethoscope,
-                          'health',
-                          'doctor',
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Social (Multi)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionSocial,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialFriends,
-                          LineIcons.userFriends,
-                          'social',
-                          'friends',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialFamily,
-                          LineIcons.home,
-                          'social',
-                          'family',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialParty,
-                          LineIcons.cocktail,
-                          'social',
-                          'party',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialPartner,
-                          LineIcons.heartAlt,
-                          'social',
-                          'partner',
-                        ),
-                        // New Items
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialGuests,
-                          Icons.people_outline,
-                          'social',
-                          'guests',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialColleagues,
-                          LineIcons.briefcase,
-                          'social',
-                          'colleagues',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialTravel,
-                          LineIcons.plane,
-                          'social',
-                          'travel',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.socialVolunteer,
-                          LineIcons.heart,
-                          'social',
-                          'volunteer',
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Hobbies (Multi)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionHobbies,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyGaming,
-                          LineIcons.gamepad,
-                          'hobbies',
-                          'gaming',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyReading,
-                          LineIcons.book,
-                          'hobbies',
-                          'reading',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyMovie,
-                          LineIcons.video,
-                          'hobbies',
-                          'movie',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyArt,
-                          LineIcons.palette,
-                          'hobbies',
-                          'art',
-                        ),
-                        // New Items
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyMusic,
-                          LineIcons.music,
-                          'hobbies',
-                          'music',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyCoding,
-                          LineIcons.code,
-                          'hobbies',
-                          'coding',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyPhotography,
-                          LineIcons.camera,
-                          'hobbies',
-                          'photography',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.hobbyCrafts,
-                          LineIcons.brush,
-                          'hobbies',
-                          'crafts',
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Chores (Multi)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionChores,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreCleaning,
-                          LineIcons.broom,
-                          'chores',
-                          'cleaning',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreShopping,
-                          LineIcons.shoppingCart,
-                          'chores',
-                          'shopping',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreLaundry,
-                          LineIcons.tShirt,
-                          'chores',
-                          'laundry',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreCooking,
-                          LineIcons.utensils,
-                          'chores',
-                          'cooking',
-                        ),
-                        // New Items
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreIroning,
-                          Icons.iron,
-                          'chores',
-                          'ironing',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreDishes,
-                          Icons.kitchen,
-                          'chores',
-                          'dishes',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.choreRepair,
-                          LineIcons.tools,
-                          'chores',
-                          'repair',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.chorePlants,
-                          LineIcons.leaf,
-                          'chores',
-                          'plants',
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Self Care (Multi)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionSelfCare,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careManicure,
-                          LineIcons.handHoldingHeart,
-                          'selfcare',
-                          'manicure',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careSkincare,
-                          LineIcons.spa,
-                          'selfcare',
-                          'skincare',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careHair,
-                          LineIcons.cut,
-                          'selfcare',
-                          'hair',
-                        ),
-                        // New Items
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careMassage,
-                          Icons.spa,
-                          'selfcare',
-                          'massage',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careFaceMask,
-                          Icons.face,
-                          'selfcare',
-                          'facemask',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careBath,
-                          LineIcons.bath,
-                          'selfcare',
-                          'bath',
-                        ),
-                        _buildFilterChip(
-                          AppLocalizations.of(context)!.careDetox,
-                          Icons.phonelink_off,
-                          'selfcare',
-                          'digital_detox',
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Weather (Single usually, but Multi ok)
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionWeather,
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherSunny,
-                          LineIcons.sun,
-                          'weather',
-                          'sunny',
-                          activeColor: Colors.amber,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherRainy,
-                          LineIcons.cloudWithRain,
-                          'weather',
-                          'rainy',
-                          activeColor: Colors.blue,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherCloudy,
-                          LineIcons.cloud,
-                          'weather',
-                          'cloudy',
-                          activeColor: Colors.grey,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherSnowy,
-                          LineIcons.snowflake,
-                          'weather',
-                          'snowy',
-                          activeColor: Colors.lightBlue,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherWindy,
-                          LineIcons.wind,
-                          'weather',
-                          'windy',
-                          activeColor: Colors.blueGrey,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherFoggy,
-                          Icons
-                              .foggy, // Ensure Icons.foggy exists or use alternative
-                          'weather',
-                          'foggy',
-                          activeColor: Colors.blueGrey,
-                        ),
-                        _buildChoiceChip(
-                          AppLocalizations.of(context)!.weatherHail,
-                          Icons.ac_unit,
-                          'weather',
-                          'hail',
-                          activeColor: Colors.lightBlueAccent,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // HEADER: Daily Goals
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.dailyGoals,
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalNoSmoking,
-                      LineIcons.smokingBan,
-                      'no_smoking',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalSocialDetox,
-                      LineIcons.mobilePhone,
-                      'social_media_detox',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalReadBook,
-                      LineIcons.book,
-                      'read_book',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalDrinkWater,
-                      LineIcons.tint,
-                      'drink_water',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalMeditation,
-                      LineIcons.spa,
-                      'meditation',
-                    ),
-                    // New Goal Items
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalEarlyRise,
-                      LineIcons.bell,
-                      'early_rise',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalNoSugar,
-                      Icons.no_food,
-                      'no_sugar',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalJournaling,
-                      LineIcons.bookOpen,
-                      'journaling',
-                    ),
-                    _buildHabitTile(
-                      AppLocalizations.of(context)!.goalSteps,
-                      LineIcons.shoePrints,
-                      '10k_steps',
-                    ),
-
-                    const Divider(height: 32),
-
-                    // Note & Media
-                    _buildSectionTitle(
-                      context,
-                      AppLocalizations.of(context)!.sectionNotesMedia,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.black26 : Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: TextField(
-                        controller: noteController,
-                        maxLines: 4,
-                        style: GoogleFonts.lora(
-                          fontSize: 16,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)!.notesHint,
-                          hintStyle: TextStyle(
-                            color: isDark ? Colors.white30 : Colors.black38,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // --- MAGIC WAND STORY MAKER ---
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '',
-                            style: GoogleFonts.nunito(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: isDark ? Colors.white70 : Colors.grey,
-                            ),
-                          ),
-                          // Dynamic Magic Wand Button
-                          Builder(
-                            builder: (context) {
-                              final lang = Localizations.localeOf(
-                                context,
-                              ).languageCode;
-                              final hasStory = _generatedStoryText.isNotEmpty;
-
-                              // Dynamic Colors
-                              final Color bgColor = isDark
-                                  ? Colors.white.withValues(alpha: 0.1)
-                                  : Colors.deepPurple.withValues(alpha: 0.05);
-
-                              final Color contentColor = isDark
-                                  ? Colors.amberAccent
-                                  : Theme.of(context).primaryColor;
-
-                              final Color borderColor = isDark
-                                  ? Colors.amberAccent.withValues(alpha: 0.3)
-                                  : Theme.of(
-                                      context,
-                                    ).primaryColor.withValues(alpha: 0.2);
-
-                              // Dynamic Label
-                              String label;
-                              if (hasStory) {
-                                label = (lang == 'en')
-                                    ? "Remove Story"
-                                    : "Hikayeyi Kaldır";
-                              } else {
-                                label = (lang == 'en')
-                                    ? "Magic Story"
-                                    : "Hikaye Oluştur";
-                              }
-
-                              return InkWell(
-                                onTap: _toggleStoryGeneration,
-                                borderRadius: BorderRadius.circular(30),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: bgColor,
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(color: borderColor),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        hasStory
-                                            ? Icons.close
-                                            : Icons.auto_awesome,
-                                        color: contentColor,
-                                        size: 18,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        label,
-                                        style: GoogleFonts.nunito(
-                                          color: contentColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    if (_isGeneratingStory)
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-
-                    if (_generatedStoryText.isNotEmpty && !_isGeneratingStory)
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF2C2C2E)
-                              : const Color(0xFFFFF8E1), // Creamy for story
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: isDark
-                                ? Colors.transparent
-                                : Colors.amber.withValues(alpha: 0.3),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.auto_awesome,
-                                  size: 16,
-                                  color: Colors.amber[700],
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'AI Story',
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.amber[700],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _generatedStoryText,
-                              style: GoogleFonts.merriweather(
-                                fontSize: 14,
-                                height: 1.6,
-                                color: isDark ? Colors.white70 : Colors.black87,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    // --- END MAGIC WAND ---
-                    const SizedBox(height: 12),
-                    _buildMediaSection(context, isDark),
-
-                    const SizedBox(height: 80), // Space for fab/bottom area
+                    _buildContent(context, isDark, loc),
                   ],
                 ),
               ),
@@ -916,6 +364,642 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    bool isDark,
+    AppLocalizations loc,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Sleep
+        _buildSectionTitle(context, loc.sectionSleep),
+        Wrap(
+          spacing: 12,
+          children: [
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.sleepGood,
+              LineIcons.sun,
+              'sleep',
+              'good',
+              activeColor: Colors.orangeAccent,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.sleepMedium,
+              LineIcons.cloudWithMoon,
+              'sleep',
+              'medium',
+              activeColor: Colors.blueGrey,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.sleepBad,
+              LineIcons.moon,
+              'sleep',
+              'bad',
+              activeColor: Colors.indigo,
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Health (Multi)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionHealth,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthSport,
+              LineIcons.running,
+              'health',
+              'sport',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthHealthyFood,
+              LineIcons.carrot,
+              'health',
+              'healthy_food',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthFastFood,
+              LineIcons.hamburger,
+              'health',
+              'fast_food',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthWater,
+              LineIcons.tint,
+              'health',
+              'water',
+            ),
+            // New Items
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthWalking,
+              LineIcons.walking,
+              'health',
+              'walking',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthVitamins,
+              LineIcons.pills,
+              'health',
+              'vitamins',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthSleep,
+              LineIcons.bed,
+              'health',
+              'sleep_health',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.healthDoctor,
+              LineIcons.stethoscope,
+              'health',
+              'doctor',
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Social (Multi)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionSocial,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialFriends,
+              LineIcons.userFriends,
+              'social',
+              'friends',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialFamily,
+              LineIcons.home,
+              'social',
+              'family',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialParty,
+              LineIcons.cocktail,
+              'social',
+              'party',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialPartner,
+              LineIcons.heartAlt,
+              'social',
+              'partner',
+            ),
+            // New Items
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialGuests,
+              Icons.people_outline,
+              'social',
+              'guests',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialColleagues,
+              LineIcons.briefcase,
+              'social',
+              'colleagues',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialTravel,
+              LineIcons.plane,
+              'social',
+              'travel',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.socialVolunteer,
+              LineIcons.heart,
+              'social',
+              'volunteer',
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Hobbies (Multi)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionHobbies,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyGaming,
+              LineIcons.gamepad,
+              'hobbies',
+              'gaming',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyReading,
+              LineIcons.book,
+              'hobbies',
+              'reading',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyMovie,
+              LineIcons.video,
+              'hobbies',
+              'movie',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyArt,
+              LineIcons.palette,
+              'hobbies',
+              'art',
+            ),
+            // New Items
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyMusic,
+              LineIcons.music,
+              'hobbies',
+              'music',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyCoding,
+              LineIcons.code,
+              'hobbies',
+              'coding',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyPhotography,
+              LineIcons.camera,
+              'hobbies',
+              'photography',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.hobbyCrafts,
+              LineIcons.brush,
+              'hobbies',
+              'crafts',
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Chores (Multi)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionChores,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreCleaning,
+              LineIcons.broom,
+              'chores',
+              'cleaning',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreShopping,
+              LineIcons.shoppingCart,
+              'chores',
+              'shopping',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreLaundry,
+              LineIcons.tShirt,
+              'chores',
+              'laundry',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreCooking,
+              LineIcons.utensils,
+              'chores',
+              'cooking',
+            ),
+            // New Items
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreIroning,
+              Icons.iron,
+              'chores',
+              'ironing',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreDishes,
+              Icons.kitchen,
+              'chores',
+              'dishes',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.choreRepair,
+              LineIcons.tools,
+              'chores',
+              'repair',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.chorePlants,
+              LineIcons.leaf,
+              'chores',
+              'plants',
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Self Care (Multi)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionSelfCare,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careManicure,
+              LineIcons.handHoldingHeart,
+              'selfcare',
+              'manicure',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careSkincare,
+              LineIcons.spa,
+              'selfcare',
+              'skincare',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careHair,
+              LineIcons.cut,
+              'selfcare',
+              'hair',
+            ),
+            // New Items
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careMassage,
+              Icons.spa,
+              'selfcare',
+              'massage',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careFaceMask,
+              Icons.face,
+              'selfcare',
+              'facemask',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careBath,
+              LineIcons.bath,
+              'selfcare',
+              'bath',
+            ),
+            _buildFilterChip(
+              AppLocalizations.of(context)!.careDetox,
+              Icons.phonelink_off,
+              'selfcare',
+              'digital_detox',
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Weather (Single usually, but Multi ok)
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionWeather,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherSunny,
+              LineIcons.sun,
+              'weather',
+              'sunny',
+              activeColor: Colors.amber,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherRainy,
+              LineIcons.cloudWithRain,
+              'weather',
+              'rainy',
+              activeColor: Colors.blue,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherCloudy,
+              LineIcons.cloud,
+              'weather',
+              'cloudy',
+              activeColor: Colors.grey,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherSnowy,
+              LineIcons.snowflake,
+              'weather',
+              'snowy',
+              activeColor: Colors.lightBlue,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherWindy,
+              LineIcons.wind,
+              'weather',
+              'windy',
+              activeColor: Colors.blueGrey,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherFoggy,
+              Icons.foggy, // Ensure Icons.foggy exists or use alternative
+              'weather',
+              'foggy',
+              activeColor: Colors.blueGrey,
+            ),
+            _buildChoiceChip(
+              AppLocalizations.of(context)!.weatherHail,
+              Icons.ac_unit,
+              'weather',
+              'hail',
+              activeColor: Colors.lightBlueAccent,
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // HEADER: Daily Goals
+        _buildSectionTitle(context, AppLocalizations.of(context)!.dailyGoals),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalNoSmoking,
+          LineIcons.smokingBan,
+          'no_smoking',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalSocialDetox,
+          LineIcons.mobilePhone,
+          'social_media_detox',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalReadBook,
+          LineIcons.book,
+          'read_book',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalDrinkWater,
+          LineIcons.tint,
+          'drink_water',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalMeditation,
+          LineIcons.spa,
+          'meditation',
+        ),
+        // New Goal Items
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalEarlyRise,
+          LineIcons.bell,
+          'early_rise',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalNoSugar,
+          Icons.no_food,
+          'no_sugar',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalJournaling,
+          LineIcons.bookOpen,
+          'journaling',
+        ),
+        _buildHabitTile(
+          AppLocalizations.of(context)!.goalSteps,
+          LineIcons.shoePrints,
+          '10k_steps',
+        ),
+
+        const Divider(height: 32),
+
+        // Note & Media
+        _buildSectionTitle(
+          context,
+          AppLocalizations.of(context)!.sectionNotesMedia,
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.black26 : Colors.grey[100],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            controller: noteController,
+            maxLines: 4,
+            style: GoogleFonts.lora(
+              fontSize: 16,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.notesHint,
+              hintStyle: TextStyle(
+                color: isDark ? Colors.white30 : Colors.black38,
+              ),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // --- MAGIC WAND STORY MAKER ---
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '',
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white70 : Colors.grey,
+                ),
+              ),
+              // Dynamic Magic Wand Button
+              Builder(
+                builder: (context) {
+                  final lang = Localizations.localeOf(context).languageCode;
+                  final hasStory = _generatedStoryText.isNotEmpty;
+
+                  // Dynamic Colors
+                  final Color bgColor = isDark
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.deepPurple.withValues(alpha: 0.05);
+
+                  final Color contentColor = isDark
+                      ? Colors.amberAccent
+                      : Theme.of(context).primaryColor;
+
+                  final Color borderColor = isDark
+                      ? Colors.amberAccent.withValues(alpha: 0.3)
+                      : Theme.of(context).primaryColor.withValues(alpha: 0.2);
+
+                  // Dynamic Label
+                  String label;
+                  if (hasStory) {
+                    label = (lang == 'en') ? "Remove Story" : "Hikayeyi Kaldır";
+                  } else {
+                    label = (lang == 'en') ? "Magic Story" : "Hikaye Oluştur";
+                  }
+
+                  return InkWell(
+                    onTap: _toggleStoryGeneration,
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: bgColor,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: borderColor),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            hasStory ? Icons.close : Icons.auto_awesome,
+                            color: contentColor,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            label,
+                            style: GoogleFonts.poppins(
+                              color: contentColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+
+        if (_isGeneratingStory)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+
+        if (_generatedStoryText.isNotEmpty && !_isGeneratingStory)
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? const Color(0xFF2C2C2E)
+                  : const Color(0xFFFFF8E1), // Creamy for story
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark
+                    ? Colors.transparent
+                    : Colors.amber.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.auto_awesome,
+                      size: 16,
+                      color: Colors.amber[700],
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'AI Story',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber[700],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _generatedStoryText,
+                  style: GoogleFonts.merriweather(
+                    fontSize: 14,
+                    height: 1.6,
+                    color: isDark ? Colors.white70 : Colors.black87,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // --- END MAGIC WAND ---
+        const SizedBox(height: 12),
+        _buildMediaSection(context, isDark),
+
+        const SizedBox(height: 80), // Space for fab/bottom area
+      ],
     );
   }
 
@@ -938,7 +1022,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
               'd MMMM yyyy',
               Provider.of<LanguageProvider>(context).currentLanguage,
             ).format(widget.date),
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : Colors.black87,
@@ -954,13 +1038,6 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
               }
               // Generate Story for Persistence (without note, to avoid duplication in PDF)
               // Create a temp entry for generation
-              final tempEntry = DailyEntry(
-                moodCode: moodNotifier.value!.code,
-                note: noteController.text,
-                date: widget.date,
-                mediaPaths: selectedMedia,
-                activities: activities,
-              );
 
               // NO AUTO GENERATION HERE. We use _generatedStoryText.
               /* 
@@ -994,7 +1071,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
             },
             child: Text(
               loc.save.toUpperCase(),
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white70 : Colors.black87,
@@ -1013,7 +1090,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
         alignment: Alignment.centerLeft,
         child: Text(
           title,
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.grey,
@@ -1043,9 +1120,9 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(
-                    horizontal: 4,
+                    horizontal: 6,
                   ), // Tighter margin
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? _getMoodColor(mood.code)
@@ -1059,14 +1136,14 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                   ),
                   child: Text(
                     mood.emoji,
-                    style: TextStyle(fontSize: isSelected ? 30 : 22),
+                    style: TextStyle(fontSize: isSelected ? 30 : 24),
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   _getMoodName(context, mood.code),
-                  style: GoogleFonts.nunito(
-                    fontSize: 9,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
                     fontWeight: isSelected
                         ? FontWeight.bold
                         : FontWeight.normal,
@@ -1235,7 +1312,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : Colors.black87,
@@ -1245,7 +1322,7 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 if (displayStreak > 0)
                   Text(
                     '🔥 ${AppLocalizations.of(context)!.dailyStreak(displayStreak)}',
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: Colors.orange,
@@ -1254,7 +1331,10 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
                 else
                   Text(
                     AppLocalizations.of(context)!.startStreak,
-                    style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey),
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
                   ),
               ],
             ),
@@ -1326,40 +1406,98 @@ class _MoodEntrySheetState extends State<MoodEntrySheet> {
             ),
           ),
         const SizedBox(height: 12),
-        InkWell(
-          onTap: _pickMedia,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.05)
-                  : Colors.grey[200],
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isDark ? Colors.white24 : Colors.grey[300]!,
-                width: 1,
-                style: BorderStyle.solid,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.add_photo_alternate,
-                  color: Theme.of(context).primaryColor,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  AppLocalizations.of(context)!.btnAddPhoto,
-                  style: GoogleFonts.nunito(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            // Photo Button
+            Expanded(
+              child: InkWell(
+                onTap: _pickImage,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : Colors.grey[300]!,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate,
+                        color: Theme.of(context).primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.btnAddPhoto,
+                        style: GoogleFonts.poppins(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(width: 12),
+            // Video Button
+            Expanded(
+              child: InkWell(
+                onTap: _pickVideo,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : Colors.grey[300]!,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.videocam,
+                        color: Theme.of(context).primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.btnAddVideo,
+                        style: GoogleFonts.poppins(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

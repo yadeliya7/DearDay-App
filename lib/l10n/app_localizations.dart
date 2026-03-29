@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'You haven\'t lived the future yet!'**
   String get futureWarning;
 
+  /// No description provided for @selectMoodFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your mood first 👆'**
+  String get selectMoodFirst;
+
   /// No description provided for @writePoem.
   ///
   /// In en, this message translates to:
@@ -462,7 +468,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Note of the day: {note}'**
-  String dayNote(Object note);
+  String dayNote(String note);
 
   /// No description provided for @journal_sport.
   ///
@@ -816,7 +822,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'The weather was {weather}.'**
-  String weather_context(Object weather);
+  String weather_context(String weather);
 
   /// No description provided for @weather_sentence_sunny.
   ///
@@ -986,6 +992,12 @@ abstract class AppLocalizations {
   /// **'Diary entry saved'**
   String get msgEntrySaved;
 
+  /// No description provided for @msgEntryUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry updated successfully! ✨'**
+  String get msgEntryUpdated;
+
   /// No description provided for @shareText.
   ///
   /// In en, this message translates to:
@@ -1081,6 +1093,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Created with'**
   String get createdWith;
+
+  /// No description provided for @shareMonthlyMood.
+  ///
+  /// In en, this message translates to:
+  /// **'My monthly mood calendar! 📅✨ #DearDay'**
+  String get shareMonthlyMood;
+
+  /// No description provided for @shareYearlyMood.
+  ///
+  /// In en, this message translates to:
+  /// **'My yearly mood calendar! 📅✨ #DearDay'**
+  String get shareYearlyMood;
+
+  /// No description provided for @moodStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'MOOD STATUS'**
+  String get moodStatusLabel;
 
   /// No description provided for @dailyGoals.
   ///
@@ -1261,6 +1291,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Photo'**
   String get btnAddPhoto;
+
+  /// No description provided for @btnAddVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Video'**
+  String get btnAddVideo;
+
+  /// No description provided for @celebrationKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Going! 🚀'**
+  String get celebrationKeepGoing;
+
+  /// No description provided for @celebrationCongrats.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! '**
+  String get celebrationCongrats;
+
+  /// No description provided for @celebrationOver30Part1.
+  ///
+  /// In en, this message translates to:
+  /// **'Amazing! '**
+  String get celebrationOver30Part1;
+
+  /// No description provided for @celebrationOver30Part2.
+  ///
+  /// In en, this message translates to:
+  /// **' habit reached day '**
+  String get celebrationOver30Part2;
+
+  /// No description provided for @celebrationOver30Part3.
+  ///
+  /// In en, this message translates to:
+  /// **'.\nWe\'ll celebrate your victory every 15 days!'**
+  String get celebrationOver30Part3;
+
+  /// No description provided for @celebrationGoalUpgraded.
+  ///
+  /// In en, this message translates to:
+  /// **'🚀 Your goal has been automatically upgraded to {nextLevel} days!'**
+  String celebrationGoalUpgraded(int nextLevel);
+
+  /// No description provided for @celebrationNewGoalButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Goal'**
+  String get celebrationNewGoalButton;
+
+  /// No description provided for @celebrationGreatButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Great!'**
+  String get celebrationGreatButton;
+
+  /// No description provided for @cannotGoToFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t go to the future yet!'**
+  String get cannotGoToFuture;
+
+  /// No description provided for @videoFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video File'**
+  String get videoFileTitle;
+
+  /// No description provided for @videoPlaybackComing.
+  ///
+  /// In en, this message translates to:
+  /// **'Video playback coming soon'**
+  String get videoPlaybackComing;
+
+  /// No description provided for @unableToLoadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load image'**
+  String get unableToLoadImage;
+
+  /// No description provided for @fileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File not found'**
+  String get fileNotFound;
 
   /// No description provided for @goalDuration.
   ///
@@ -1487,7 +1601,7 @@ abstract class AppLocalizations {
   /// No description provided for @analysisSleepQuality.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Quality'**
+  /// **'Sleep Status'**
   String get analysisSleepQuality;
 
   /// No description provided for @analysisTopActivities.
@@ -1499,8 +1613,8 @@ abstract class AppLocalizations {
   /// No description provided for @mostFrequentActivities.
   ///
   /// In en, this message translates to:
-  /// **'Top Activities ({year})'**
-  String mostFrequentActivities(int year);
+  /// **'Top Activities'**
+  String get mostFrequentActivities;
 
   /// No description provided for @analysisAllActivities.
   ///
@@ -1585,6 +1699,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'\nYou completed {days} days streak!'**
   String streakGoalCompleted(int days);
+
+  /// No description provided for @trialBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'7 Days Free'**
+  String get trialBadge;
 
   /// No description provided for @sectionSocial.
   ///
@@ -2003,13 +2123,13 @@ abstract class AppLocalizations {
   /// No description provided for @aboutContentTitle.
   ///
   /// In en, this message translates to:
-  /// **'Content & Poems'**
+  /// **'Features & Content'**
   String get aboutContentTitle;
 
   /// No description provided for @aboutContentDesc.
   ///
   /// In en, this message translates to:
-  /// **'Poems and quotes in the app are for motivation and cultural sharing purposes. Content can be edited upon request of rights holders.'**
+  /// **'DearDay offers mood tracking, habit monitoring, insights, and personalized stories to help you on your self-awareness journey.'**
   String get aboutContentDesc;
 
   /// No description provided for @aboutLegalTitle.
@@ -2051,7 +2171,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s meet... How should we address you?'**
+  /// **'How should we address you?'**
   String get welcomeSubtitle;
 
   /// No description provided for @nameHint.
@@ -2135,7 +2255,7 @@ abstract class AppLocalizations {
   /// No description provided for @insightSleepTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sleep Factor'**
+  /// **'Sleep Quality'**
   String get insightSleepTitle;
 
   /// No description provided for @insightWeekendDesc.
@@ -2227,6 +2347,502 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mood of the Year: '**
   String get moodOfTheYear;
+
+  /// No description provided for @insightTeaserSuperPowerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Super Power? 🔒'**
+  String get insightTeaserSuperPowerTitle;
+
+  /// No description provided for @insightTeaserSuperPowerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover which activity makes you 40% happier.'**
+  String get insightTeaserSuperPowerDesc;
+
+  /// No description provided for @insightTeaserEnergyDrainersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy Drainers 🔒'**
+  String get insightTeaserEnergyDrainersTitle;
+
+  /// No description provided for @insightTeaserEnergyDrainersDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Find hidden reasons draining your mood.'**
+  String get insightTeaserEnergyDrainersDesc;
+
+  /// No description provided for @insightTeaserSleepAnalysisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Status 🔒'**
+  String get insightTeaserSleepAnalysisTitle;
+
+  /// No description provided for @insightTeaserSleepAnalysisDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'How does your sleep quality affect you?'**
+  String get insightTeaserSleepAnalysisDesc;
+
+  /// No description provided for @insightTeaserGoPremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium for more'**
+  String get insightTeaserGoPremiumTitle;
+
+  /// No description provided for @insightTeaserGoPremiumDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock unlimited analysis and content.'**
+  String get insightTeaserGoPremiumDesc;
+
+  /// No description provided for @insightBadSleepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor Sleep Quality'**
+  String get insightBadSleepTitle;
+
+  /// No description provided for @insightBadSleepDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor sleep lowers your mood by %{percent}.'**
+  String insightBadSleepDesc(String percent);
+
+  /// No description provided for @insightAverageSleepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Sleep'**
+  String get insightAverageSleepTitle;
+
+  /// No description provided for @insightAverageSleepDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your sleep quality has a neutral impact.'**
+  String get insightAverageSleepDesc;
+
+  /// No description provided for @dataCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gathering Data... ⏳'**
+  String get dataCollectionTitle;
+
+  /// No description provided for @dataCollectionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to enter data for at least 3-5 days for analysis. Keep journaling!'**
+  String get dataCollectionDesc;
+
+  /// No description provided for @themeSelectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'THEME SELECTION'**
+  String get themeSelectionTitle;
+
+  /// No description provided for @themeColorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Theme'**
+  String get themeColorTitle;
+
+  /// No description provided for @themePeach.
+  ///
+  /// In en, this message translates to:
+  /// **'Peach'**
+  String get themePeach;
+
+  /// No description provided for @themeCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get themeCoffee;
+
+  /// No description provided for @themeOcean.
+  ///
+  /// In en, this message translates to:
+  /// **'Ocean'**
+  String get themeOcean;
+
+  /// No description provided for @themeNature.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature'**
+  String get themeNature;
+
+  /// No description provided for @themeBerry.
+  ///
+  /// In en, this message translates to:
+  /// **'Berry'**
+  String get themeBerry;
+
+  /// No description provided for @themeMidnight.
+  ///
+  /// In en, this message translates to:
+  /// **'Midnight'**
+  String get themeMidnight;
+
+  /// No description provided for @appLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get appLock;
+
+  /// No description provided for @appLockDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock with fingerprint or FaceID'**
+  String get appLockDesc;
+
+  /// No description provided for @authenticationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication required to continue'**
+  String get authenticationRequired;
+
+  /// No description provided for @authenticationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed'**
+  String get authenticationFailed;
+
+  /// No description provided for @biometricNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication is not available on your device'**
+  String get biometricNotAvailable;
+
+  /// No description provided for @journalEmptyMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No story has been written for this month yet.'**
+  String get journalEmptyMonth;
+
+  /// No description provided for @insightMagicDuoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Magic Duo'**
+  String get insightMagicDuoTitle;
+
+  /// No description provided for @insightMagicDuoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'{activity1} & {activity2} together boost your mood by {percent}%!'**
+  String insightMagicDuoDesc(
+    String activity1,
+    String activity2,
+    String percent,
+  );
+
+  /// No description provided for @insightBestDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Week Champion'**
+  String get insightBestDayTitle;
+
+  /// No description provided for @insightBestDayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} is your day! ⭐'**
+  String insightBestDayDesc(String day);
+
+  /// No description provided for @insightStabilityRockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional Rock'**
+  String get insightStabilityRockTitle;
+
+  /// No description provided for @insightStabilityRockDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced and consistent mood'**
+  String get insightStabilityRockDesc;
+
+  /// No description provided for @insightStabilityWaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional Rollercoaster'**
+  String get insightStabilityWaveTitle;
+
+  /// No description provided for @insightStabilityWaveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fluctuating mood pattern'**
+  String get insightStabilityWaveDesc;
+
+  /// No description provided for @paywallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DearDay Premium'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock your potential, reach your best version.'**
+  String get paywallSubtitle;
+
+  /// No description provided for @featureUnlimitedStories.
+  ///
+  /// In en, this message translates to:
+  /// **'Story Variations 📝'**
+  String get featureUnlimitedStories;
+
+  /// No description provided for @featureDetailedAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Relational & Detailed Analysis 📊'**
+  String get featureDetailedAnalysis;
+
+  /// No description provided for @featureYearInPixels.
+  ///
+  /// In en, this message translates to:
+  /// **'Year in Pixels 📅'**
+  String get featureYearInPixels;
+
+  /// No description provided for @featurePdfExport.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Journal Export 📕'**
+  String get featurePdfExport;
+
+  /// No description provided for @planWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Plan'**
+  String get planWeekly;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Plan'**
+  String get planMonthly;
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly Plan'**
+  String get planYearly;
+
+  /// No description provided for @planLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get planLifetime;
+
+  /// No description provided for @priceWeeklyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺29.99 / week'**
+  String get priceWeeklyMock;
+
+  /// No description provided for @priceMonthlyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺49.99 / month'**
+  String get priceMonthlyMock;
+
+  /// No description provided for @priceYearlyMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺299.99 / year'**
+  String get priceYearlyMock;
+
+  /// No description provided for @priceMonthlyBreakdownMock.
+  ///
+  /// In en, this message translates to:
+  /// **'Just ₺24.99 / month'**
+  String get priceMonthlyBreakdownMock;
+
+  /// No description provided for @priceLifetimeMock.
+  ///
+  /// In en, this message translates to:
+  /// **'₺999.99'**
+  String get priceLifetimeMock;
+
+  /// No description provided for @priceOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time payment'**
+  String get priceOneTime;
+
+  /// No description provided for @bestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'BEST VALUE'**
+  String get bestValue;
+
+  /// No description provided for @badgeOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'ONE TIME'**
+  String get badgeOneTime;
+
+  /// No description provided for @btnStartTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Free Trial'**
+  String get btnStartTrial;
+
+  /// No description provided for @btnBecomePremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get btnBecomePremium;
+
+  /// No description provided for @restorePurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchase'**
+  String get restorePurchase;
+
+  /// No description provided for @trialToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get trialToday;
+
+  /// No description provided for @trialTodayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Premium'**
+  String get trialTodayDesc;
+
+  /// No description provided for @trialDay5.
+  ///
+  /// In en, this message translates to:
+  /// **'Day 5'**
+  String get trialDay5;
+
+  /// No description provided for @trialDay5Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Sent'**
+  String get trialDay5Desc;
+
+  /// No description provided for @trialDay7.
+  ///
+  /// In en, this message translates to:
+  /// **'Day 7'**
+  String get trialDay7;
+
+  /// No description provided for @trialDay7Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts'**
+  String get trialDay7Desc;
+
+  /// No description provided for @trialGuarantee.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel anytime via Play Store settings. No commitment.'**
+  String get trialGuarantee;
+
+  /// No description provided for @btnSubscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe'**
+  String get btnSubscribe;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @dailyReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Reminder'**
+  String get dailyReminder;
+
+  /// No description provided for @dailyReminderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get reminded every day'**
+  String get dailyReminderDesc;
+
+  /// No description provided for @notificationDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your day? 🌙'**
+  String get notificationDailyTitle;
+
+  /// No description provided for @notificationDailyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to leave a note for yourself?'**
+  String get notificationDailyBody;
+
+  /// No description provided for @exactAlarmPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'⏰ Notification Permission Required'**
+  String get exactAlarmPermissionTitle;
+
+  /// No description provided for @exactAlarmPermissionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'For daily reminders to work precisely, we need the \"Alarms & reminders\" permission.\n\nOn the next screen:\n1. Find \"DearDay\" app\n2. Turn ON \"Alarms & reminders\" permission\n3. Go back'**
+  String get exactAlarmPermissionMessage;
+
+  /// No description provided for @notificationTrialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2 days left in your trial! 🔔'**
+  String get notificationTrialTitle;
+
+  /// No description provided for @notificationTrialBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder: Your subscription starts in 48 hours.'**
+  String get notificationTrialBody;
+
+  /// No description provided for @btnGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get btnGoToSettings;
+
+  /// No description provided for @exportFileName.
+  ///
+  /// In en, this message translates to:
+  /// **'DearDay Export'**
+  String get exportFileName;
+
+  /// No description provided for @generatingPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating PDF...'**
+  String get generatingPdf;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription restored successfully! 🎉'**
+  String get restoreSuccess;
+
+  /// No description provided for @restoreNoSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'No active subscription found'**
+  String get restoreNoSubscription;
+
+  /// No description provided for @restoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred, please try again'**
+  String get restoreError;
+
+  /// No description provided for @perMonthSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'/ month'**
+  String get perMonthSuffix;
 }
 
 class _AppLocalizationsDelegate

@@ -11,11 +11,13 @@ import '../core/language_provider.dart';
 
 import '../models/poem_model.dart';
 import 'package:line_icons/line_icons.dart';
+import 'main_scaffold.dart';
 
-import '../widgets/mood_entry_dialog.dart';
 import '../widgets/home_mood_selector.dart';
+import '../widgets/premium_habit_button.dart';
 import '../helpers/localization_helper.dart';
 import '../helpers/story_generator.dart';
+import 'daily_detail_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -96,9 +98,9 @@ class _HomeTabState extends State<HomeTab> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.today,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white70 : Colors.black54,
                       ),
                     ),
@@ -122,9 +124,9 @@ class _HomeTabState extends State<HomeTab> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   AppLocalizations.of(context)!.pastRecords,
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: isDark ? Colors.white70 : Colors.black54,
                   ),
                 ),
@@ -154,9 +156,9 @@ class _HomeTabState extends State<HomeTab> {
     // 1. Check if entry exists (Mood must be selected)
     if (entry == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Lütfen önce yukarıdan ruh halinizi seçin 👆"),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.selectMoodFirst),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -325,18 +327,22 @@ class _HomeTabState extends State<HomeTab> {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.95),
                         height: 1.5,
                       ),
                       children: [
                         TextSpan(
-                          text: days > 30 ? "Durmak Yok! 🚀\n" : "Tebrikler! ",
-                          style: GoogleFonts.nunito(
+                          text: days > 30
+                              ? "${AppLocalizations.of(context)!.celebrationKeepGoing}\n"
+                              : AppLocalizations.of(
+                                  context,
+                                )!.celebrationCongrats,
+                          style: GoogleFonts.poppins(
                             fontSize: days > 30 ? 24 : 16,
                             fontWeight: days > 30
-                                ? FontWeight.w900
+                                ? FontWeight.bold
                                 : FontWeight.normal,
                             color: Colors.white,
                           ),
@@ -354,26 +360,35 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                         ] else ...[
-                          TextSpan(text: "İnanılmaz! "),
+                          TextSpan(
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part1,
+                          ),
                           TextSpan(
                             text: label,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
-                          TextSpan(text: " alışkanlığında "),
                           TextSpan(
-                            text: "$days. güne ",
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part2,
+                          ),
+                          TextSpan(
+                            text: "$days",
                             style: const TextStyle(
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Colors.yellowAccent,
                             ),
                           ),
                           TextSpan(
-                            text:
-                                "ulaştın.\nHer 15 günde bir yeni zaferini kutlayacağız!",
+                            text: AppLocalizations.of(
+                              context,
+                            )!.celebrationOver30Part3,
                           ),
                         ],
                       ],
@@ -391,11 +406,13 @@ class _HomeTabState extends State<HomeTab> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
-                        "🚀 Hedefin otomatik olarak $nextLevel güne yükseltildi!",
+                        AppLocalizations.of(
+                          context,
+                        )!.celebrationGoalUpgraded(nextLevel),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(
+                        style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                       ),
@@ -417,9 +434,15 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                     child: Text(
-                      nextLevel != null ? "Yeni Hedefe Başla" : "Harika!",
-                      style: GoogleFonts.nunito(
-                        fontWeight: FontWeight.bold,
+                      nextLevel != null
+                          ? AppLocalizations.of(
+                              context,
+                            )!.celebrationNewGoalButton
+                          : AppLocalizations.of(
+                              context,
+                            )!.celebrationGreatButton,
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                     ),
@@ -608,127 +631,28 @@ class _HomeTabState extends State<HomeTab> {
               // Active Decoration
               final gradient = getGradient(key);
 
-              // Inactive Color logic (Dark Matte)
+              // Inactive Color logic (Subtle Box)
               final inactiveColor = isDark
-                  ? const Color(0xFF1E2228) // Deep Matte Grey
+                  ? Colors.white.withValues(
+                      alpha: 0.05,
+                    ) // Subtle glass box for dark mode
                   : Colors.white.withValues(
-                      alpha: 0.4,
-                    ); // Glassy White on Cream
-
-              final inactiveBorder = isDark
-                  ? Border.all(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      width: 1,
-                    )
-                  : null; // No border in light mode or faint
+                      alpha: 0.4, // Glassy White on Cream
+                    );
 
               return Padding(
-                padding: const EdgeInsets.only(
-                  right: 12,
-                ), // Spacing between items
-                child: InkWell(
+                padding: const EdgeInsets.only(right: 12),
+                child: PremiumHabitButton(
+                  label: label,
+                  icon: icon,
+                  count: displayStreak,
+                  goalMax: goalMax,
+                  isDone: isDone,
+                  isGoalReached: isGoalReached,
+                  inactiveColor: inactiveColor,
+                  gradient: gradient,
+                  isDark: isDark,
                   onTap: () => _toggleActivity(context, provider, entry, key),
-                  borderRadius: BorderRadius.circular(30),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      // Active: Gradient, Inactive: Soft solid / glass
-                      gradient: isDone
-                          ? (isGoalReached
-                                ? const LinearGradient(
-                                    colors: [
-                                      Color(0xFFFFD700),
-                                      Color(0xFFFFA000),
-                                    ], // Gold
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  )
-                                : gradient)
-                          : null,
-                      color: isDone ? null : inactiveColor,
-                      border: isDone ? null : inactiveBorder,
-                      boxShadow: isDone
-                          ? [
-                              BoxShadow(
-                                color: isGoalReached
-                                    ? Colors.amber.withValues(alpha: 0.4)
-                                    : Colors.black.withValues(
-                                        alpha: 0.3,
-                                      ), // Dark shadow
-                                blurRadius: isGoalReached ? 10 : 6,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : [],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isGoalReached ? LineIcons.trophy : icon,
-                          size: 20,
-                          color: isDone
-                              ? Colors.white
-                              : (isDark
-                                    ? Colors.white38
-                                    : const Color(
-                                        0xFF4E342E,
-                                      )), // Dark Brown for Cream
-                        ),
-                        const SizedBox(width: 8),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              label,
-                              style: GoogleFonts.nunito(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: isDone
-                                    ? Colors.white
-                                    : (isDark
-                                          ? Colors.white70
-                                          : const Color(
-                                              0xFF4E342E,
-                                            )), // Dark Brown
-                              ),
-                            ),
-                            if (displayStreak > 0)
-                              Row(
-                                children: [
-                                  Icon(
-                                    isGoalReached
-                                        ? Icons.star
-                                        : Icons.local_fire_department,
-                                    size: 10,
-                                    color: isDone
-                                        ? Colors.white.withValues(alpha: 0.8)
-                                        : Colors.orangeAccent,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    "$displayStreak/$goalMax",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 10,
-                                      color: isDone
-                                          ? Colors.white.withValues(alpha: 0.8)
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               );
             },
@@ -785,8 +709,8 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                "Dosya bulunamadı",
-                                style: GoogleFonts.nunito(
+                                AppLocalizations.of(context)!.fileNotFound,
+                                style: GoogleFonts.poppins(
                                   color: Colors.white70,
                                   decoration: TextDecoration.none,
                                   fontSize: 14,
@@ -872,16 +796,16 @@ class _HomeTabState extends State<HomeTab> {
               lang.currentLanguage == 'tr'
                   ? 'Merhaba, $firstName 👋'
                   : 'Hello, $firstName 👋',
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: isDark ? Colors.white : Colors.black87,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               formattedDate,
-              style: GoogleFonts.nunito(fontSize: 14, color: Colors.grey),
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -889,9 +813,10 @@ class _HomeTabState extends State<HomeTab> {
         // Right side: Profile Avatar
         GestureDetector(
           onTap: () {
-            // For now, profile navigation would require accessing MainScaffold
-            // This is a placeholder - proper implementation would use a callback or state management
-            // Navigator.pushNamed doesn't work well with tab-based navigation
+            // Navigate to Profile tab (index 4) by accessing MainScaffold state
+            context.findAncestorStateOfType<MainScaffoldState>()?.onItemTapped(
+              4,
+            );
           },
           child: CircleAvatar(
             radius: 22,
@@ -907,9 +832,9 @@ class _HomeTabState extends State<HomeTab> {
             child: provider.profileImagePath == null
                 ? Text(
                     _getInitials(firstName),
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   )
@@ -944,9 +869,25 @@ class _HomeTabState extends State<HomeTab> {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: mood.color.withValues(alpha: 0.08),
+        color: Theme.of(
+          context,
+        ).cardColor, // Theme-aware color (light cream or dark charcoal)
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: mood.color.withValues(alpha: 0.2), width: 1),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : const Color(0xFFE0C9A6).withValues(alpha: 0.3),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.3)
+                : const Color(0xFFD4A574).withValues(alpha: 0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -960,9 +901,9 @@ class _HomeTabState extends State<HomeTab> {
                   'd MMM yyyy, EEEE',
                   Provider.of<LanguageProvider>(context).currentLanguage,
                 ).format(entry.date),
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white70 : Colors.black54,
                 ),
               ),
@@ -1006,15 +947,13 @@ class _HomeTabState extends State<HomeTab> {
                   IconButton(
                     icon: const Icon(Icons.edit, size: 18, color: Colors.grey),
                     onPressed: () {
-                      showMoodEntryDialog(
+                      // Navigate to DailyDetailScreen (replaces old modal)
+                      Navigator.push(
                         context,
-                        date: entry.date,
-                        provider: provider,
-                        currentMood: entry.moodCode,
-                        currentNote: entry.note,
-                        currentMedia: entry.mediaPaths,
-                        currentActivities: entry.activities,
-                        currentSavedStory: entry.savedStory,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DailyDetailScreen(initialDate: entry.date),
+                        ),
                       );
                     },
                   ),
@@ -1035,9 +974,9 @@ class _HomeTabState extends State<HomeTab> {
                   children: [
                     Text(
                       LocalizationHelper.getMoodName(context, mood.code),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
@@ -1048,7 +987,7 @@ class _HomeTabState extends State<HomeTab> {
                           entry.note!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.nunito(
+                          style: GoogleFonts.poppins(
                             fontSize: 14,
                             color: isDark ? Colors.white60 : Colors.black45,
                             fontStyle: FontStyle.italic,
@@ -1073,202 +1012,278 @@ class _HomeTabState extends State<HomeTab> {
   Widget _buildWrapIcons(DailyEntry entry) {
     // Configuration Map for all activities
     final Map<String, dynamic> activityConfig = {
-      // Sleep
-      'good': {'l': 'İyi Uyku', 'i': LineIcons.sun, 'c': Colors.orange},
+      // Sleep - Soft Purple/Lavender
+      'good': {
+        'l': 'İyi Uyku',
+        'i': LineIcons.sun,
+        'c': const Color(0xFFB39DDB),
+      },
       'medium': {
         'l': 'Orta Uyku',
         'i': LineIcons.cloudWithMoon,
-        'c': Colors.cyanAccent,
+        'c': const Color(0xFF9FA8DA),
       },
       'bad': {
         'l': 'Kötü Uyku',
         'i': LineIcons.moon,
-        'c': Colors.deepPurpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
 
-      // Weather
-      'sunny': {'l': 'Güneşli', 'i': LineIcons.sun, 'c': Colors.amber},
+      // Weather - Light Amber, Soft Blue, Grey
+      'sunny': {
+        'l': 'Güneşli',
+        'i': LineIcons.sun,
+        'c': const Color(0xFFFFD54F),
+      },
       'rainy': {
         'l': 'Yağmurlu',
         'i': LineIcons.cloudWithRain,
-        'c': Colors.blue,
+        'c': const Color(0xFF81D4FA),
       },
-      'cloudy': {'l': 'Bulutlu', 'i': LineIcons.cloud, 'c': Colors.grey},
+      'cloudy': {
+        'l': 'Bulutlu',
+        'i': LineIcons.cloud,
+        'c': const Color(0xFFB0BEC5),
+      },
       'snowy': {
         'l': 'Karlı',
         'i': LineIcons.snowflake,
-        'c': Colors.lightBlueAccent,
+        'c': const Color(0xFFB3E5FC),
       },
-      'windy': {'l': 'Rüzgarlı', 'i': LineIcons.wind, 'c': Colors.blueGrey},
-      'foggy': {'l': 'Sisli', 'i': Icons.foggy, 'c': Colors.blueGrey},
-      'hail': {'l': 'Dolu', 'i': Icons.ac_unit, 'c': Colors.lightBlueAccent},
+      'windy': {
+        'l': 'Rüzgarlı',
+        'i': LineIcons.wind,
+        'c': const Color(0xFF90CAF9),
+      },
+      'foggy': {'l': 'Sisli', 'i': Icons.foggy, 'c': const Color(0xFFCFD8DC)},
+      'hail': {'l': 'Dolu', 'i': Icons.ac_unit, 'c': const Color(0xFFE1F5FE)},
 
-      // Health
-      'sport': {'l': 'Spor', 'i': LineIcons.running, 'c': Colors.green},
+      // Health - Soft Greens, Light Coral
+      'sport': {
+        'l': 'Spor',
+        'i': LineIcons.running,
+        'c': const Color(0xFFA5D6A7),
+      },
       'healthy_food': {
         'l': 'Sağlıklı',
         'i': LineIcons.carrot,
-        'c': Colors.greenAccent,
+        'c': const Color(0xFFC5E1A5),
       },
       'fast_food': {
         'l': 'Fast Food',
         'i': LineIcons.hamburger,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFAB91),
       },
-      'water': {'l': 'Su', 'i': LineIcons.tint, 'c': Colors.blueAccent},
-      'walking': {'l': 'Yürüyüş', 'i': LineIcons.walking, 'c': Colors.green},
+      'water': {'l': 'Su', 'i': LineIcons.tint, 'c': const Color(0xFF80DEEA)},
+      'walking': {
+        'l': 'Yürüyüş',
+        'i': LineIcons.walking,
+        'c': const Color(0xFFB2DFDB),
+      },
       'vitamins': {
         'l': 'Vitamin',
         'i': LineIcons.pills,
-        'c': Colors.greenAccent,
+        'c': const Color(0xFFDCEDC8),
       },
       'sleep_health': {
         'l': 'Uyku',
         'i': LineIcons.bed,
-        'c': Colors.indigoAccent,
+        'c': const Color(0xFFD1C4E9),
       },
       'doctor': {
         'l': 'Doktor',
         'i': LineIcons.stethoscope,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFEF9A9A),
       },
 
-      // Social
+      // Social - Soft Pinks, Lavender, Mint
       'friends': {
         'l': 'Arkadaşlar',
         'i': LineIcons.userFriends,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFE1BEE7),
       },
-      'family': {'l': 'Aile', 'i': LineIcons.home, 'c': Colors.pinkAccent},
-      'party': {'l': 'Parti', 'i': LineIcons.cocktail, 'c': Colors.cyanAccent},
+      'family': {
+        'l': 'Aile',
+        'i': LineIcons.home,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'party': {
+        'l': 'Parti',
+        'i': LineIcons.cocktail,
+        'c': const Color(0xFF80CBC4),
+      },
       'partner': {
         'l': 'Partner',
         'i': LineIcons.heartAlt,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFF48FB1),
       },
       'guests': {
         'l': 'Misafir',
         'i': Icons.people_outline,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
       'colleagues': {
         'l': 'İş Ark.',
         'i': LineIcons.briefcase,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFF80CBC4),
       },
-      'travel': {'l': 'Seyahat', 'i': LineIcons.plane, 'c': Colors.blue},
+      'travel': {
+        'l': 'Seyahat',
+        'i': LineIcons.plane,
+        'c': const Color(0xFF90CAF9),
+      },
       'volunteer': {
         'l': 'Gönüllü',
         'i': LineIcons.heart,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFFFCDD2),
       },
 
-      // Hobbies
-      'gaming': {'l': 'Oyun', 'i': LineIcons.gamepad, 'c': Colors.indigoAccent},
+      // Hobbies - Mint, Coral, Soft Blue, Peach
+      'gaming': {
+        'l': 'Oyun',
+        'i': LineIcons.gamepad,
+        'c': const Color(0xFF9FA8DA),
+      },
       'reading': {
         'l': 'Okuma',
         'i': LineIcons.book,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       },
-      'movie': {'l': 'Film', 'i': LineIcons.video, 'c': Colors.redAccent},
-      'art': {'l': 'Sanat', 'i': LineIcons.palette, 'c': Colors.pinkAccent},
-      'music': {'l': 'Müzik', 'i': LineIcons.music, 'c': Colors.pinkAccent},
-      'coding': {'l': 'Kodlama', 'i': LineIcons.code, 'c': Colors.tealAccent},
+      'movie': {
+        'l': 'Film',
+        'i': LineIcons.video,
+        'c': const Color(0xFFEF9A9A),
+      },
+      'art': {
+        'l': 'Sanat',
+        'i': LineIcons.palette,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'music': {
+        'l': 'Müzik',
+        'i': LineIcons.music,
+        'c': const Color(0xFFE1BEE7),
+      },
+      'coding': {
+        'l': 'Kodlama',
+        'i': LineIcons.code,
+        'c': const Color(0xFF80CBC4),
+      },
       'photography': {
         'l': 'Fotoğraf',
         'i': LineIcons.camera,
-        'c': Colors.cyanAccent,
+        'c': const Color(0xFF81D4FA),
       },
-      'crafts': {'l': 'El İşi', 'i': LineIcons.brush, 'c': Colors.orange},
+      'crafts': {
+        'l': 'El İşi',
+        'i': LineIcons.brush,
+        'c': const Color(0xFFFFCC80),
+      },
 
-      // Chores
+      // Chores - Light Teal, Peach, Soft Coral
       'cleaning': {
         'l': 'Temizlik',
         'i': LineIcons.broom,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFFB2DFDB),
       },
       'shopping': {
         'l': 'Alışveriş',
         'i': LineIcons.shoppingCart,
-        'c': Colors.orange,
+        'c': const Color(0xFFFFAB91),
       },
       'laundry': {
         'l': 'Çamaşır',
         'i': LineIcons.tShirt,
-        'c': Colors.lightBlueAccent,
+        'c': const Color(0xFFB3E5FC),
       },
       'cooking': {
         'l': 'Yemek',
         'i': LineIcons.utensils,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       },
-      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': Colors.cyanAccent},
-      'dishes': {'l': 'Bulaşık', 'i': Icons.kitchen, 'c': Colors.tealAccent},
+      'ironing': {'l': 'Ütü', 'i': Icons.iron, 'c': const Color(0xFF80DEEA)},
+      'dishes': {
+        'l': 'Bulaşık',
+        'i': Icons.kitchen,
+        'c': const Color(0xFFA5D6A7),
+      },
       'repair': {
         'l': 'Tamirat',
         'i': LineIcons.tools,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFAB91),
       },
-      'plants': {'l': 'Bitkiler', 'i': LineIcons.leaf, 'c': Colors.greenAccent},
+      'plants': {
+        'l': 'Bitkiler',
+        'i': LineIcons.leaf,
+        'c': const Color(0xFFC5E1A5),
+      },
 
-      // Selfcare
+      // Selfcare - Soft Pink, Mint
       'manicure': {
         'l': 'Manikür',
         'i': LineIcons.handHoldingHeart,
-        'c': Colors.pink,
+        'c': const Color(0xFFF8BBD0),
       },
       'skincare': {
         'l': 'Cilt Bakımı',
         'i': LineIcons.spa,
-        'c': Colors.lightGreen,
+        'c': const Color(0xFFC5E1A5),
       },
-      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': Colors.pinkAccent},
-      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': Colors.tealAccent},
-      'facemask': {'l': 'Maske', 'i': Icons.face, 'c': Colors.pinkAccent},
-      'bath': {'l': 'Banyo', 'i': LineIcons.bath, 'c': Colors.blue},
+      'hair': {'l': 'Saç', 'i': LineIcons.cut, 'c': const Color(0xFFE1BEE7)},
+      'massage': {'l': 'Masaj', 'i': Icons.spa, 'c': const Color(0xFF80CBC4)},
+      'facemask': {'l': 'Maske', 'i': Icons.face, 'c': const Color(0xFFF48FB1)},
+      'bath': {'l': 'Banyo', 'i': LineIcons.bath, 'c': const Color(0xFF90CAF9)},
       'digital_detox': {
         'l': 'Detoks',
         'i': Icons.phonelink_off,
-        'c': Colors.tealAccent,
+        'c': const Color(0xFFB2DFDB),
       },
 
       // Booleans (Goals)
       'no_smoking': {
         'l': 'Sigara Yok',
         'i': LineIcons.smokingBan,
-        'c': Colors.redAccent,
+        'c': const Color(0xFFEF9A9A),
       },
       'social_media_detox': {
         'l': 'Sosyal Medya',
         'i': LineIcons.mobilePhone,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFCE93D8),
       },
       'meditation': {
         'l': 'Meditasyon',
         'i': LineIcons.spa,
-        'c': Colors.purpleAccent,
+        'c': const Color(0xFFD1C4E9),
       },
       'read_book': {
         'l': 'Okuma',
         'i': LineIcons.book,
-        'c': Colors.deepOrangeAccent,
+        'c': const Color(0xFFFFCC80),
       }, // Reused key
       'drink_water': {
         'l': 'Su',
         'i': LineIcons.tint,
-        'c': Colors.blueAccent,
+        'c': const Color(0xFF80DEEA),
       }, // Reused key
       'early_rise': {
         'l': 'Erken Kalk',
         'i': LineIcons.bell,
-        'c': Colors.orangeAccent,
+        'c': const Color(0xFFFFD54F),
       },
-      'no_sugar': {'l': 'Şekersiz', 'i': Icons.no_food, 'c': Colors.pinkAccent},
-      'journaling': {'l': 'Günlük', 'i': LineIcons.bookOpen, 'c': Colors.amber},
+      'no_sugar': {
+        'l': 'Şekersiz',
+        'i': Icons.no_food,
+        'c': const Color(0xFFF8BBD0),
+      },
+      'journaling': {
+        'l': 'Günlük',
+        'i': LineIcons.bookOpen,
+        'c': const Color(0xFFFFCC80),
+      },
       '10k_steps': {
         'l': '10 Bin Adım',
         'i': LineIcons.shoePrints,
-        'c': Colors.green,
+        'c': const Color(0xFFA5D6A7),
       },
     };
 
@@ -1283,21 +1298,34 @@ class _HomeTabState extends State<HomeTab> {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: isDark ? 0.15 : 0.1),
+          // Fix: Use White background in Light Mode to prevent color blending on colored cards (like Berry theme)
+          color: isDark
+              ? color.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(20), // Stadium-like
-          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+          // Fix: Stronger border in Light Mode
+          border: Border.all(
+            color: isDark
+                ? color.withValues(alpha: 0.3)
+                : color.withValues(alpha: 0.6),
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 14),
+            Icon(
+              icon,
+              color: isDark ? color : const Color(0xFF4E342E),
+              size: 14,
+            ),
             const SizedBox(width: 6),
             Text(
               label,
-              style: GoogleFonts.nunito(
-                color: color,
+              style: GoogleFonts.poppins(
+                color: isDark ? color : const Color(0xFF4E342E),
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

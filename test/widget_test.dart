@@ -8,11 +8,20 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:poem_diary/main.dart';
+import 'package:poem_diary/providers/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('DearDay App loads', (WidgetTester tester) async {
+    // Mock SharedPreferences
+    SharedPreferences.setMockInitialValues({});
+
+    final themeProvider = ThemeProvider();
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const PoemDiaryApp(isSetupDone: true));
+    await tester.pumpWidget(
+      PoemDiaryApp(isSetupDone: true, themeProvider: themeProvider),
+    );
 
     // Verify that app loads without errors
     expect(find.byType(PoemDiaryApp), findsOneWidget);

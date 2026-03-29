@@ -51,5 +51,7 @@
 	<string>Galeriye erişim gereklidir.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Fotoğraf çekimi için gereklidir.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Günlüğünüzü korumak için FaceID kullanın</string>
 </dict>
 </plist>

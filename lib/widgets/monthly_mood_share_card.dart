@@ -12,6 +12,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
   final Map<String, String> localizedLabels; // For translated names
   final String locale; // e.g. 'tr' or 'en'
   final String footerText; // "Created with DearDay"
+  final String moodStatusLabel; // "MOOD STATUS" or "DUYGU DURUMU"
 
   const MonthlyMoodShareCard({
     super.key,
@@ -23,6 +24,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
     required this.localizedLabels,
     required this.locale,
     required this.footerText,
+    required this.moodStatusLabel,
   });
 
   @override
@@ -53,7 +55,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat('MMMM', locale).format(month).toUpperCase(),
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.black87,
@@ -62,7 +64,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
                   ),
                   Text(
                     DateFormat('yyyy', locale).format(month),
-                    style: GoogleFonts.nunito(
+                    style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
@@ -70,7 +72,6 @@ class MonthlyMoodShareCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Icon(Icons.auto_awesome, color: Colors.amber, size: 32),
             ],
           ),
 
@@ -85,8 +86,8 @@ class MonthlyMoodShareCard extends StatelessWidget {
 
           // 3. Mood Legend (ALL Moods)
           Text(
-            "DUYGU DURUMU",
-            style: GoogleFonts.nunito(
+            moodStatusLabel,
+            style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: FontWeight.bold,
               color: Colors.grey,
@@ -100,7 +101,7 @@ class MonthlyMoodShareCard extends StatelessWidget {
           //   const SizedBox(height: 20),
           //   Text(
           //     "AKTİVİTELER",
-          //     style: GoogleFonts.nunito(
+          //     style: GoogleFonts.poppins(
           //       fontSize: 10,
           //       fontWeight: FontWeight.bold,
           //       color: Colors.grey,
@@ -116,13 +117,18 @@ class MonthlyMoodShareCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.edit_note, size: 16, color: Colors.grey),
+              Image.asset(
+                'assets/icon/app_icon2.png',
+                width: 16,
+                height: 16,
+                fit: BoxFit.contain,
+              ),
               const SizedBox(width: 8),
               Text(
                 locale == 'tr'
                     ? 'DearDay ile oluşturuldu'
                     : 'Created with DearDay',
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 12,
                   color: Colors.grey,
                   fontWeight: FontWeight.w600,
@@ -171,14 +177,17 @@ class MonthlyMoodShareCard extends StatelessWidget {
             color: mood?.color ?? Colors.grey.withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: mood == null
-                ? Border.all(color: Colors.grey.withValues(alpha: 0.2))
+                ? Border.all(
+                    color: Colors.grey.withValues(alpha: 0.3),
+                    width: 1.5,
+                  )
                 : null,
           ),
           alignment: Alignment.center,
           child: Text(
             '$dayNum',
-            style: GoogleFonts.nunito(
-              fontSize: 14,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: mood != null ? Colors.white : Colors.grey[700],
             ),

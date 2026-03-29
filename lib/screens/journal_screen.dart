@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 
 import '../core/providers.dart';
 import '../models/daily_entry_model.dart';
@@ -10,7 +9,9 @@ import '../models/poem_model.dart';
 
 import '../helpers/localization_helper.dart';
 import '../core/language_provider.dart';
+import 'package:poem_diary/l10n/app_localizations.dart';
 import 'full_screen_gallery.dart';
+import '../widgets/mood_entry_dialog.dart'; // For buildMediaThumbnail
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -143,10 +144,10 @@ class _JournalScreenState extends State<JournalScreen> {
               child: Center(
                 child: Text(
                   monthFormat.format(month),
-                  style: GoogleFonts.nunito(
+                  style: GoogleFonts.poppins(
                     fontSize: isSelected ? 16 : 14,
                     fontWeight: isSelected
-                        ? FontWeight.bold
+                        ? FontWeight.w600
                         : FontWeight.normal,
                     color: isSelected ? Colors.white : Colors.grey,
                   ),
@@ -172,21 +173,23 @@ class _JournalScreenState extends State<JournalScreen> {
       orElse: () => provider.moods.first,
     );
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // LEFT: Timeline Column
-          _buildTimelineColumn(mood, isLast),
+    return Stack(
+      children: [
+        // LEFT: Timeline Column
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 40,
+          child: _buildTimelineColumn(mood, isLast),
+        ),
 
-          const SizedBox(width: 16),
-
-          // RIGHT: Entry Card (now stateful)
-          Expanded(
-            child: _JournalCard(entry: entry, mood: mood, provider: provider),
-          ),
-        ],
-      ),
+        // RIGHT: Entry Card
+        Padding(
+          padding: const EdgeInsets.only(left: 56), // 40 (col) + 16 (gap)
+          child: _JournalCard(entry: entry, mood: mood, provider: provider),
+        ),
+      ],
     );
   }
 
@@ -229,8 +232,8 @@ class _JournalScreenState extends State<JournalScreen> {
           Icon(Icons.auto_stories, size: 80, color: Colors.grey.withAlpha(100)),
           const SizedBox(height: 16),
           Text(
-            'Bu ay henüz bir hikaye yazılmadı.',
-            style: GoogleFonts.nunito(fontSize: 16, color: Colors.grey),
+            AppLocalizations.of(context)!.journalEmptyMonth,
+            style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
           ),
         ],
       ),
@@ -282,36 +285,33 @@ class _JournalCardState extends State<_JournalCard> {
         margin: const EdgeInsets.only(bottom: 24),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark ? null : Colors.white,
-          gradient: isDark
-              ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    widget.mood.color.withAlpha(12),
-                    const Color(0xFF1C1C1E),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isDark
+                ? [widget.mood.color.withAlpha(12), const Color(0xFF1C1C1E)]
+                : [
+                    widget.mood.color.withAlpha(
+                      25,
+                    ), // Soft mood color (10% opacity)
+                    Colors.white, // Fade to white
                   ],
-                )
-              : null,
+          ),
           borderRadius: BorderRadius.circular(16),
-          // Add shadow in Light Mode for depth
-          boxShadow: isDark
-              ? []
-              : [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                    spreadRadius: 2,
-                  ),
-                ],
-          // Mood-colored border in Light Mode instead of glow
-          border: isDark
-              ? null
-              : Border.all(
-                  color: widget.mood.color.withValues(alpha: 0.4),
-                  width: 2,
-                ),
+          boxShadow: [
+            BoxShadow(
+              color: isDark
+                  ? widget.mood.color.withAlpha(20)
+                  : widget.mood.color.withAlpha(30),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+              spreadRadius: 1,
+            ),
+          ],
+          border: Border.all(
+            color: widget.mood.color.withValues(alpha: 0.4),
+            width: isDark ? 1 : 2,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,16 +327,16 @@ class _JournalCardState extends State<_JournalCard> {
                   children: [
                     Text(
                       dayFormat.format(widget.entry.date),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 40,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : Colors.black87,
                         height: 0.9,
                       ),
                     ),
                     Text(
                       dayNameFormat.format(widget.entry.date).toUpperCase(),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.5,
@@ -356,7 +356,7 @@ class _JournalCardState extends State<_JournalCard> {
                     const SizedBox(width: 8),
                     Text(
                       LocalizationHelper.getMoodName(context, widget.mood.code),
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: widget.mood.color,
@@ -400,7 +400,7 @@ class _JournalCardState extends State<_JournalCard> {
               const SizedBox(height: 8),
               Text(
                 widget.entry.note!,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: isDark ? Colors.white60 : Colors.black54,
                   fontStyle: FontStyle.italic,
@@ -418,10 +418,10 @@ class _JournalCardState extends State<_JournalCard> {
                       lang.currentLanguage == 'tr'
                           ? 'Devamını Oku'
                           : 'Read More',
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: widget.mood.color,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -465,17 +465,13 @@ class _JournalCardState extends State<_JournalCard> {
         onTap: () => _openGallery(0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.file(
-            File(paths[0]),
+          child: SizedBox(
             height: 200,
             width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
+            child: buildMediaThumbnail(
+              paths[0],
+              width: double.infinity,
               height: 200,
-              color: Colors.grey.withAlpha(50),
-              child: const Center(
-                child: Icon(Icons.broken_image, color: Colors.grey),
-              ),
             ),
           ),
         ),
@@ -495,20 +491,12 @@ class _JournalCardState extends State<_JournalCard> {
               onTap: () => _openGallery(index),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(paths[index]),
+                child: SizedBox(
                   height: 180,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
+                  child: buildMediaThumbnail(
+                    paths[index],
+                    width: 150,
                     height: 180,
-                    color: Colors.grey.withAlpha(50),
-                    child: const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        color: Colors.white38,
-                        size: 32,
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -552,7 +540,7 @@ class _JournalCardState extends State<_JournalCard> {
             ),
             child: Text(
               LocalizationHelper.getActivityName(context, key),
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.poppins(
                 fontSize: 11,
                 color: isDark ? Colors.grey : Colors.black54,
               ),
@@ -576,34 +564,42 @@ class _JournalCardState extends State<_JournalCard> {
         backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         title: Text(
           lang.currentLanguage == 'tr' ? 'Hikayeni Düzenle' : 'Edit Your Story',
-          style: GoogleFonts.nunito(
+          style: GoogleFonts.poppins(
             color: isDark ? Colors.white : Colors.black87,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        content: TextField(
-          controller: controller,
-          maxLines: 8,
-          style: GoogleFonts.merriweather(
-            color: isDark ? Colors.white : Colors.black87,
-            fontSize: 14,
-          ),
-          decoration: InputDecoration(
-            hintText: lang.currentLanguage == 'tr'
-                ? 'Hikayeni buraya yaz...'
-                : 'Write your story here...',
-            hintStyle: TextStyle(color: Colors.grey.withAlpha(100)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: TextField(
+            controller: controller,
+            maxLines: null, // Allow unlimited lines
+            minLines: 15, // Start with a tall area
+            keyboardType: TextInputType.multiline,
+            scrollPhysics: const BouncingScrollPhysics(),
+            style: GoogleFonts.merriweather(
+              color: isDark ? Colors.white : Colors.black87,
+              fontSize: 14,
+              height: 1.5,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Theme.of(ctx).primaryColor),
+            decoration: InputDecoration(
+              hintText: lang.currentLanguage == 'tr'
+                  ? 'Hikayeni buraya yaz...'
+                  : 'Write your story here...',
+              hintStyle: TextStyle(color: Colors.grey.withAlpha(100)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(50)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Theme.of(ctx).primaryColor),
+              ),
+              contentPadding: const EdgeInsets.all(16),
             ),
           ),
         ),
